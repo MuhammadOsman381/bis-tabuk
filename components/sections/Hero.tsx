@@ -6,8 +6,8 @@ import { motion } from '../ui/Motion';
 
 const badges = [
   { label: 'Learning', icon: Book, className: 'bg-[#C8102E]' },
-  { label: 'Leading', icon: Globe, className: 'bg-[#5B2C8D]' },
-  { label: 'Living', icon: User, className: 'bg-[#1A1F4B]' },
+  { label: 'Leading', icon: Globe, className: 'bg-[#5B2C8D] dark:bg-zinc-800 dark:ring-1 dark:ring-white/10' },
+  { label: 'Living', icon: User, className: 'bg-[#1A1F4B] dark:bg-zinc-900 dark:ring-1 dark:ring-white/10' },
 ];
 
 const stats = [
@@ -28,8 +28,8 @@ export default function Hero() {
       />
       
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/92 via-[#1A1F4B]/82 to-[#C8102E]/55" />
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#FFF8F0] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/92 via-[#1A1F4B]/82 to-[#C8102E]/55 dark:from-zinc-950/94 dark:via-zinc-900/86 dark:to-[#C8102E]/48" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#FFF8F0] to-transparent dark:from-zinc-950" />
 
       <motion.div
         initial={{ opacity: 0, y: 26 }}
@@ -62,7 +62,7 @@ export default function Hero() {
 
         <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/88 md:text-xl">
           Learning to live, learn and lead — an outstanding international school 
-          with a global vision, educating young people aged 2–18 in the heart of Jeddah.
+          with a global vision, educating young people aged 2–18 in the heart of Tabuk.
         </p>
 
         <p className="mt-5 rounded-full border border-white/15 bg-white/10 px-5 py-2 text-xs font-semibold tracking-[0.2em] text-[#f6d974] backdrop-blur-md sm:text-sm">

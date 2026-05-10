@@ -29,14 +29,14 @@ const values = [
 
 export default function Values() {
   return (
-    <section id="about" className="py-20 sm:py-24 bg-white">
+    <section id="about" className="py-20 sm:py-24 bg-white dark:bg-zinc-900">
       <div className="max-w-7xl mx-auto px-6">
         <Reveal className="text-center mb-14 sm:mb-16">
           <span className="text-[#C8102E] font-bold text-sm tracking-[3px] uppercase">Our Curriculum</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3 dark:text-zinc-50">
             A Global Curriculum, <span className="gradient-text">Locally Rooted</span>
           </h2>
-          <p className="mt-6 text-gray-600 max-w-2xl mx-auto text-lg leading-8">
+          <p className="mt-6 text-gray-600 max-w-2xl mx-auto text-lg leading-8 dark:text-zinc-400">
             The British National Curriculum enhanced for an international context — blending academic rigour, creative thinking, and cultural awareness.
           </p>
         </Reveal>
@@ -69,10 +69,10 @@ export default function Values() {
               </div>
 
               <div className="p-6 sm:p-8">
-                <h3 className="text-2xl font-bold text-[#1A1F4B] mb-4">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.desc}</p>
+                <h3 className="text-2xl font-bold text-[#1A1F4B] mb-4 dark:text-zinc-50">{value.title}</h3>
+                <p className="text-gray-600 leading-relaxed dark:text-zinc-400">{value.desc}</p>
                 
-                <a href="#" className="mt-8 inline-flex items-center gap-2 text-[#C8102E] font-bold transition-all hover:translate-x-1">
+                <a href="#" className="mt-8 inline-flex items-center gap-2 text-[#C8102E] font-bold transition-all hover:translate-x-1 dark:text-[#f07185] dark:hover:text-[#C9A84C]">
                   Learn more <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
@@ -82,9 +82,9 @@ export default function Values() {
         </motion.div>
 
         {/* Accreditations */}
-        <Reveal className="mt-20 pt-12 border-t border-gray-100 text-center">
-          <p className="text-xs font-bold tracking-[3px] uppercase text-gray-400 mb-6">Accredited & Recognised By</p>
-          <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#1A1F4B]/45 font-bold text-sm">
+        <Reveal className="mt-20 pt-12 border-t border-gray-100 text-center dark:border-white/10">
+          <p className="text-xs font-bold tracking-[3px] uppercase text-gray-400 mb-6 dark:text-zinc-500">Accredited & Recognised By</p>
+          <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#1A1F4B]/45 font-bold text-sm dark:text-zinc-500">
             <span>Cambridge Assessment</span>
             <span>IBO</span>
             <span>BSO</span>

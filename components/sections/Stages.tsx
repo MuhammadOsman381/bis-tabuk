@@ -53,12 +53,12 @@ const stages = [
 
 export default function Stages() {
   return (
-    <section id="stages" className="bg-[#FFF8F0] py-20 sm:py-24">
+    <section id="stages" className="bg-[#FFF8F0] py-20 sm:py-24 dark:bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6">
         <Reveal className="text-center mb-14 sm:mb-16">
           <span className="text-[#C8102E] font-bold text-sm tracking-[3px] uppercase">Our School</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3">With You Every Step</h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto leading-7">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3 dark:text-zinc-50">With You Every Step</h2>
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto leading-7 dark:text-zinc-400">
             From the earliest years to IB graduation, we walk alongside your child at every stage.
           </p>
         </Reveal>
@@ -88,16 +88,16 @@ export default function Stages() {
               </div>
 
               <div className="p-6 sm:p-8">
-                <h3 className="text-2xl font-bold text-[#1A1F4B]">{stage.title}</h3>
-                <p className="text-[#C8102E] text-sm font-bold tracking-widest mt-1">{stage.tagline}</p>
-                <p className="text-gray-600 mt-4 text-[15px] leading-relaxed">{stage.desc}</p>
+                <h3 className="text-2xl font-bold text-[#1A1F4B] dark:text-zinc-50">{stage.title}</h3>
+                <p className="text-[#C8102E] text-sm font-bold tracking-widest mt-1 dark:text-[#f07185]">{stage.tagline}</p>
+                <p className="text-gray-600 mt-4 text-[15px] leading-relaxed dark:text-zinc-400">{stage.desc}</p>
 
-                <div className="flex justify-between items-center gap-4 mt-8 pt-6 border-t border-gray-100">
+                <div className="flex justify-between items-center gap-4 mt-8 pt-6 border-t border-gray-100 dark:border-white/10">
                   <div>
-                    <span className="text-sm text-gray-500">Pupils</span>
-                    <p className="font-bold text-[#1A1F4B]">{stage.pupils}</p>
+                    <span className="text-sm text-gray-500 dark:text-zinc-500">Pupils</span>
+                    <p className="font-bold text-[#1A1F4B] dark:text-zinc-100">{stage.pupils}</p>
                   </div>
-                  <a href="#" className="text-[#C8102E] font-bold inline-flex items-center gap-2 transition-all hover:translate-x-1">
+                  <a href="#" className="text-[#C8102E] font-bold inline-flex items-center gap-2 transition-all hover:translate-x-1 dark:text-[#f07185] dark:hover:text-[#C9A84C]">
                     Learn more <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>

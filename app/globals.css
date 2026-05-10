@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap'); */
 
 :root {
@@ -14,6 +16,19 @@
   --muted: #64748b;
   --surface: #ffffff;
   --line: #e5e7eb;
+  --app-bg: #fffaf4;
+  --app-text: #111827;
+  --app-muted: #64748b;
+  --app-card: rgba(255, 255, 255, 0.92);
+  --app-border: rgba(17, 24, 39, 0.08);
+}
+
+.dark {
+  --app-bg: #09090b;
+  --app-text: #f4f4f5;
+  --app-muted: #a1a1aa;
+  --app-card: rgba(24, 24, 27, 0.86);
+  --app-border: rgba(255, 255, 255, 0.1);
 }
 
 html {
@@ -22,12 +37,20 @@ html {
 
 body {
   font-family: 'Source Sans 3', system-ui, sans-serif;
-  color: var(--ink);
+  color: var(--app-text);
   background:
     radial-gradient(circle at top left, rgba(200, 16, 46, 0.06), transparent 30rem),
     linear-gradient(180deg, #ffffff 0%, #fffaf4 48%, #ffffff 100%);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(200, 16, 46, 0.14), transparent 34rem),
+    radial-gradient(circle at 80% 10%, rgba(201, 168, 76, 0.08), transparent 30rem),
+    linear-gradient(180deg, #09090b 0%, #18181b 48%, #0a0a0b 100%);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -70,9 +93,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .premium-card {
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--app-border);
+  background: var(--app-card);
   box-shadow: 0 18px 50px rgba(26, 31, 75, 0.08);
+  backdrop-filter: blur(18px);
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.dark .premium-card {
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.34), 0 0 30px rgba(200, 16, 46, 0.05);
 }
 
 .focus-ring {
@@ -83,6 +112,38 @@ h1, h2, h3, h4, h5, h6 {
 .focus-ring:focus {
   border-color: var(--red);
   box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.12);
+}
+
+.dark .focus-ring:focus {
+  box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.22), 0 0 28px rgba(200, 16, 46, 0.1);
+}
+
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    fill 300ms ease,
+    stroke 300ms ease,
+    box-shadow 300ms ease !important;
+}
+
+table {
+  border-color: var(--app-border);
+}
+
+input,
+select,
+textarea {
+  color-scheme: light;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -11,7 +11,7 @@ const steps = [
   'Place offered & confirmed',
 ];
 
-const fieldClass = 'focus-ring w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-[#1A1F4B] placeholder:text-gray-400 shadow-sm shadow-[#1A1F4B]/5';
+const fieldClass = 'focus-ring w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-[#1A1F4B] placeholder:text-gray-400 shadow-sm shadow-[#1A1F4B]/5 dark:border-white/10 dark:bg-zinc-950/70 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:shadow-black/20';
 
 export default function Admissions() {
   return (
@@ -21,7 +21,7 @@ export default function Admissions() {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('https://picsum.photos/id/1080/1920/800')" }}
       />
-      <div className="absolute inset-0 bg-[#11163c]/88" />
+      <div className="absolute inset-0 bg-[#11163c]/88 dark:bg-zinc-950/90" />
 
       <div className="relative max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         {/* Left Content */}
@@ -65,17 +65,17 @@ export default function Admissions() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-2xl bg-white p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-10"
+          className="rounded-2xl bg-white p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-10 dark:border dark:border-white/10 dark:bg-zinc-900/88 dark:shadow-black/40 dark:backdrop-blur-xl"
         >
-          <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C8102E]/10 text-[#C8102E]">
+          <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C8102E]/10 text-[#C8102E] dark:bg-[#C8102E]/18 dark:text-[#ff8fa0] dark:shadow-lg dark:shadow-[#C8102E]/10">
             <CalendarDays className="h-6 w-6" />
           </div>
-          <h3 className="text-2xl font-bold text-[#1A1F4B]">Request Information</h3>
-          <p className="text-gray-500 mt-2">Our admissions team will respond within 24 hours.</p>
+          <h3 className="text-2xl font-bold text-[#1A1F4B] dark:text-zinc-50">Request Information</h3>
+          <p className="text-gray-500 mt-2 dark:text-zinc-400">Our admissions team will respond within 24 hours.</p>
 
           <form className="mt-8 space-y-6">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2">Parent&apos;s Full Name</label>
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2 dark:text-zinc-300">Parent&apos;s Full Name</label>
               <input 
                 type="text" 
                 className={fieldClass}
@@ -84,7 +84,7 @@ export default function Admissions() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2">Email Address</label>
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2 dark:text-zinc-300">Email Address</label>
               <input 
                 type="email" 
                 className={fieldClass}
@@ -93,7 +93,7 @@ export default function Admissions() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2">Phone Number</label>
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2 dark:text-zinc-300">Phone Number</label>
               <input 
                 type="tel" 
                 className={fieldClass}
@@ -102,7 +102,7 @@ export default function Admissions() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2">Year Group</label>
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2 dark:text-zinc-300">Year Group</label>
               <select className={fieldClass}>
                 <option>Select year group…</option>
                 <option>Early Years (Age 2–5)</option>
@@ -115,7 +115,7 @@ export default function Admissions() {
 
             <button 
               type="submit"
-              className="w-full bg-[#C8102E] hover:bg-[#9B0D23] text-white py-4 rounded-2xl font-bold text-lg transition-all mt-4 shadow-lg shadow-[#C8102E]/20 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/20"
+              className="w-full bg-[#C8102E] hover:bg-[#9B0D23] text-white py-4 rounded-2xl font-bold text-lg transition-all mt-4 shadow-lg shadow-[#C8102E]/20 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/20 dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
             >
               Send Enquiry
             </button>

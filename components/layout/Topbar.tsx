@@ -9,7 +9,7 @@ export default function Topbar() {
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="bg-[#11163c] text-white text-[11px] px-4 py-2.5"
+      className="bg-[#11163c] text-white text-[11px] px-4 py-2.5 dark:border-b dark:border-white/10 dark:bg-zinc-950"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2">

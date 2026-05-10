@@ -1,18 +1,19 @@
 'use client';
-
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { Reveal } from '../ui/Motion';
+import img from "../../app/Logo.png"
+import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#11163c] text-white">
+    <footer className="bg-[#11163c] text-white dark:bg-zinc-950">
       <Reveal className="max-w-7xl mx-auto px-6 pt-16 pb-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#C8102E] via-[#5B2C8D] to-[#1A1F4B] flex items-center justify-center text-white font-bold text-sm relative shadow-lg shadow-black/15">
-                BISJ
+              <div className="w-12 h-12 rounded-2xl border-none flex items-center justify-center text-white font-bold text-sm relative shadow-lg shadow-black/15 dark:from-[#C8102E] dark:via-zinc-800 dark:to-zinc-950 dark:ring-1 dark:ring-white/10">
+            <Image src={img} alt="" className='shadow-[#1A1F4B]/20'  />
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#C9A84C] rounded-full border-2 border-white" />
               </div>
               <div>

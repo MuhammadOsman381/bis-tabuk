@@ -45,7 +45,7 @@ const lifeActivities = [
 
 export default function SchoolLife() {
   return (
-    <section id="life" className="bg-[#11163c] py-20 sm:py-24 text-white">
+    <section id="life" className="bg-[#11163c] py-20 sm:py-24 text-white dark:bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6">
         <Reveal className="text-center mb-14 sm:mb-16">
           <span className="text-[#C9A84C] font-bold text-sm tracking-[3px] uppercase">Life at BISJ</span>
