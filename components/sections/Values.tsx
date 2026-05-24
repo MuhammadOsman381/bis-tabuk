@@ -29,10 +29,10 @@ const values = [
 
 export default function Values() {
   return (
-    <section id="about" className="py-20 sm:py-24 bg-white dark:bg-zinc-900">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="about" className="luxury-section py-20 sm:py-28 bg-white dark:bg-zinc-900">
+      <div className="relative max-w-7xl mx-auto px-6">
         <Reveal className="text-center mb-14 sm:mb-16">
-          <span className="text-[#C8102E] font-bold text-sm tracking-[3px] uppercase">Our Curriculum</span>
+          <span className="luxury-kicker text-xs font-bold tracking-[3px] uppercase">Our Curriculum</span>
           <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3 dark:text-zinc-50">
             A Global Curriculum, <span className="gradient-text">Locally Rooted</span>
           </h2>
@@ -52,14 +52,14 @@ export default function Values() {
             const Icon = value.icon;
 
             return (
-            <MotionCard key={value.title} className="premium-card group overflow-hidden rounded-2xl">
+            <MotionCard key={value.title} className="premium-card group overflow-hidden rounded-[1.75rem]">
               <div className="relative h-64 overflow-hidden">
                 <img
                   src={value.img} 
                   alt={value.title}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/18 to-transparent" />
                 <div 
                   className="absolute bottom-6 left-6 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg"
                   style={{ backgroundColor: value.color }}
@@ -72,7 +72,7 @@ export default function Values() {
                 <h3 className="text-2xl font-bold text-[#1A1F4B] mb-4 dark:text-zinc-50">{value.title}</h3>
                 <p className="text-gray-600 leading-relaxed dark:text-zinc-400">{value.desc}</p>
                 
-                <a href="#" className="mt-8 inline-flex items-center gap-2 text-[#C8102E] font-bold transition-all hover:translate-x-1 dark:text-[#f07185] dark:hover:text-[#C9A84C]">
+                <a href="#" className="luxury-link mt-8 inline-flex items-center gap-2 text-[#C8102E] dark:text-[#f07185] dark:hover:text-[#C9A84C]">
                   Learn more <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

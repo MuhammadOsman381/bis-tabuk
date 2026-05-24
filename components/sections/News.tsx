@@ -67,7 +67,7 @@ export default function News() {
   return (
     <section
       id="news"
-      className="relative overflow-hidden bg-[#FFF8F0] py-20 sm:py-24 dark:bg-zinc-950"
+      className="luxury-section relative overflow-hidden bg-[#FFF8F0] py-20 sm:py-28 dark:bg-zinc-950"
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C8102E]/20 to-transparent" />
       <div className="absolute right-0 top-16 h-72 w-72 rounded-full bg-[#C9A84C]/10 blur-3xl dark:bg-[#C9A84C]/8" />
@@ -77,11 +77,9 @@ export default function News() {
         {/* Header */}
         <Reveal className="mb-12 grid gap-8 lg:mb-14 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#C8102E]/10 bg-white px-4 py-2 shadow-sm shadow-[#1A1F4B]/5 dark:border-white/10 dark:bg-zinc-900/80 dark:shadow-black/20">
+            <div className="luxury-kicker text-xs font-bold tracking-[2px] uppercase">
               <Sparkles className="w-4 h-4 text-[#C8102E]" />
-              <span className="text-[#C8102E] font-semibold text-xs tracking-[2px] uppercase dark:text-[#ff8fa0]">
-                Latest News
-              </span>
+              <span>Latest News</span>
             </div>
 
             <h2 className="text-4xl md:text-5xl font-bold mt-5 text-[#1A1F4B] leading-tight dark:text-zinc-50">
@@ -124,7 +122,7 @@ export default function News() {
           <motion.article
             variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
             whileHover={{ y: -6 }}
-            className="group relative overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_18px_50px_rgba(26,31,75,0.08)] transition-shadow duration-500 hover:shadow-[0_24px_70px_rgba(26,31,75,0.12)] lg:col-span-3 dark:border-white/10 dark:bg-zinc-900/88 dark:shadow-black/30 dark:hover:shadow-[0_24px_70px_rgba(0,0,0,0.42)]"
+              className="premium-card group relative overflow-hidden rounded-[1.75rem] transition-shadow duration-500 lg:col-span-3"
           >
             <div className="relative h-[320px] overflow-hidden sm:h-[420px]">
               <img
@@ -186,7 +184,7 @@ export default function News() {
 
                 <a
                   href="#"
-                  className="group inline-flex items-center gap-2 font-semibold text-[#C8102E] dark:text-[#f07185] dark:hover:text-[#C9A84C]"
+                  className="luxury-link group inline-flex items-center gap-2 text-[#C8102E] dark:text-[#f07185] dark:hover:text-[#C9A84C]"
                 >
                   View Post
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -205,7 +203,7 @@ export default function News() {
                   key={item.title}
                   variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
                   whileHover={{ y: -5 }}
-                  className="group flex flex-col gap-4 rounded-2xl border border-black/5 bg-white p-4 shadow-[0_12px_34px_rgba(26,31,75,0.06)] transition-shadow duration-300 hover:shadow-[0_18px_50px_rgba(26,31,75,0.1)] sm:flex-row sm:gap-5 dark:border-white/10 dark:bg-zinc-900/86 dark:shadow-black/25 dark:hover:shadow-[0_18px_50px_rgba(0,0,0,0.36)]"
+                  className="premium-card group flex flex-col gap-4 rounded-[1.5rem] p-4 sm:flex-row sm:gap-5"
                 >
                   {/* Image */}
                   <div className="relative h-44 rounded-2xl overflow-hidden flex-shrink-0 sm:h-36 sm:w-36">
@@ -239,7 +237,7 @@ export default function News() {
 
                     <a
                       href="#"
-                      className="inline-flex items-center gap-2 mt-5 text-sm font-semibold text-[#C8102E] dark:text-[#f07185] dark:hover:text-[#C9A84C]"
+                      className="luxury-link mt-5 inline-flex items-center gap-2 text-sm text-[#C8102E] dark:text-[#f07185] dark:hover:text-[#C9A84C]"
                     >
                       Read More
                       <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

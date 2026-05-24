@@ -4,10 +4,10 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BISJ – British International School of Tabuk",
-  description: "Outstanding British international education in Jeddah for ages 2-18. British Curriculum & IB Diploma.",
+  title: "BIST – British International School of Tabuk",
+  description: "Outstanding British international education in Tabuk for ages 2-18. British Curriculum & IB Diploma.",
   icons: {
-    icon: "./Logo.png",
+    icon: "/Logo.png",
   },
 };
 
@@ -19,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="overflow-x-hidden bg-white text-zinc-950 antialiased dark:bg-zinc-950 dark:text-zinc-50">
+        <ThemeProvider>{children}</ThemeProvider>
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function() {
@@ -32,7 +33,6 @@ export default function RootLayout({
             })();
           `}
         </Script>
-        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

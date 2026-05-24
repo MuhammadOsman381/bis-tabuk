@@ -21,14 +21,20 @@
   --app-muted: #64748b;
   --app-card: rgba(255, 255, 255, 0.92);
   --app-border: rgba(17, 24, 39, 0.08);
+  --lux-shadow: 0 24px 80px rgba(26, 31, 75, 0.12);
+  --lux-shadow-soft: 0 16px 48px rgba(26, 31, 75, 0.08);
+  --lux-ring: rgba(255, 255, 255, 0.72);
 }
 
 .dark {
-  --app-bg: #09090b;
+  --app-bg: #07070a;
   --app-text: #f4f4f5;
   --app-muted: #a1a1aa;
   --app-card: rgba(24, 24, 27, 0.86);
   --app-border: rgba(255, 255, 255, 0.1);
+  --lux-shadow: 0 24px 90px rgba(0, 0, 0, 0.46);
+  --lux-shadow-soft: 0 18px 58px rgba(0, 0, 0, 0.36);
+  --lux-ring: rgba(255, 255, 255, 0.1);
 }
 
 html {
@@ -39,8 +45,9 @@ body {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   color: var(--app-text);
   background:
-    radial-gradient(circle at top left, rgba(200, 16, 46, 0.06), transparent 30rem),
-    linear-gradient(180deg, #ffffff 0%, #fffaf4 48%, #ffffff 100%);
+    radial-gradient(circle at top left, rgba(200, 16, 46, 0.08), transparent 30rem),
+    radial-gradient(circle at 80% 0%, rgba(201, 168, 76, 0.08), transparent 34rem),
+    linear-gradient(180deg, #ffffff 0%, #fffaf4 46%, #ffffff 100%);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   transition: background-color 300ms ease, color 300ms ease;
@@ -48,9 +55,10 @@ body {
 
 .dark body {
   background:
-    radial-gradient(circle at top left, rgba(200, 16, 46, 0.14), transparent 34rem),
-    radial-gradient(circle at 80% 10%, rgba(201, 168, 76, 0.08), transparent 30rem),
-    linear-gradient(180deg, #09090b 0%, #18181b 48%, #0a0a0b 100%);
+    radial-gradient(circle at top left, rgba(200, 16, 46, 0.16), transparent 34rem),
+    radial-gradient(circle at 82% 8%, rgba(201, 168, 76, 0.1), transparent 30rem),
+    radial-gradient(circle at 45% 40%, rgba(60, 60, 70, 0.32), transparent 44rem),
+    linear-gradient(180deg, #07070a 0%, #111113 48%, #08080a 100%);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -73,7 +81,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-hover:hover {
   transform: translateY(-6px);
-  box-shadow: 0 24px 48px rgba(26, 31, 75, 0.14);
+  box-shadow: var(--lux-shadow);
 }
 
 /* Custom utilities */
@@ -94,14 +102,96 @@ h1, h2, h3, h4, h5, h6 {
 
 .premium-card {
   border: 1px solid var(--app-border);
-  background: var(--app-card);
-  box-shadow: 0 18px 50px rgba(26, 31, 75, 0.08);
-  backdrop-filter: blur(18px);
-  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.74)),
+    var(--app-card);
+  box-shadow: var(--lux-shadow-soft), inset 0 1px 0 var(--lux-ring);
+  backdrop-filter: blur(22px);
+  transform-style: preserve-3d;
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
 }
 
 .dark .premium-card {
-  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.34), 0 0 30px rgba(200, 16, 46, 0.05);
+  background:
+    linear-gradient(180deg, rgba(39, 39, 42, 0.9), rgba(24, 24, 27, 0.78)),
+    var(--app-card);
+  box-shadow: var(--lux-shadow-soft), 0 0 34px rgba(200, 16, 46, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.luxury-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-section::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(26, 31, 75, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(26, 31, 75, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 0%, black, transparent 66%);
+}
+
+.dark .luxury-section::before {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.075) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+}
+
+.dark .luxury-section::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(200, 16, 46, 0.1), transparent 26rem),
+    radial-gradient(circle at 84% 0%, rgba(201, 168, 76, 0.08), transparent 24rem);
+  mask-image: radial-gradient(circle at 50% 0%, black, transparent 70%);
+}
+
+.luxury-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(200, 16, 46, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.55rem 0.9rem;
+  color: var(--red);
+  box-shadow: 0 10px 30px rgba(26, 31, 75, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.dark .luxury-kicker {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(39, 39, 42, 0.68);
+  color: #ff8fa0;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+}
+
+.luxury-link {
+  position: relative;
+  font-weight: 800;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.luxury-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -0.3rem;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: right 220ms ease;
+}
+
+.luxury-link:hover::after {
+  right: 0;
 }
 
 .focus-ring {

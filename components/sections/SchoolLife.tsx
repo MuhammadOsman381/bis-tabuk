@@ -45,13 +45,15 @@ const lifeActivities = [
 
 export default function SchoolLife() {
   return (
-    <section id="life" className="bg-[#11163c] py-20 sm:py-24 text-white dark:bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="life" className="relative overflow-hidden bg-[#0f1434] py-20 text-white dark:bg-zinc-950 sm:py-28">
+      <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-[#C8102E]/16 blur-3xl" />
+      <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-[#C9A84C]/10 blur-3xl" />
+      <div className="relative max-w-7xl mx-auto px-6">
         <Reveal className="text-center mb-14 sm:mb-16">
-          <span className="text-[#C9A84C] font-bold text-sm tracking-[3px] uppercase">Life at BISJ</span>
+          <span className="inline-flex rounded-full border border-white/10 bg-white/8 px-4 py-2 text-xs font-bold tracking-[3px] text-[#C9A84C] uppercase backdrop-blur-xl">Life at BIST</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-3">School Life & <span className="text-[#C9A84C]">Enrichment</span></h2>
           <p className="mt-6 text-white/70 max-w-xl mx-auto leading-7">
-            Education at BISJ extends far beyond the classroom. We develop the whole person through extraordinary co-curricular experiences.
+            Education at BIST extends far beyond the classroom. We develop the whole person through extraordinary co-curricular experiences.
           </p>
         </Reveal>
 
@@ -67,15 +69,16 @@ export default function SchoolLife() {
               href="#"
               key={item.title}
               variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
-              whileHover={{ y: -5 }}
-              className={`group relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/10 outline-none focus-visible:ring-4 focus-visible:ring-[#C9A84C]/25 ${item.big ? 'lg:col-span-2 lg:row-span-2' : ''}`}
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 23 }}
+              className={`group relative overflow-hidden rounded-[1.75rem] border border-white/10 shadow-2xl shadow-black/20 outline-none focus-visible:ring-4 focus-visible:ring-[#C9A84C]/25 ${item.big ? 'lg:col-span-2 lg:row-span-2' : ''}`}
             >
               <img
                 src={item.img} 
                 alt={item.title} 
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/34 to-transparent" />
               
               <div className="absolute top-4 left-4 bg-[#C8102E]/90 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
                 {item.tag}

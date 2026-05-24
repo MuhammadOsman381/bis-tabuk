@@ -53,10 +53,10 @@ const stages = [
 
 export default function Stages() {
   return (
-    <section id="stages" className="bg-[#FFF8F0] py-20 sm:py-24 dark:bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="stages" className="luxury-section bg-[#FFF8F0] py-20 sm:py-28 dark:bg-zinc-950">
+      <div className="relative max-w-7xl mx-auto px-6">
         <Reveal className="text-center mb-14 sm:mb-16">
-          <span className="text-[#C8102E] font-bold text-sm tracking-[3px] uppercase">Our School</span>
+          <span className="luxury-kicker text-xs font-bold tracking-[3px] uppercase">Our School</span>
           <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3 dark:text-zinc-50">With You Every Step</h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto leading-7 dark:text-zinc-400">
             From the earliest years to IB graduation, we walk alongside your child at every stage.
@@ -71,16 +71,17 @@ export default function Stages() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
         >
           {stages.map((stage) => (
-            <MotionCard key={stage.title} className="premium-card group overflow-hidden rounded-2xl">
+            <MotionCard key={stage.title} className="premium-card group overflow-hidden rounded-[1.75rem]">
               <div className="relative h-56 overflow-hidden">
                 <img 
                   src={stage.img} 
                   alt={stage.title}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${stage.color}40, transparent)` }} />
+                <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${stage.color}55, transparent 58%)` }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 <span 
-                  className="absolute top-4 left-4 rounded-full px-4 py-1.5 text-xs font-bold text-white shadow-lg"
+                  className="absolute top-4 left-4 rounded-full border border-white/15 px-4 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur"
                   style={{ background: stage.color }}
                 >
                   {stage.age}
@@ -97,7 +98,7 @@ export default function Stages() {
                     <span className="text-sm text-gray-500 dark:text-zinc-500">Pupils</span>
                     <p className="font-bold text-[#1A1F4B] dark:text-zinc-100">{stage.pupils}</p>
                   </div>
-                  <a href="#" className="text-[#C8102E] font-bold inline-flex items-center gap-2 transition-all hover:translate-x-1 dark:text-[#f07185] dark:hover:text-[#C9A84C]">
+                  <a href="#" className="luxury-link text-[#C8102E] inline-flex items-center gap-2 dark:text-[#f07185] dark:hover:text-[#C9A84C]">
                     Learn more <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
