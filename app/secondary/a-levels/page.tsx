@@ -51,7 +51,7 @@ export default function IbOneAndTwoPage() {
             <Reveal className="mt-12">
               <div
                 className="min-h-96 rounded-3xl bg-cover bg-center shadow-[0_22px_60px_rgba(26,31,75,0.14),inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-zinc-200 dark:ring-white/10"
-                style={{ backgroundImage: "url('/images//secondary/fourth.png')" }}
+                style={{ backgroundImage: "url('/images/secondary/fourth.png')" }}
                 aria-label="Sixth Form students collaborating"
               />
             </Reveal>

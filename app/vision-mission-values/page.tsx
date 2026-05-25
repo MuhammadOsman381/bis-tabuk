@@ -122,7 +122,7 @@ export default function VisionMissionValuesPage() {
                 />
                 <div
                   className="min-h-64 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-                  style={{ backgroundImage: "url('/images/vision/third.jpg')" }}
+                  style={{ backgroundImage: "url('/images/vision/third.JPG')" }}
                   aria-label="School community learning together"
                 />
               </div>
@@ -151,7 +151,7 @@ export default function VisionMissionValuesPage() {
 
               <div
                 className="mt-8 min-h-80 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-                style={{ backgroundImage: "url('/images/vision/fourth.jpg')" }}
+                style={{ backgroundImage: "url('/images/vision/fourth.JPG')" }}
                 aria-label="Students representing core values"
               />
             </Reveal>

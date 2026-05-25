@@ -13,7 +13,7 @@ import { Reveal, staggerContainer } from '@/components/ui/Motion';
 const principles = [
   {
     title: 'Learning to Live:',
-    image: '/images/core/second.jpg',
+    image: '/images/core/second.JPG',
     body: 'This principle focuses on personal development and well-being. It encourages students to interact positively with others, respect themselves and their peers, act ethically and empathetically, participate in community service, and maintain a healthy lifestyle. The goal is to foster individuals who are responsible, considerate, and aware of their impact on the world.',
   },
   {
@@ -23,7 +23,7 @@ const principles = [
   },
   {
     title: 'Learning to Lead:',
-    image: '/images/core/fourth.jpg',
+    image: '/images/core/fourth.JPG',
     body: 'This principle focuses on leadership development. It encourages students to be open-minded, good communicators, organised, goal-oriented, and considerate towards others. The goal is to develop individuals who can inspire and motivate others, demonstrate responsibility, and have a positive impact on their communities.',
   },
 ];
@@ -41,7 +41,7 @@ export default function CorePrinciplesPage() {
         <section className="relative min-h-[52vh] overflow-hidden">
           <div
             className="absolute inset-0 scale-105 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/core/first.jpg')" }}
+            style={{ backgroundImage: "url('/images/core/first.JPG')" }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/90 via-[#1A1F4B]/78 to-[#C8102E]/48 dark:from-zinc-950/94 dark:via-zinc-900/84 dark:to-[#C8102E]/42" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.18),transparent_34%)]" />

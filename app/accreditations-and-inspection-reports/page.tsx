@@ -59,7 +59,7 @@ export default function AccreditationsPage() {
         <section className="relative min-h-[52vh] overflow-hidden">
           <div
             className="absolute inset-0 scale-105 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/inspection/first.jpg')" }}
+            style={{ backgroundImage: "url('/images/inspection/first.JPG')" }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/90 via-[#1A1F4B]/78 to-[#C8102E]/48 dark:from-zinc-950/94 dark:via-zinc-900/84 dark:to-[#C8102E]/42" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.18),transparent_34%)]" />

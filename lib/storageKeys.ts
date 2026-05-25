@@ -1,2 +1,9 @@
 export const AUTH_TOKEN_KEY = 'bist-auth-token';
 export const APPLY_DRAFT_KEY = 'bist-application-draft';
+export const USER_EMAIL_HASH_KEY = 'bist-user-email-hash';
+export const USER_EMAIL_ENCODED_KEY = 'bist-user-email-encoded';
+export const ADMIN_TOKEN_KEY = 'bist-admin-token';
+export const TEACHER_TOKEN_KEY = 'bist-teacher-token';
+export const TEACHER_PROFILE_KEY = 'bist-teacher-profile';
+export const STUDENT_TOKEN_KEY = 'bist-student-token';
+export const STUDENT_PROFILE_KEY = 'bist-student-profile';

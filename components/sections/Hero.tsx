@@ -3,7 +3,7 @@
 import { ArrowDown, ArrowRight, Book, Globe, User } from 'lucide-react';
 import Button from '../ui/Button';
 import { motion } from '../ui/Motion';
-const heroImage = "/images/landing-page/hero-img.jpg";
+const heroImage = "/images/landing-page/hero-img.JPG";
 
 const badges = [
   { label: 'Learning', icon: Book, className: 'bg-[#C8102E]' },

@@ -101,6 +101,16 @@ const sidebarItems: SidebarItem[] = [
     ],
   },
   {
+    label: 'Teacher Portal',
+    href: '/teacher',
+    icon: GraduationCap,
+  },
+  {
+    label: 'Student Portal',
+    href: '/student',
+    icon: GraduationCap,
+  },
+  {
     label: 'News & Dates / Media',
     href: '#news',
     icon: Newspaper,

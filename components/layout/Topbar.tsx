@@ -1,7 +1,8 @@
 'use client';
 
-import { Mail, Phone, ShieldCheck } from 'lucide-react';
+import {  Mail, Phone, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Topbar() {
   return (
@@ -25,11 +26,11 @@ export default function Topbar() {
 
         <div className="hidden md:flex items-center gap-3 text-white/70">
           <ShieldCheck className="h-3.5 w-3.5 text-[#C9A84C]" />
-          <a href="#" className="hover:text-[#C9A84C] transition-colors">Student Portal</a>
+          <Link href={'/student'} className="hover:text-[#C9A84C] transition-colors">Student Portal</Link>
           <span className="text-white/25">/</span>
-          <a href="#" className="hover:text-[#C9A84C] transition-colors">Parent Portal</a>
+          <Link href={'/teacher'} className="hover:text-[#C9A84C] transition-colors">Teacher Portal</Link>
           <span className="text-white/25">/</span>
-          <a href="#" className="hover:text-[#C9A84C] transition-colors">Staff</a>
+          <Link href={'/admin'} className="hover:text-[#C9A84C] transition-colors">Admin</Link>
         </div>
       </div>
     </motion.div>

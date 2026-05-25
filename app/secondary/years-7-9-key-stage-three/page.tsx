@@ -79,7 +79,7 @@ export default function KeyStageThreePage() {
               </div>
               <div
                 className="min-h-72 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-                style={{ backgroundImage: "url('/images/secondary/second.jpg')" }}
+                style={{ backgroundImage: "url('/images/secondary/second.JPG')" }}
                 aria-label="Secondary students in learning activities"
               />
             </Reveal>

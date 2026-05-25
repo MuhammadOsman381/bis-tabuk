@@ -11,9 +11,7 @@ import ThemeToggle from '../ui/ThemeToggle';
 const navItems = [
   { href: '#about', label: 'About Us' },
   { href: '#admissions', label: 'Admissions' },
-  { href: '#stages', label: 'Primary' },
-  { href: '#stages', label: 'Secondary' },
-  { href: '#stages', label: 'IB' },
+  { href: '#stages', label: 'Stages' },
   { href: '#life', label: 'School Life' },
   { href: '#news', label: 'News' },
 ];
