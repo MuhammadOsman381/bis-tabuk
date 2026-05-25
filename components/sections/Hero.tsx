@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowDown, ArrowRight, Book, Globe, User } from 'lucide-react';
 import Button from '../ui/Button';
 import { motion } from '../ui/Motion';
@@ -20,12 +21,13 @@ const stats = [
 export default function Hero() {
   return (
     <section className="relative min-h-[calc(100vh-104px)] overflow-hidden text-center">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center scale-105"
-        style={{ 
-          backgroundImage: `url(${heroImage})`,
-        }}
+      <Image
+        src={heroImage}
+        alt="BIST campus and students"
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 scale-105 object-cover"
       />
       
       {/* Overlay */}

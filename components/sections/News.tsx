@@ -1,6 +1,7 @@
 'use client';
 
-import {
+import Image from 'next/image';
+import { 
   ArrowRight,
   CalendarDays,
   Eye,
@@ -125,10 +126,12 @@ export default function News() {
               className="premium-card group relative overflow-hidden rounded-[1.75rem] transition-shadow duration-500 lg:col-span-3"
           >
             <div className="relative h-[320px] overflow-hidden sm:h-[420px]">
-              <img
+              <Image
                 src={featuredNews.image}
                 alt={featuredNews.title}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                fill
+                sizes="(min-width: 1024px) 60vw, 100vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
@@ -207,10 +210,12 @@ export default function News() {
                 >
                   {/* Image */}
                   <div className="relative h-44 rounded-2xl overflow-hidden flex-shrink-0 sm:h-36 sm:w-36">
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(min-width: 640px) 9rem, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute left-3 top-3 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur">
                       0{index + 1}

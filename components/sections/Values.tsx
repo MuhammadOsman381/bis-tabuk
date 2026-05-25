@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight, Globe2, ShieldCheck, Sparkles } from 'lucide-react';
 import { motion, MotionCard, Reveal, staggerContainer } from '../ui/Motion';
 
@@ -54,10 +55,12 @@ export default function Values() {
             return (
             <MotionCard key={value.title} className="premium-card group overflow-hidden rounded-[1.75rem]">
               <div className="relative h-64 overflow-hidden">
-                <img
-                  src={value.img} 
+                <Image
+                  src={value.img}
                   alt={value.title}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/18 to-transparent" />
                 <div 

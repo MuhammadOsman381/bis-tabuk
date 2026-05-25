@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -115,11 +116,15 @@ function SectionBlock({ section }: { section: ShellSection }) {
           )}
         </div>
         {section.image && (
-          <div
-            className="min-h-80 rounded-3xl bg-cover bg-center shadow-[0_22px_60px_rgba(26,31,75,0.14),inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-zinc-200 dark:ring-white/10"
-            style={{ backgroundImage: `url('${section.image}')` }}
-            aria-label={section.imageAlt}
-          />
+          <div className="relative min-h-80 overflow-hidden rounded-3xl shadow-[0_22px_60px_rgba(26,31,75,0.14),inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-zinc-200 dark:ring-white/10">
+            <Image
+              src={section.image}
+              alt={section.imageAlt ?? section.title}
+              fill
+              sizes="(min-width: 768px) 20rem, 100vw"
+              className="object-cover"
+            />
+          </div>
         )}
       </div>
       {section.cards && (
@@ -138,7 +143,17 @@ function SectionBlock({ section }: { section: ShellSection }) {
               transition={{ type: 'spring', stiffness: 220, damping: 24 }}
               className="overflow-hidden rounded-3xl border border-zinc-200/80 bg-white/75 shadow-[0_18px_55px_rgba(26,31,75,0.09)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]"
             >
-              {card.image && <div className="h-40 bg-cover bg-center" style={{ backgroundImage: `url('${card.image}')` }} />}
+              {card.image && (
+                <div className="relative h-40 overflow-hidden">
+                  <Image
+                    src={card.image}
+                    alt={`${card.title} image`}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              )}
               <div className="p-6">
                 <div className="mb-3 flex flex-wrap gap-2 text-xs font-black uppercase tracking-[0.14em] text-[#C8102E] dark:text-[#ff8fa0]">
                   {card.date && <span>{card.date}</span>}
@@ -186,7 +201,14 @@ export default function SchoolPageShell({
 
         {heroImage ? (
           <section className="relative min-h-[58vh] overflow-hidden">
-            <div className="absolute inset-0 scale-105 bg-cover bg-center" style={{ backgroundImage: `url('${heroImage}')` }} aria-label={heroAlt} />
+            <Image
+              src={heroImage}
+              alt={heroAlt ?? title}
+              fill
+              priority
+              sizes="100vw"
+              className="absolute inset-0 scale-105 object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/90 via-[#1A1F4B]/76 to-[#C8102E]/48 dark:from-zinc-950/94 dark:via-zinc-900/82 dark:to-[#C8102E]/42" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.18),transparent_34%)]" />
             <div className="relative z-10 mx-auto flex min-h-[58vh] max-w-5xl flex-col items-center justify-center px-6 py-20 text-center text-white">

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { motion, MotionCard, Reveal, staggerContainer } from '../ui/Motion';
 
@@ -73,10 +74,12 @@ export default function Stages() {
           {stages.map((stage) => (
             <MotionCard key={stage.title} className="premium-card group overflow-hidden rounded-[1.75rem]">
               <div className="relative h-56 overflow-hidden">
-                <img 
-                  src={stage.img} 
+                <Image
+                  src={stage.img}
                   alt={stage.title}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${stage.color}55, transparent 58%)` }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
