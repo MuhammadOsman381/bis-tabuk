@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, Reveal, staggerContainer } from '../ui/Motion';
 
+
+
 const lifeActivities = [
   {
     title: "Sports & Athletics",
