@@ -114,17 +114,16 @@ export default function VisionMissionValuesPage() {
                 where individuals feel secure, respected, valued, happy and successful.
               </p>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="mt-8 grid gap-4 ">
                 <div
-                  className="min-h-64 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-                  style={{ backgroundImage: "url('/images/vision/second.png')" }}
+                  className="min-h-100 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
+                  style={{
+                    backgroundImage:
+                      "url('https://i0.wp.com/www.kouya.net/wp-content/uploads/2021/04/Company-Mission-Statement-1.jpg?fit=1200%2C750&ssl=1')",
+                  }}
                   aria-label="Students collaborating in a classroom"
                 />
-                <div
-                  className="min-h-64 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-                  style={{ backgroundImage: "url('/images/vision/third.JPG')" }}
-                  aria-label="School community learning together"
-                />
+
               </div>
 
               <h3 className="mt-10 text-left text-xl font-black text-[#1A1F4B] dark:text-zinc-50">
@@ -148,12 +147,12 @@ export default function VisionMissionValuesPage() {
                 At BIST, we nurture confident, compassionate, and principled learners. Our values guide every member of
                 our school-from our youngest pupils to our graduates-as we learn, grow, and lead together.
               </p>
-
+{/* 
               <div
                 className="mt-8 min-h-80 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
                 style={{ backgroundImage: "url('/images/vision/fourth.JPG')" }}
                 aria-label="Students representing core values"
-              />
+              /> */}
             </Reveal>
 
             <motion.div
@@ -180,7 +179,7 @@ export default function VisionMissionValuesPage() {
             </motion.div>
 
             <Reveal className="mt-16 text-center">
-              <p className="text-2xl font-black leading-9 text-[#1A1F4B] dark:text-zinc-50">
+              <p className="text-xl font-black text-[#1A1F4B] dark:text-zinc-50">
                 At BIST, these values unite us. They inspire us. They define us.
               </p>
             </Reveal>

@@ -18,13 +18,13 @@ export default function Footer() {
             <Image src={img} alt="" className='shadow-[#1A1F4B]/20'  />
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#C9A84C] rounded-full border-2 border-white" />
               </div>
-              <div>
+              <div className='flex flex-col' >
                 <strong className="text-xl">British International</strong>
-                <p className="text-[#C8102E] text-sm font-bold tracking-widest">SCHOOL OF TABUK</p>
+                <strong className=" text-xl  tracking-tight">School of Tabuk</strong>
               </div>
             </div>
             <p className="max-w-md text-white/70 leading-relaxed">
-              An outstanding international school in Tabuk, Saudi Arabia. Educating young people aged 2–18 with the British National Curriculum and IB Diploma since 1977.
+              An outstanding international school in Tabuk, Saudi Arabia. Educating young people aged 2–18 with the Cambridge International IGCSE and A-Levels Curriculum  since 1977.
             </p>
           </div>
 
@@ -40,10 +40,10 @@ export default function Footer() {
           <div>
             <h4 className="text-[#C9A84C] uppercase text-xs font-bold tracking-widest mb-6">Learning</h4>
             <ul className="space-y-3 text-white/70">
-              <li><a href="#" className="hover:text-white transition-colors">Early Years</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Reception</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Primary</a></li>
               <li><a href="#" className="hover:text-white transition-colors">IGCSE</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">IB Diploma</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">A-Levels</a></li>
             </ul>
           </div>
 
@@ -51,15 +51,15 @@ export default function Footer() {
             <h4 className="text-[#C9A84C] uppercase text-xs font-bold tracking-widest mb-6">Contact</h4>
             <p className="flex gap-3 text-white/70 text-sm leading-relaxed">
               <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              <span>Corniche Al Hamra District<br />Tabuk 23521, Saudi Arabia</span>
+              <span> P.O. Box 100<br />Tabuk, Saudi Arabia</span>
             </p>
             <a href="tel:+966126656700" className="mt-4 flex gap-3 text-white/70 hover:text-white transition-colors">
               <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              +966 12 665 6700
+              +966 (01) 4 4411 088 x 83103
             </a>
             <a href="mailto:admissions@bis-tabuk.com" className="mt-3 flex gap-3 text-white/70 hover:text-white transition-colors">
               <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              admissions@bis-tabuk.com
+              admin@bis-tabuk.org
             </a>
           </div>
         </div>

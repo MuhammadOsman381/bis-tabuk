@@ -1,9 +1,9 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Trash2, UserCheck, UsersRound, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Trash2, UserCheck, XCircle } from 'lucide-react';
+import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
 
@@ -323,12 +323,9 @@ export default function AdminPage() {
     <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <PortalHeader />
       <section className="min-h-screen bg-[#f6fbff] px-4 pb-12 pt-32 dark:bg-zinc-950 sm:px-6 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <Link href="/" className="mb-8 inline-flex items-center gap-2 rounded-full text-sm font-bold text-[#C8102E] transition hover:gap-3 dark:text-[#ff8fa0]">
-            <ArrowLeft className="h-4 w-4" />
-            Return to Home
-          </Link>
-
+        <div className={token ? 'mx-auto grid max-w-7xl gap-6 lg:grid-cols-[16rem_1fr]' : 'mx-auto max-w-7xl'}>
+          {token && <AdminSidebar active="dashboard" />}
+          <div>
           <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.24em] text-[#8796B3] dark:text-zinc-500">BIST admissions</p>
@@ -345,10 +342,6 @@ export default function AdminPage() {
                   <UserCheck className="h-4 w-4" />
                   Approve All
                 </button>
-                <Link href="/admin/teachers" className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-bold text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-50 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100">
-                  <UsersRound className="h-4 w-4" />
-                  Teachers
-                </Link>
                 <button type="button" onClick={logout} title="Logout" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-50 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100">
                   <LogOut className="h-4 w-4" />
                 </button>
@@ -497,6 +490,7 @@ export default function AdminPage() {
               )}
             </div>
           )}
+          </div>
         </div>
       </section>
     </motion.main>

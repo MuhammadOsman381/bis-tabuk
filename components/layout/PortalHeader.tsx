@@ -31,14 +31,10 @@ export default function PortalHeader() {
               <Image src={logo} alt="British International School of Tabuk logo" className="object-contain" />
               <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-[#C9A84C] dark:border-zinc-950" />
             </div>
-            <div className="min-w-0">
-              <strong className="block text-base font-black leading-tight text-[#1A1F4B] dark:text-zinc-50">
-                British International
-              </strong>
-              <span className="block text-[11px] font-bold tracking-widest text-[#C8102E] dark:text-[#C9A84C]">
-                SCHOOL OF TABUK
-              </span>
-            </div>
+            <div className="">
+            <strong className="text-[#C8102E] text-base sm:text-lg leading-tight block dark:text-zinc-50">British International</strong>
+            <strong className="text-[#C8102E]  text-base sm:text-lg  block leading-tight dark:text-zinc-50">School of Tabuk</strong>
+          </div>
           </Link>
         </div>
 

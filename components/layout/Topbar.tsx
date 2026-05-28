@@ -1,6 +1,6 @@
 'use client';
 
-import {  Mail, Phone, ShieldCheck } from 'lucide-react';
+import {  GraduationCap, Mail, Phone, ShieldCheck, ShieldUser, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
@@ -16,21 +16,27 @@ export default function Topbar() {
         <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2">
         <a href="tel:+966126656700" className="inline-flex items-center gap-1.5 text-white/80 hover:text-[#C9A84C] transition-colors">
           <Phone className="h-3 w-3" />
-          +966 12 665 6700
+              +966 (01) 4 4411 088 x 83103
         </a>
         <a href="mailto:admissions@bis-jeddah.com" className="inline-flex items-center gap-1.5 truncate text-white/80 hover:text-[#C9A84C] transition-colors">
           <Mail className="h-3 w-3" />
-          admissions@bis-tabuk.com
+          admin@bis-tabuk.org
         </a>
       </div>
 
         <div className="hidden md:flex items-center gap-3 text-white/70">
-          <ShieldCheck className="h-3.5 w-3.5 text-[#C9A84C]" />
-          <Link href={'/student'} className="hover:text-[#C9A84C] transition-colors">Student Portal</Link>
+          {/* <ShieldCheck className="h-3.5 w-3.5 text-[#C9A84C]" /> */}
+          <Link href={'/student'} className="hover:text-[#C9A84C] flex items-center gap-1 transition-colors">
+          <User size={15} />
+          Student Portal </Link>
           <span className="text-white/25">/</span>
-          <Link href={'/teacher'} className="hover:text-[#C9A84C] transition-colors">Teacher Portal</Link>
+          <Link href={'https://isksafh.vercel.app/'} className="hover:text-[#C9A84C] flex items-center gap-1 transition-colors">
+          <GraduationCap size={15} />
+          Teacher Portal</Link>
           <span className="text-white/25">/</span>
-          <Link href={'/admin'} className="hover:text-[#C9A84C] transition-colors">Admin</Link>
+          <Link href={'/admin'} className="hover:text-[#C9A84C] flex items-center gap-1 transition-colors">
+          <ShieldUser size={15} />
+          Admin</Link>
         </div>
       </div>
     </motion.div>

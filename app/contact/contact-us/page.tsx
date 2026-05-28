@@ -1,14 +1,23 @@
 'use client';
 
-import Link from 'next/link';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import SchoolPageShell from '@/components/layout/SchoolPageShell';
 
+const Map = dynamic(() => import('@/components/Map'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-[500px] w-full items-center justify-center rounded-3xl bg-zinc-100 text-sm font-black uppercase tracking-[0.18em] text-zinc-500 dark:bg-white/[0.04] dark:text-zinc-400">
+      Loading map
+    </div>
+  ),
+});
+
 const contactItems = [
-  { icon: MapPin, label: 'Address', value: 'The British International School Tabuk, Tabuk, Saudi Arabia' },
-  { icon: Phone, label: 'General Phone', value: '+966 12 000 0000' },
-  { icon: Mail, label: 'General Email', value: 'info@conti.sch.sa' },
-  { icon: Mail, label: 'Admissions Email', value: 'Registrar@conti.sch.sa' },
+  { icon: MapPin, label: 'Address', value: 'The British International School, P.O. Box 100, Tabuk, Kingdom of Saudia Arabia' },
+  { icon: Phone, label: 'General Phone', value: '+966 (01) 4 4411088 x 83103' },
+  { icon: Mail, label: 'General Email', value: 'admin@bis-tabuk.com' },
+  // { icon: Mail, label: 'Admissions Email', value: 'admissions@bis-tabuk.com' },
 ];
 
 export default function ContactUsPage() {
@@ -16,14 +25,14 @@ export default function ContactUsPage() {
     <SchoolPageShell
       eyebrow="Contact"
       title="Contact Us"
-      heroImage="https://picsum.photos/id/1041/1920/980"
+      heroImage="/images/contact.jpeg"
       heroAlt="Welcoming school campus entrance"
     >
-      <div className="mt-4 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mt-4 grid gap-8 ">
         <div className="space-y-4 text-left">
           <h2 className="text-3xl font-black text-[#1A1F4B] dark:text-zinc-50">Contact Information</h2>
           {contactItems.map((item) => {
-            const Icon = item.icon;
+            const Icon = item.icon; 
             return (
               <div key={item.label} className="flex gap-4 rounded-3xl border border-zinc-200 bg-white/75 p-5 dark:border-white/10 dark:bg-white/[0.04]">
                 <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#C8102E]/10 text-[#C8102E] dark:bg-[#C9A84C]/15 dark:text-[#C9A84C]">
@@ -37,11 +46,11 @@ export default function ContactUsPage() {
             );
           })}
           <div className="flex min-h-64 items-center justify-center rounded-3xl border border-dashed border-zinc-300 bg-white/60 text-center text-sm font-bold uppercase tracking-[0.18em] text-zinc-500 dark:border-white/15 dark:bg-white/[0.04] dark:text-zinc-400">
-            Google Maps Placeholder
+            <Map/>
           </div>
         </div>
 
-        <form className="rounded-[2rem] border border-zinc-200 bg-white/80 p-6 text-left shadow-[0_22px_70px_rgba(26,31,75,0.12)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:p-8">
+        {/* <form className="rounded-[2rem] border border-zinc-200 bg-white/80 p-6 text-left shadow-[0_22px_70px_rgba(26,31,75,0.12)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:p-8">
           <h2 className="text-3xl font-black text-[#1A1F4B] dark:text-zinc-50">Send a Message</h2>
           <div className="mt-6 grid gap-4">
             {['Full Name', 'Email', 'Phone'].map((label) => (
@@ -68,16 +77,16 @@ export default function ContactUsPage() {
               <Send className="ml-2 h-4 w-4" />
             </button>
           </div>
-        </form>
+        </form> */}
       </div>
 
-      <div className="mt-14 rounded-3xl border border-zinc-200 bg-white/75 p-8 text-center dark:border-white/10 dark:bg-white/[0.04]">
+      {/* <div className="mt-14 rounded-3xl border border-zinc-200 bg-white/75 p-8 text-center dark:border-white/10 dark:bg-white/[0.04]">
         <h2 className="text-3xl font-black text-[#1A1F4B] dark:text-zinc-50">Visit Our School</h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">We would be delighted to welcome you for a tour of our campus and learning spaces.</p>
         <Link href="/admissions/book-a-tour" className="mt-7 inline-flex rounded-full bg-[#C8102E] px-7 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5">
           Book a Tour
         </Link>
-      </div>
+      </div> */}
     </SchoolPageShell>
   );
 }

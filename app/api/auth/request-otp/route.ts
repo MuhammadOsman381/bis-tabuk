@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const db = getDb();
     const code = createOtp();
     await db.delete(otpCodes).where(lt(otpCodes.expiresAt, new Date()));
-    const expiresAt = new Date(Date.now() + 60 * 1000);
+    const expiresAt = new Date(Date.now() + 600 * 1000);
 
     await db.insert(users).values({ email: normalizedEmail, emailHash }).onConflictDoNothing({ target: users.email });
     await db.delete(otpCodes).where(eq(otpCodes.email, normalizedEmail));

@@ -106,7 +106,7 @@ export default function StudentPage() {
   return (
     <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <PortalHeader />
-      <section className="min-h-screen bg-[#f6fbff] px-4 pb-12 pt-32 dark:bg-zinc-950 sm:px-6 lg:px-10">
+      {/* <section className="min-h-screen bg-[#f6fbff] px-4 pb-12 pt-32 dark:bg-zinc-950 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
@@ -185,7 +185,15 @@ export default function StudentPage() {
             </div>
           )}
         </div>
-      </section>
+      </section> */}
+      <div className='min-h-screen  text-5xl   text-center flex flex-col justify-center items-center gap-20'>
+        {/* <div className='text-red-600 font-bold text-6xl' >
+          Learning Management System
+          </div>  */}
+          <div className='text-red-600 font-semibold ' >
+            Under Construction
+          </div>
+      </div>
     </motion.main>
   );
 }

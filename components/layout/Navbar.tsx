@@ -9,11 +9,11 @@ import Image from 'next/image';
 import ThemeToggle from '../ui/ThemeToggle';
 
 const navItems = [
-  { href: '#about', label: 'About Us' },
-  { href: '#admissions', label: 'Admissions' },
-  { href: '#stages', label: 'Stages' },
-  { href: '#life', label: 'School Life' },
-  { href: '#news', label: 'News' },
+  { href: '#school-life', label: 'School Life' },
+  { href: '#calendar', label: 'Calendar' },
+  // { href: '#stages', label: 'Stages' },
+  // { href: '#life', label: 'School Life' },
+  // { href: '#news', label: 'News' },
 ];
 
 type NavbarProps = {
@@ -35,30 +35,29 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         {/* Logo */}
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={onToggleSidebar}
+            aria-label={isSidebarOpen ? 'Close sidebar menu' : 'Open sidebar menu'}
+            className="hidden h-11 w-11 items-center justify-center rounded-full border border-[#C8102E]/10 bg-white/86 text-[#1A1F4B] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#FFF8F0] hover:text-[#C8102E] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-[#111113]/82 dark:text-zinc-100 dark:hover:bg-white/10 dark:hover:text-[#C9A84C] lg:inline-flex"
+          >
+            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
           <Link href="/" className="group flex items-center gap-3 rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15">
           <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-transparent text-sm font-bold text-white shadow-lg transition-transform duration-300 group-hover:scale-105">
             <Image src={img} alt="" className='shadow-[#1A1F4B]/20'  />
             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#C9A84C] rounded-full border-2 border-white dark:border-zinc-950" />
           </div>
-          <div className="min-w-0">
-            <strong className="text-[#1A1F4B] text-base sm:text-lg leading-tight block dark:text-zinc-50">British International</strong>
-            <span className="text-[#C8102E] text-[11px] sm:text-xs font-bold tracking-widest">SCHOOL OF TABUK</span>
+          <div className="">
+            <strong className="text-[#C8102E] text-base sm:text-lg leading-tight block dark:text-zinc-50">British International</strong>
+            <strong className="text-[#C8102E]  text-base sm:text-lg  block leading-tight dark:text-zinc-50">School of Tabuk</strong>
           </div>
         </Link>
       </div>
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={onToggleSidebar}
-            aria-label={isSidebarOpen ? 'Close sidebar menu' : 'Open sidebar menu'}
-            className="mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#C8102E]/10 bg-white/86 text-[#1A1F4B] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#FFF8F0] hover:text-[#C8102E] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-[#111113]/82 dark:text-zinc-100 dark:hover:bg-white/10 dark:hover:text-[#C9A84C]"
-          >
-            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-
           {navItems.map((item) => (
             <Link
               key={`${item.href}-${item.label}`}
@@ -73,10 +72,10 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
           <ThemeToggle />
 
           <Link 
-            href="/apply" 
+            href="/login" 
             className="ml-2 bg-[#C8102E] text-white px-5 py-3 rounded-full font-bold text-sm shadow-lg shadow-[#C8102E]/20 hover:bg-[#9B0D23] hover:-translate-y-0.5 transition-all dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
           >
-            Apply Now
+            Login
           </Link>
         </div>
 

@@ -11,14 +11,14 @@ export default function CurrentVacanciesPage() {
     <SchoolPageShell
       eyebrow="Employment"
       title="Current Vacancies"
-      intro={['Explore career opportunities at BIST. We welcome both overseas and local hire candidates.']}
-      sections={[
-        { title: 'Whole School Positions', cards: vacancies.filter((job) => job.tag === 'Whole School') },
-        { title: 'Primary Section Positions', cards: vacancies.filter((job) => job.tag === 'Primary') },
-        { title: 'Secondary Section Positions', cards: vacancies.filter((job) => job.tag === 'Secondary') },
-      ]}
-      ctaTitle="Apply Now"
-      ctaLabel="Apply Now"
+      intro={['Under Maintenance']}
+      // sections={[
+      //   { title: 'Whole School Positions', cards: vacancies.filter((job) => job.tag === 'Whole School') },
+      //   { title: 'Primary Section Positions', cards: vacancies.filter((job) => job.tag === 'Primary') },
+      //   { title: 'Secondary Section Positions', cards: vacancies.filter((job) => job.tag === 'Secondary') },
+      // ]}
+      // ctaTitle="Apply Now"
+      // ctaLabel="Apply Now"
     />
   );
 }

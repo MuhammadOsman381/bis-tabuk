@@ -71,9 +71,11 @@ export default function Hero() {
           Welcome to <span className="text-[#C9A84C] block">BIST</span>
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/88 md:text-xl">
-          Learning to live, learn and lead — an outstanding international school 
-          with a global vision, educating young people aged 2–18 in the heart of Tabuk.
+        <p className="mx-auto mt-6 max-w-4xl text-base  text-white/88 md:text-lg">
+      
+      The International School of King Salman Armed Forces Hospital, formerly known as the British International School of Tabuk, is a non-profit educational institution operating under the administration of King Salman Armed Forces Hospital. The school is registered with the Ministry of Education and accredited by Cambridge Assessment International Education to offer IGCSE and A Level programmes following the British curriculum.
+
+      
         </p>
 
         <p className="mt-5 rounded-full border border-white/15 bg-white/10 px-5 py-2 text-xs font-semibold tracking-[0.2em] text-[#f6d974] shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-md sm:text-sm">
@@ -82,8 +84,8 @@ export default function Hero() {
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <Button href="/apply" variant="primary">Apply Now <ArrowRight className="h-4 w-4" /></Button>
-          <Button href="#about" variant="outline">Learn More</Button>
-          <Button href="#stages" variant="ghost">Explore Our School</Button>
+          {/* <Button href="#about" variant="outline">Learn More</Button> */}
+          <Button href="#school-life" variant="ghost">Explore Our School</Button>
         </div>
 
         {/* Stats */}

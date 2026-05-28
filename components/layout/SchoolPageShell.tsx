@@ -207,7 +207,7 @@ export default function SchoolPageShell({
               fill
               priority
               sizes="100vw"
-              className="absolute inset-0 scale-105 object-cover"
+              className="absolute inset-0  object-contain "
             />
             <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/90 via-[#1A1F4B]/76 to-[#C8102E]/48 dark:from-zinc-950/94 dark:via-zinc-900/82 dark:to-[#C8102E]/42" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.18),transparent_34%)]" />
@@ -230,12 +230,21 @@ export default function SchoolPageShell({
         <section className="luxury-section bg-[#fffaf4] py-16 dark:bg-zinc-950 sm:py-24">
           <div className="relative mx-auto max-w-4xl px-6">
             {intro && (
-              <Reveal className="space-y-7 text-left text-lg leading-8 text-zinc-700 dark:text-zinc-300">
+              <Reveal className="space-y-7 text-left text-xl leading-8 text-zinc-700 dark:text-zinc-300">
                 {intro.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </Reveal>
             )}
+             <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
+                <iframe
+                  className="aspect-video w-full"
+                  src="https://www.youtube.com/embed/5VnQgM32YCs"
+                  title="BIST community video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
             {quote && (
               <Reveal className="mt-12">
                 <blockquote className="border-l-4 border-[#C8102E] pl-6 text-left text-xl font-semibold leading-9 text-[#1A1F4B] dark:border-[#C9A84C] dark:text-zinc-50">{quote}</blockquote>
@@ -243,7 +252,7 @@ export default function SchoolPageShell({
             )}
             {sections?.map((section) => <SectionBlock key={section.title} section={section} />)}
             {children}
-            <Reveal className="mt-16 border-t border-zinc-200 pt-12 text-center dark:border-white/10">
+            {/* <Reveal className="mt-16 border-t border-zinc-200 pt-12 text-center dark:border-white/10">
               <h2 className="text-3xl font-black text-[#1A1F4B] dark:text-zinc-50">{ctaTitle}</h2>
               <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">Click below to register your interest-we&apos;d love to hear from you!</p>
               <Link href={ctaHref} className="group relative isolate mt-8 inline-flex overflow-hidden rounded-full bg-[linear-gradient(135deg,#E11D48,#C8102E_45%,#7F1024)] px-7 py-3.5 text-sm font-bold text-white shadow-[0_18px_38px_rgba(200,16,46,0.26)] transition hover:-translate-y-0.5">
@@ -251,10 +260,10 @@ export default function SchoolPageShell({
                 {ctaLabel}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-            </Reveal>
+            </Reveal> */}
           </div>
         </section>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </motion.main>
   );

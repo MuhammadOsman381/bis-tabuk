@@ -12,6 +12,7 @@ import Events from "@/components/sections/Events";
 import News from "@/components/sections/News";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
+import Calendar from "@/components/Calendar";
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,17 +23,18 @@ export default function Home() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
     >
-      <Sidebar isDesktopOpen={isSidebarOpen} onDesktopClose={() => setIsSidebarOpen(false)} />
+      <Sidebar isDesktopOpen={isSidebarOpen} onDesktopClose={() => setIsSidebarOpen(false)} showMobileTrigger />
       <div className={isSidebarOpen ? "relative transition-all duration-300 lg:pl-80" : "relative transition-all duration-300 lg:pl-0"}>
         <Topbar />
         <Navbar isSidebarOpen={isSidebarOpen} onToggleSidebar={() => setIsSidebarOpen((value) => !value)} />
         <Hero />
-        <Stages />
-        <Values />
+        {/* <Stages /> */}
+        {/* <Values /> */}
         <SchoolLife />
         {/* <Admissions /> */}
-        <Events />
-        <News />
+        {/* <Events /> */}
+        <Calendar/>
+        {/* <News /> */}
         <Footer />
       </div>
     </motion.main>

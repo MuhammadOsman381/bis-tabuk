@@ -9,11 +9,12 @@ import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
 import { Reveal, staggerContainer } from '@/components/ui/Motion';
+import Image from 'next/image';
 
 const timings = [
   {
     day: 'Sunday to Thursday',
-    timings: ['Early Years: 7:30 AM - 12:45 PM', 'Primary: 7:30 AM - 2:45 PM', 'Secondary: 7:30 AM - 3:00 PM'],
+    timings: ['Reception: 7:30 AM - 13:00 PM', 'Primary: 7:30 AM - 13:00 PM', 'Secondary: 7:30 AM - 13:00 PM'],
   },
   {
     day: 'Friday & Saturday',
@@ -129,19 +130,37 @@ export default function WelcomeToBistPage() {
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <div
+                {/* <div
                   className="min-h-64 rounded-3xl bg-cover bg-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
                   style={{ backgroundImage: "url('/images/welcome/second.JPG')" }}
                   aria-label="Students learning together on campus"
                 />
+                 */}
+                <Image
+                    src="/images/welcome/second.JPG"
+                    alt="Students learning together on campus"
+                    width={640}
+                    height={420}
+                    className="min-h-64 rounded-3xl bg-cover bg-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
+                />
+{/* 
                 <div
                   className="min-h-64 rounded-3xl bg-cover bg-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
                   style={{ backgroundImage: "url('/images/welcome/third.JPG')" }}
                   aria-label="International school community activity"
+                /> */}
+
+                <Image
+                    src="/images/welcome/third.JPG"
+                    alt="Students learning together on campus"
+                    width={640}
+                    height={420}
+                    className="min-h-64 rounded-3xl bg-cover bg-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
                 />
+
               </div>
 
-              <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
+              {/* <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
                 <iframe
                   className="aspect-video w-full"
                   src="https://www.youtube.com/embed/5VnQgM32YCs"
@@ -149,7 +168,7 @@ export default function WelcomeToBistPage() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
-              </div>
+              </div> */}
             </Reveal>
           </div>
 
@@ -164,16 +183,15 @@ export default function WelcomeToBistPage() {
               <p className="mt-5 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
                 Our curriculum reflects the international nature of the school. Our primary curriculum is based on the
                 International Primary Curriculum, while in the secondary curriculum students follow a programme leading
-                to the International General Certificate of Secondary Education in Year 11 and the International
-                Baccalaureate Diploma in Year 13.
+                to the International General Certificate of Secondary Education in Year 10 & 11 and A-Levels in year 12 & 13.
               </p>
-              <blockquote className="mt-8 rounded-3xl border border-[#C8102E]/10 bg-white/70 p-6 text-left text-lg font-semibold leading-8 text-[#1A1F4B] shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-zinc-100">
+              {/* <blockquote className="mt-8 rounded-3xl border border-[#C8102E]/10 bg-white/70 p-6 text-left text-lg font-semibold leading-8 text-[#1A1F4B] shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-zinc-100">
                 “BIST has many traditions, but my favorite is International Day, where all the cultures come together.
                 It’s something I look forward to every year.”
                 <span className="mt-3 block text-sm font-bold uppercase tracking-[0.2em] text-[#C8102E] dark:text-[#ff8fa0]">
                   Hana, IB2
                 </span>
-              </blockquote>
+              </blockquote> */}
             </Reveal>
           </div>
 
@@ -190,16 +208,25 @@ export default function WelcomeToBistPage() {
                 Strong relationships between students, staff, and families help create a culture of belonging.
               </p>
 
-              <div
+              {/* <div
                 className="mt-8 aspect-[4/3] rounded-3xl bg-zinc-100 bg-contain bg-center bg-no-repeat shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)] dark:bg-zinc-900"
                 style={{ backgroundImage: "url('/images/welcome/fourth.JPG')" }}
                 aria-label="Close-knit school community"
               />
+`` */}
+
+                <Image
+                    src="/images/welcome/fourth.JPG"
+                    alt="Students learning together on campus"
+                    width={760}
+                    height={420}
+                className="mt-8 aspect-[4/3] rounded-3xl bg-zinc-100 bg-contain bg-center bg-no-repeat shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)] dark:bg-zinc-900"
+                />
 
               <div className="mt-8 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950/60">
                 <div className="border-b border-zinc-200 bg-zinc-50 px-5 py-4 dark:border-white/10 dark:bg-white/5">
                   <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-600 dark:text-zinc-400">
-                    School timings 2025/2026
+                    School timings 2026/2027
                   </h3>
                 </div>
                 <table className="w-full text-left text-sm">
@@ -229,7 +256,7 @@ export default function WelcomeToBistPage() {
           </div>
         </article>
 
-        <section className="relative overflow-hidden bg-white py-16 dark:bg-zinc-900 sm:py-24">
+        {/* <section className="relative overflow-hidden bg-white py-16 dark:bg-zinc-900 sm:py-24">
           <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-[#C8102E]/8 blur-3xl" />
           <div className="relative mx-auto max-w-7xl px-6">
             <Reveal className="mx-auto max-w-3xl text-center">
@@ -282,7 +309,7 @@ export default function WelcomeToBistPage() {
               ))}
             </motion.div>
           </div>
-        </section>
+        </section> */}
 
         <Footer />
       </div>

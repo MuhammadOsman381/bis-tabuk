@@ -3,7 +3,6 @@ import { eq } from 'drizzle-orm';
 import { getDb } from '@/lib/db';
 import { applications, students } from '@/lib/db/schema';
 import { hashPassword } from '@/lib/server/auth';
-import { sendLmsAccessEmail } from '@/lib/server/mailer';
 
 type ApplicationData = {
   students?: Array<Record<string, unknown> & { firstName?: string; lastName?: string; admissionYearGroup?: string }>;
@@ -17,6 +16,10 @@ function generatePassword() {
   return `BIST-${randomBytes(4).toString('hex').toUpperCase()}`;
 }
 
+function generatePublicStudentId() {
+  return `BIST-${randomBytes(4).toString('hex').toUpperCase()}`;
+}
+
 function getStudentName(student: { firstName?: string; lastName?: string }, index: number) {
   return [student.firstName, student.lastName].filter(Boolean).join(' ') || `Student ${index + 1}`;
 }
@@ -24,6 +27,22 @@ function getStudentName(student: { firstName?: string; lastName?: string }, inde
 function getApplicationData(data: unknown): ApplicationData {
   const applicationData = data as ApplicationData;
   return applicationData.data ?? applicationData.draft ?? applicationData.application ?? applicationData;
+}
+
+async function syncPublicStudent({ studentId, name, year }: { studentId: string; name: string; year: string }) {
+  const response = await fetch('https://isksafh.vercel.app/api/public/students', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ studentId, name, year }),
+  });
+
+  const result = await response.json().catch(() => null);
+  if (!response.ok) {
+    const message = result && typeof result === 'object' && 'error' in result ? String(result.error) : 'Unable to sync student to public portal.';
+    throw new Error(message);
+  }
+
+  return result;
 }
 
 export async function approveApplication(id: string) {
@@ -44,8 +63,15 @@ export async function approveApplication(id: string) {
     (data.students?.length ? data.students : [{}]).map(async (student, index) => {
       const studentName = getStudentName(student, index);
       const admissionYearGroup = student.admissionYearGroup || 'Not selected';
+      const publicStudentId = generatePublicStudentId();
       const password = generatePassword();
       const lmsPasswordHash = await hashPassword(password);
+
+      await syncPublicStudent({
+        studentId: publicStudentId,
+        name: studentName,
+        year: admissionYearGroup,
+      });
 
       await db.insert(students).values({
         applicationId: id,
@@ -55,14 +81,15 @@ export async function approveApplication(id: string) {
         lmsPasswordHash,
       });
 
-      await sendLmsAccessEmail({
-        guardianEmail,
-        studentName,
-        admissionYearGroup,
-        password,
-      });
+      // LMS access email disabled: approval still creates the student account and syncs the public student record.
+      // await sendLmsAccessEmail({
+      //   guardianEmail,
+      //   studentName,
+      //   admissionYearGroup,
+      //   password,
+      // });
 
-      return { studentName, guardianEmail, admissionYearGroup };
+      return { studentId: publicStudentId, studentName, guardianEmail, admissionYearGroup };
     }),
   );
 

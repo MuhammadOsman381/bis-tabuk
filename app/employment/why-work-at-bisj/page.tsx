@@ -19,13 +19,13 @@ export default function WhyWorkPage() {
           image: 'https://picsum.photos/id/1048/900/1000',
           imageAlt: 'Staff collaborating in professional development',
         },
-        {
-          title: 'Explore opportunities',
-          cards: [
-            { title: 'Rewards and Benefits', description: 'Learn more about the benefits available to overseas and local hires.', cta: 'View our Rewards and Benefits', href: '/employment/overseas-hire-benefits' },
-            { title: 'Current Vacancies', description: 'Explore open roles across the school.', cta: 'View Current Vacancies', href: '/employment/current-vacancies' },
-          ],
-        },
+        // {
+        //   title: 'Explore opportunities',
+        //   cards: [y
+        //     { title: 'Rewards and Benefits', description: 'Learn more about the benefits available to overseas and local hires.', cta: 'View our Rewards and Benefits', href: '/employment/overseas-hire-benefits' },
+        //     { title: 'Current Vacancies', description: 'Explore open roles across the school.', cta: 'View Current Vacancies', href: '/employment/current-vacancies' },
+        //   ],
+        // },
       ]}
       ctaTitle="Apply Now"
       ctaLabel="Apply Now"

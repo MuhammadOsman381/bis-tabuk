@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  CreditCard,
   FileCheck2,
   GraduationCap,
   Plus,
@@ -83,7 +82,6 @@ const steps = [
   { label: 'Application', icon: School },
   { label: 'Student', icon: UserRound },
   { label: 'Guardian', icon: UsersRound },
-  { label: 'Fees', icon: CreditCard },
   { label: 'Declaration', icon: ShieldCheck },
 ];
 
@@ -375,7 +373,6 @@ export default function ApplyPage() {
   const [submitError, setSubmitError] = useState('');
   const [studentPassportFiles, setStudentPassportFiles] = useState<Record<number, File>>({});
   const [guardianPassportFiles, setGuardianPassportFiles] = useState<Record<number, File>>({});
-  const [paymentReceiptFile, setPaymentReceiptFile] = useState<File | null>(null);
 
   const persistDraft = useCallback((nextDraft: ApplyDraft) => {
     window.localStorage.setItem(APPLY_DRAFT_KEY, JSON.stringify(stripFileData(nextDraft)));
@@ -541,15 +538,13 @@ export default function ApplyPage() {
         }),
       );
 
-      if (!paymentReceiptFile) throw new Error('Please upload the payment receipt image.');
-      const receiptUpload = await uploadFile(paymentReceiptFile);
       const finalDraft: ApplyDraft = {
         ...draft,
         students: studentsWithUploads,
         guardians: guardiansWithUploads,
-        paymentReceiptFileName: receiptUpload.name,
-        paymentReceiptUrl: receiptUpload.url,
-        paymentReceiptPublicId: receiptUpload.publicId,
+        paymentReceiptFileName: '',
+        paymentReceiptUrl: '',
+        paymentReceiptPublicId: '',
         status: 'Pending',
       };
 
@@ -566,7 +561,6 @@ export default function ApplyPage() {
       setDraft(initialDraft());
       setStudentPassportFiles({});
       setGuardianPassportFiles({});
-      setPaymentReceiptFile(null);
       window.localStorage.removeItem(APPLY_DRAFT_KEY);
     } catch (error) {
       setSyncState('error');
@@ -586,12 +580,6 @@ export default function ApplyPage() {
     if (!file) return;
     setGuardianPassportFiles((current) => ({ ...current, [index]: file }));
     updateGuardian(index, { passportFileName: file.name });
-  };
-
-  const handlePaymentReceipt = async (file: File | undefined) => {
-    if (!file) return;
-    setPaymentReceiptFile(file);
-    updateDraft((current) => ({ ...current, paymentReceiptFileName: file.name }));
   };
 
   const declarationOptions = useMemo(
@@ -817,29 +805,6 @@ export default function ApplyPage() {
                       )}
 
                       {activeStep === 3 && (
-                        <ApplicationCard title="Application and Assessment Fees" subtitle="Please upload the bank transfer payment receipt image.">
-                          <div className="space-y-6 text-base leading-8 text-zinc-700 dark:text-zinc-300">
-                            <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-50">Application Fee</h3>
-                            <p>Please settle the application assessment fees amount of SR1,450 (inclusive of VAT) via bank transfer.</p>
-                            <p>This is a non-refundable fee, payable upon the schools’ receiving the application form and all the necessary documentation. The Application fee is valid for three consecutive academic years. Should you wish to reactivate after the third year, a new application fee will be required.</p>
-                            <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-white/10 dark:bg-white/[0.04]">
-                              <p><strong>Account Name:</strong> British International School of Tabuk</p>
-                              <p><strong>Bank Account:</strong> 021-091368-001</p>
-                              <p><strong>Bank Name:</strong> Saudi Awwal Bank</p>
-                              <p><strong>Bank Address:</strong> SAAB - Main Branch</p>
-                              <p><strong>Swift/Bic Code:</strong> SABBSARI</p>
-                              <p><strong>IBAN NO:</strong> SA38-4500-0000-0210-9136-8001</p>
-                            </div>
-                            <Field label="Payment receipt image" required>
-                              <input className={inputClass} type="file" accept="image/*" onChange={(event) => handlePaymentReceipt(event.target.files?.[0])} required={!draft.paymentReceiptFileName} />
-                              {draft.paymentReceiptFileName && <p className="mt-2 text-xs text-zinc-500">{draft.paymentReceiptFileName}</p>}
-                              {draft.paymentReceiptUrl && <a className="mt-1 block text-xs font-bold text-[#C8102E]" href={draft.paymentReceiptUrl} target="_blank">View uploaded receipt</a>}
-                            </Field>
-                          </div>
-                        </ApplicationCard>
-                      )}
-
-                      {activeStep === 4 && (
                         <ApplicationCard title="Final Declaration" subtitle="Please confirm each declaration before submitting.">
                           <div className="space-y-4">
                             {declarationOptions.map((declaration) => {
