@@ -10,13 +10,11 @@ import "leaflet/dist/leaflet.css";
 const center: LatLngExpression = [28.3235655, 36.6442752];
 const markerPosition: LatLngExpression = [28.3235655, 36.6442752];
 
-// 🔴 Red marker icon
 const redIcon = new L.Icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
   shadowUrl:
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -25,8 +23,7 @@ const redIcon = new L.Icon({
 
 const Map: FC = () => {
   useEffect(() => {
-    // Fix default marker issue in Next.js (important)
-    delete (L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: unknown })._getIconUrl;
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
 
     L.Icon.Default.mergeOptions({
       iconRetinaUrl:
@@ -50,7 +47,18 @@ const Map: FC = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      <Marker position={markerPosition} icon={redIcon}>
+      <Marker
+        position={markerPosition}
+        icon={redIcon}
+        eventHandlers={{
+          click: () => {
+            window.open(
+              "https://www.google.com/maps?q=28.3235655,36.6442752",
+              "_blank"
+            );
+          },
+        }}
+      >
         <Popup>British International School of Tabuk</Popup>
       </Marker>
     </MapContainer>
