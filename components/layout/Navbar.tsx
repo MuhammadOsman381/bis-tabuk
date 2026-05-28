@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import img from "../../app/Logo.png"
 import Image from 'next/image';
 import ThemeToggle from '../ui/ThemeToggle';
+import { APPLY_DRAFT_KEY, AUTH_TOKEN_KEY, USER_EMAIL_ENCODED_KEY, USER_EMAIL_HASH_KEY } from '@/lib/storageKeys';
 
 const navItems = [
   { href: '#school-life', label: 'School Life' },
@@ -28,7 +30,23 @@ type NavbarProps = {
 };
 
 export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(Boolean(window.localStorage.getItem(AUTH_TOKEN_KEY)));
+  }, []);
+
+  const handleLogout = () => {
+    window.localStorage.removeItem(AUTH_TOKEN_KEY);
+    window.localStorage.removeItem(USER_EMAIL_HASH_KEY);
+    window.localStorage.removeItem(USER_EMAIL_ENCODED_KEY);
+    window.localStorage.removeItem(APPLY_DRAFT_KEY);
+    setIsLoggedIn(false);
+    setIsOpen(false);
+    router.push('/');
+  };
 
   return (
     <nav className="sticky top-0 z-50">
@@ -77,12 +95,22 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
 
           <ThemeToggle />
 
-          <Link 
-            href="/login" 
-            className="ml-2 bg-[#C8102E] text-white px-5 py-3 rounded-full font-bold text-sm shadow-lg shadow-[#C8102E]/20 hover:bg-[#9B0D23] hover:-translate-y-0.5 transition-all dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
-          >
-            Login
-          </Link>
+          {isLoggedIn ? (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="ml-2 rounded-full bg-[#C8102E] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9B0D23] dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="ml-2 rounded-full bg-[#C8102E] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9B0D23] dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         <div className="hidden items-center gap-3 max-lg:flex">
@@ -133,13 +161,23 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
                   {item.label}
                 </Link>
               ))}
-              <Link
-                href="/apply"
-                onClick={() => setIsOpen(false)}
-                className="mt-2 rounded-full bg-[#C8102E] py-3 text-center font-bold text-white shadow-lg shadow-[#C8102E]/20 dark:shadow-[#C8102E]/30"
-              >
-                Apply Now
-              </Link>
+              {isLoggedIn ? (
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="mt-2 rounded-full bg-[#C8102E] py-3 text-center font-bold text-white shadow-lg shadow-[#C8102E]/20 dark:shadow-[#C8102E]/30"
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="mt-2 rounded-full bg-[#C8102E] py-3 text-center font-bold text-white shadow-lg shadow-[#C8102E]/20 dark:shadow-[#C8102E]/30"
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
