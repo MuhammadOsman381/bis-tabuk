@@ -50,23 +50,14 @@ function normalizeChapters(material: Material): ChapterInput[] {
 }
 
 export default function TeacherPage() {
-  const [token, setToken] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem(TEACHER_TOKEN_KEY) ?? '' : ''));
-  const [profile, setProfile] = useState<TeacherProfile | null>(() => {
-    if (typeof window === 'undefined') return null;
-    const savedProfile = window.localStorage.getItem(TEACHER_PROFILE_KEY);
-    return savedProfile ? JSON.parse(savedProfile) as TeacherProfile : null;
-  });
+  const [token, setToken] = useState('');
+  const [profile, setProfile] = useState<TeacherProfile | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [materials, setMaterials] = useState<Material[]>([]);
   const [editingMaterialId, setEditingMaterialId] = useState('');
   const [editForm, setEditForm] = useState<MaterialForm>({ className: '', title: '', chapters: [emptyChapter()] });
-  const [form, setForm] = useState<MaterialForm>(() => {
-    if (typeof window === 'undefined') return { className: '', title: '', chapters: [emptyChapter()] };
-    const savedProfile = window.localStorage.getItem(TEACHER_PROFILE_KEY);
-    const parsedProfile = savedProfile ? JSON.parse(savedProfile) as TeacherProfile : null;
-    return { className: parsedProfile?.assignedClasses[0] ?? '', title: '', chapters: [emptyChapter()] };
-  });
+  const [form, setForm] = useState<MaterialForm>({ className: '', title: '', chapters: [emptyChapter()] });
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -81,6 +72,17 @@ export default function TeacherPage() {
       setMessage(error instanceof Error ? error.message : 'Unable to load materials.');
     }
   }, [token]);
+
+  useEffect(() => {
+    const savedToken = window.localStorage.getItem(TEACHER_TOKEN_KEY);
+    const savedProfile = window.localStorage.getItem(TEACHER_PROFILE_KEY);
+    if (savedToken) setToken(savedToken);
+    if (savedProfile) {
+      const parsedProfile = JSON.parse(savedProfile) as TeacherProfile;
+      setProfile(parsedProfile);
+      setForm((current) => ({ ...current, className: parsedProfile.assignedClasses[0] ?? '' }));
+    }
+  }, []);
 
   useEffect(() => {
     if (!token || !profile) return;

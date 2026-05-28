@@ -173,9 +173,9 @@ function IconButton({
 }
 
 export default function AdminPage() {
-  const [token, setToken] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem(ADMIN_TOKEN_KEY) ?? '' : ''));
-  const [email, setEmail] = useState('admin@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [token, setToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -193,7 +193,15 @@ export default function AdminPage() {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? 'Unable to load applicants.');
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.localStorage.removeItem(ADMIN_TOKEN_KEY);
+          setToken('');
+          setApplicants([]);
+          setSelectedApplicant(null);
+        }
+        throw new Error(result.error ?? 'Unable to load applicants.');
+      }
       setApplicants(result.applications ?? []);
       setSelectedApplicant((current) => {
         if (!current) return null;
@@ -205,6 +213,11 @@ export default function AdminPage() {
       setIsLoading(false);
     }
   }, [token]);
+
+  useEffect(() => {
+    const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
+    if (savedToken) setToken(savedToken);
+  }, []);
 
   useEffect(() => {
     if (!token) return;
@@ -372,9 +385,6 @@ export default function AdminPage() {
                 </label>
                 <button type="submit" disabled={isLoading} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C8102E] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-70">
                   {isLoading ? 'Please wait...' : 'Login'}
-                </button>
-                <button type="button" onClick={seedAdmin} disabled={isLoading} className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-6 py-3.5 text-sm font-bold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-70 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100">
-                  Create Default Admin
                 </button>
               </form>
             </motion.div>

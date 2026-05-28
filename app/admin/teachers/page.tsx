@@ -26,7 +26,7 @@ function formatDate(value?: string) {
 }
 
 export default function AdminTeachersPage() {
-  const [token, setToken] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem(ADMIN_TOKEN_KEY) ?? '' : ''));
+  const [token, setToken] = useState('');
   const [email, setEmail] = useState('admin@gmail.com');
   const [password, setPassword] = useState('12345678');
   const [teachers, setTeachers] = useState<TeacherRecord[]>([]);
@@ -46,7 +46,14 @@ export default function AdminTeachersPage() {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? 'Unable to load teachers.');
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.localStorage.removeItem(ADMIN_TOKEN_KEY);
+          setToken('');
+          setTeachers([]);
+        }
+        throw new Error(result.error ?? 'Unable to load teachers.');
+      }
       setTeachers(result.teachers ?? []);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Unable to load teachers.');
@@ -54,6 +61,11 @@ export default function AdminTeachersPage() {
       setIsLoading(false);
     }
   }, [token]);
+
+  useEffect(() => {
+    const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
+    if (savedToken) setToken(savedToken);
+  }, []);
 
   useEffect(() => {
     if (!token) return;

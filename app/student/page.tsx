@@ -42,12 +42,8 @@ function normalizeChapters(material: Material): Chapter[] {
 }
 
 export default function StudentPage() {
-  const [token, setToken] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem(STUDENT_TOKEN_KEY) ?? '' : ''));
-  const [profile, setProfile] = useState<StudentProfile | null>(() => {
-    if (typeof window === 'undefined') return null;
-    const savedProfile = window.localStorage.getItem(STUDENT_PROFILE_KEY);
-    return savedProfile ? JSON.parse(savedProfile) as StudentProfile : null;
-  });
+  const [token, setToken] = useState('');
+  const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -65,6 +61,13 @@ export default function StudentPage() {
       setMessage(error instanceof Error ? error.message : 'Unable to load materials.');
     }
   }, [token]);
+
+  useEffect(() => {
+    const savedToken = window.localStorage.getItem(STUDENT_TOKEN_KEY);
+    const savedProfile = window.localStorage.getItem(STUDENT_PROFILE_KEY);
+    if (savedToken) setToken(savedToken);
+    if (savedProfile) setProfile(JSON.parse(savedProfile) as StudentProfile);
+  }, []);
 
   useEffect(() => {
     if (!token || !profile) return;

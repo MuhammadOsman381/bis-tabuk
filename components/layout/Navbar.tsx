@@ -16,6 +16,12 @@ const navItems = [
   // { href: '#news', label: 'News' },
 ];
 
+const portalItems = [
+  { href: '/student', label: 'Student Portal' },
+  { href: 'https://isksafh.vercel.app/', label: 'Teacher Portal' },
+  { href: '/admin', label: 'Admin' },
+];
+
 type NavbarProps = {
   isSidebarOpen: boolean;
   onToggleSidebar: () => void;
@@ -116,6 +122,17 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
                     {item.label}
                   </Link>
                 ))}
+              <div className="my-2 h-px bg-zinc-200/80 dark:bg-white/10" />
+              {portalItems.map((item) => (
+                <Link
+                  key={`mobile-${item.label}`}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-2xl px-4 py-3 font-semibold text-[#1A1F4B] transition hover:bg-[#FFF8F0] hover:text-[#C8102E] dark:text-zinc-200 dark:hover:bg-white/7 dark:hover:text-[#C9A84C]"
+                >
+                  {item.label}
+                </Link>
+              ))}
               <Link
                 href="/apply"
                 onClick={() => setIsOpen(false)}

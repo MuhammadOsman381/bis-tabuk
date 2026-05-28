@@ -31,11 +31,13 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => getPreferredTheme());
+  const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    const preferredTheme = getPreferredTheme();
+    setTheme(preferredTheme);
+    applyTheme(preferredTheme);
+  }, []);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -51,6 +53,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     media.addEventListener('change', handleSystemThemeChange);
     return () => media.removeEventListener('change', handleSystemThemeChange);
   }, []);
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   const value = useMemo(
     () => ({

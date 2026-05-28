@@ -18,9 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="overflow-x-hidden bg-white text-zinc-950 antialiased dark:bg-zinc-950 dark:text-zinc-50">
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head>
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function() {
@@ -34,6 +33,9 @@ export default function RootLayout({
             })();
           `}
         </Script>
+      </head>
+      <body className="overflow-x-hidden bg-white text-zinc-950 antialiased dark:bg-zinc-950 dark:text-zinc-50">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
