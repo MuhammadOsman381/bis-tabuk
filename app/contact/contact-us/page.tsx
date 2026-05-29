@@ -27,6 +27,7 @@ export default function ContactUsPage() {
       title="Contact Us"
       heroImage="/images/contact.jpeg"
       heroAlt="Welcoming school campus entrance"
+      isContact={true}
     >
       <div className="mt-4 grid gap-8 ">
         <div className="space-y-4 text-left">

@@ -50,6 +50,7 @@ type SchoolPageShellProps = {
   ctaLabel?: string;
   ctaHref?: string;
   ctaTitle?: string;
+  isContact:boolean;
 };
 
 function DataTable({ table }: { table: ShellTable }) {
@@ -189,6 +190,7 @@ export default function SchoolPageShell({
   ctaLabel = 'Join Our School',
   ctaHref = '/apply',
   ctaTitle = 'Register Online',
+  isContact = false,
 }: SchoolPageShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -236,7 +238,7 @@ export default function SchoolPageShell({
                 ))}
               </Reveal>
             )}
-             <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
+             {!isContact && <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
                 <iframe
                   className="aspect-video w-full"
                   src="https://www.youtube.com/embed/5VnQgM32YCs"
@@ -244,7 +246,7 @@ export default function SchoolPageShell({
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
-              </div>
+              </div>}
             {quote && (
               <Reveal className="mt-12">
                 <blockquote className="border-l-4 border-[#C8102E] pl-6 text-left text-xl font-semibold leading-9 text-[#1A1F4B] dark:border-[#C9A84C] dark:text-zinc-50">{quote}</blockquote>

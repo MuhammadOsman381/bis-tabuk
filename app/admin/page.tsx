@@ -371,7 +371,7 @@ export default function AdminPage() {
                   <LockKeyhole className="h-7 w-7" />
                 </div>
                 <h2 className="text-3xl font-black text-zinc-950 dark:text-zinc-50">Admin Login</h2>
-                <p className="mt-2 text-sm leading-6 text-zinc-500 dark:text-zinc-400">Create the default admin once, then login to manage applications.</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-500 dark:text-zinc-400">Login to manage applications.</p>
               </div>
 
               <form onSubmit={loginAdmin} className="space-y-5">
