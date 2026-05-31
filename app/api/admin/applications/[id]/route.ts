@@ -54,3 +54,26 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Unable to delete application.' }, { status: 500 });
   }
 }
+
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    if (!getAdminFromRequest(request)) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
+
+    const { id } = await params;
+    const { data, status } = await request.json();
+    if (!data) return NextResponse.json({ error: 'Application data is required.' }, { status: 400 });
+
+    const db = getDb();
+    const [application] = await db
+      .update(applications)
+      .set({ data, status, updatedAt: new Date() })
+      .where(eq(applications.id, id))
+      .returning();
+
+    if (!application) return NextResponse.json({ error: 'Application not found.' }, { status: 404 });
+
+    return NextResponse.json({ ok: true, application });
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unable to update application.' }, { status: 500 });
+  }
+}

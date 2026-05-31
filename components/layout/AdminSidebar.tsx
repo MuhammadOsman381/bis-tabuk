@@ -15,12 +15,12 @@ const adminLinks = [
     href: '/',
     icon: LayoutDashboard,
   },
-  {
-    key: 'teachers',
-    label: 'Teachers',
-    href: '/admin/teachers',
-    icon: UsersRound,
-  },
+  // {
+  //   key: 'teachers',
+  //   label: 'Teachers',
+  //   href: '/admin/teachers',
+  //   icon: UsersRound,
+  // },
   {
     key: 'school-life',
     label: 'School Life',

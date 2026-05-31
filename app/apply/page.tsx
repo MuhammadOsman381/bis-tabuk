@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -97,6 +97,11 @@ const steps = [
 const fallbackCountries = ['Saudi Arabia', 'United Kingdom', 'United States', 'Pakistan', 'India', 'Egypt', 'Jordan', 'Lebanon', 'Philippines', 'South Africa', 'Türkiye', 'United Arab Emirates'];
 const fallbackLanguages = ['Arabic', 'English', 'French', 'Spanish', 'Urdu', 'Hindi', 'Tagalog', 'Turkish', 'German', 'Mandarin'];
 const fallbackPhoneCodes = ['🇸🇦 +966', '🇬🇧 +44', '🇺🇸 +1', '🇵🇰 +92', '🇮🇳 +91', '🇪🇬 +20', '🇯🇴 +962', '🇦🇪 +971'];
+const declarationOptions = [
+  'I hereby declare that all information provided in this application form is true, complete, and accurate to the best of my knowledge. I understand that any false or misleading information may result in the withdrawal of an offer of admission or the cancellation of enrolment.',
+  'I acknowledge that I have read and understood all policies and conditions set forth by The British International School of Tabuk (BIST), including those related to safeguarding, data protection, student welfare, and behaviour expectations available on school website.',
+  'By submitting this application, I confirm my agreement to abide by all school rules, regulations, and guidelines. I also consent to the School’s collection, processing, and storage of personal data in accordance with the Personal Data Protection Law (PDPL) of Saudi Arabia.',
+];
 
 const emptyStudent = (): StudentForm => ({
   firstName: '',
@@ -570,6 +575,12 @@ export default function ApplyPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!declarationOptions.every((declaration) => draft.declarations.includes(declaration))) {
+      setActiveStep(3);
+      setSubmitError('Please accept all final declarations before submitting your application.');
+      return;
+    }
+
     const token = window.localStorage.getItem(AUTH_TOKEN_KEY);
     if (!token || !userEmail) {
       setSubmitError('Please login again before submitting your application.');
@@ -686,15 +697,7 @@ export default function ApplyPage() {
     setSubmitError('');
   };
 
-  const declarationOptions = useMemo(
-    () => [
-      'I hereby declare that all information provided in this application form is true, complete, and accurate to the best of my knowledge. I understand that any false or misleading information may result in the withdrawal of an offer of admission or the cancellation of enrolment.',
-      'I acknowledge that I have read and understood all policies and conditions set forth by The British International School of Tabuk (BIST), including those related to safeguarding, data protection, student welfare, and behaviour expectations available on school website.',
-      'By submitting this application, I confirm my agreement to abide by all school rules, regulations, and guidelines. I also consent to the School’s collection, processing, and storage of personal data in accordance with the Personal Data Protection Law (PDPL) of Saudi Arabia.',
-    ],
-    [],
-  );
-
+  const allDeclarationsAccepted = declarationOptions.every((declaration) => draft.declarations.includes(declaration));
   const activeStepLabel = steps[activeStep].label;
   const goToPreviousStep = () => setActiveStep((step) => Math.max(0, step - 1));
   const goToNextStep = () => setActiveStep((step) => Math.min(steps.length - 1, step + 1));
@@ -974,21 +977,39 @@ export default function ApplyPage() {
                       {activeStep === 3 && (
                         <ApplicationCard title="Final Declaration" subtitle="Please confirm each declaration before submitting.">
                           <div className="space-y-4">
-                            {declarationOptions.map((declaration) => {
+                            {declarationOptions.map((declaration, index) => {
                               const checked = draft.declarations.includes(declaration);
                               return (
-                                <label key={declaration} className="flex gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-5 text-sm leading-7 text-zinc-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300">
+                                <label
+                                  key={declaration}
+                                  className={`flex cursor-pointer gap-4 rounded-2xl border p-5 text-sm leading-7 transition ${
+                                    checked
+                                      ? 'border-emerald-200 bg-emerald-50 text-emerald-950 shadow-sm dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-100'
+                                      : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-[#C8102E]/25 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300'
+                                  }`}
+                                >
+                                  <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${checked ? 'bg-emerald-600 text-white' : 'bg-white text-zinc-300 ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-white/10'}`}>
+                                    <Check className="h-4 w-4" />
+                                  </span>
                                   <input
                                     type="checkbox"
-                                    className="mt-1 h-5 w-5 rounded border-zinc-300 text-[#C8102E]"
+                                    className="sr-only"
                                     checked={checked}
                                     onChange={() => updateDraft((current) => ({ ...current, declarations: checked ? current.declarations.filter((item) => item !== declaration) : [...current.declarations, declaration] }))}
                                     required
                                   />
-                                  <span>{declaration}</span>
+                                  <span>
+                                    <span className="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-zinc-400">Declaration {index + 1}</span>
+                                    {declaration}
+                                  </span>
                                 </label>
                               );
                             })}
+                            {!allDeclarationsAccepted && (
+                              <p className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
+                                All declarations must be accepted before the application can be submitted.
+                              </p>
+                            )}
                           </div>
                         </ApplicationCard>
                       )}
@@ -1005,7 +1026,7 @@ export default function ApplyPage() {
                         <ArrowRight className="h-4 w-4" />
                       </button>
                     ) : (
-                      <button type="submit" disabled={isSubmitting} className="inline-flex items-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-70">
+                      <button type="submit" disabled={isSubmitting || !allDeclarationsAccepted} className="inline-flex items-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-50">
                         {isSubmitting ? 'Submitting...' : editingApplicationId ? 'Update Application' : 'Submit Application'}
                         <FileCheck2 className="h-4 w-4" />
                       </button>

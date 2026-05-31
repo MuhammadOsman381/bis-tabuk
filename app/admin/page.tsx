@@ -2,7 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, Download, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Trash2, UserCheck, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Download, Edit3, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Save, Trash2, UserCheck, X, XCircle } from 'lucide-react';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
@@ -43,6 +43,47 @@ const statusStyles: Record<ApplicantStatus, string> = {
 
 const inputClass =
   'focus-ring w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-950 placeholder:text-zinc-400 shadow-sm shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-950/70 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:shadow-black/20';
+
+const textareaClass =
+  'focus-ring min-h-24 w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-950 placeholder:text-zinc-400 shadow-sm shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-950/70 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:shadow-black/20';
+
+const declarationOptions = [
+  'I hereby declare that all information provided in this application form is true, complete, and accurate to the best of my knowledge. I understand that any false or misleading information may result in the withdrawal of an offer of admission or the cancellation of enrolment.',
+  'I acknowledge that I have read and understood all policies and conditions set forth by The British International School of Tabuk (BIST), including those related to safeguarding, data protection, student welfare, and behaviour expectations available on school website',
+  'By submitting this application, I confirm my agreement to abide by all school rules, regulations, and guidelines. I also consent to the School’s collection, processing, and storage of personal data in accordance with the Personal Data Protection Law (PDPL) of Saudi Arabia.',
+];
+
+const studentFields: Array<{ key: keyof StudentData; label: string; type?: string; options?: string[] }> = [
+  { key: 'firstName', label: 'First Name' },
+  { key: 'lastName', label: 'Last Name' },
+  { key: 'dateOfBirth', label: 'Date of Birth', type: 'date' },
+  { key: 'admissionYearGroup', label: 'Admission Year Group', options: yearGroups },
+  { key: 'gender', label: 'Gender', options: ['Male', 'Female'] },
+  { key: 'nationality', label: 'Nationality' },
+  { key: 'countryOfBirth', label: 'Country of Birth' },
+  { key: 'spokenLanguages', label: 'Spoken Languages' },
+  { key: 'startDate', label: 'Start Date', type: 'date' },
+  { key: 'requiresSupport', label: 'Requires Special Educational Support?', options: ['Yes', 'No'] },
+  { key: 'hasIqama', label: 'Does Child Have Iqama?', options: ['Yes', 'No'] },
+];
+
+const guardianFields: Array<{ key: keyof GuardianData; label: string; type?: string; options?: string[] }> = [
+  { key: 'title', label: 'Contact Title', options: ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr', 'Prof'] },
+  { key: 'firstName', label: 'Contact First Name' },
+  { key: 'lastName', label: 'Contact Last Name' },
+  { key: 'email', label: 'Contact Email', type: 'email' },
+  { key: 'phoneCode', label: 'Phone Country Code' },
+  { key: 'phone', label: 'Contact Phone' },
+  { key: 'homeAddress', label: 'Home Address' },
+  { key: 'homeAddressLine1', label: 'Home Address Line 1' },
+  { key: 'homeAddressLine2', label: 'Home Address Line 2' },
+  { key: 'employer', label: 'Contact Employer' },
+  { key: 'jobTitle', label: 'Job Title' },
+  { key: 'relationshipStatus', label: 'Relationship Status', options: ['Married', 'Remarried', 'Separated or Divorced'] },
+  { key: 'nationality', label: 'Nationality' },
+  { key: 'iqamaIssued', label: 'Is the Iqama Issued?', options: ['Yes', 'No'] },
+  { key: 'relationshipToStudent', label: 'Relationship to Student', options: ['Father', 'Mother', 'Other'] },
+];
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
@@ -162,6 +203,83 @@ function ImagePreview({ title, url }: { title: string; url?: string }) {
   );
 }
 
+function DeclarationsView({ declarations = [] }: { declarations?: string[] }) {
+  return (
+    <section className="rounded-3xl border border-zinc-200/80 bg-white p-5 shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">Final Declarations</h3>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Applicant confirmations captured at submission.</p>
+        </div>
+        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-200">
+          {declarations.length}/{declarationOptions.length}
+        </span>
+      </div>
+      <div className="mt-5 space-y-3">
+        {declarationOptions.map((declaration, index) => {
+          const isChecked = declarations.includes(declaration);
+
+          return (
+            <div
+              key={declaration}
+              className={`rounded-2xl border p-4 transition ${
+                isChecked
+                  ? 'border-emerald-200 bg-emerald-50/80 dark:border-emerald-400/20 dark:bg-emerald-400/10'
+                  : 'border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04]'
+              }`}
+            >
+              <div className="flex gap-3">
+                <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${isChecked ? 'bg-emerald-600 text-white' : 'bg-zinc-200 text-zinc-400 dark:bg-white/10'}`}>
+                  <CheckCircle2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-400">Declaration {index + 1}</p>
+                  <p className="mt-2 text-sm font-semibold leading-7 text-zinc-700 dark:text-zinc-200">{declaration}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {!declarations.length && <p className="rounded-2xl border border-dashed border-zinc-300 p-4 text-sm font-bold text-zinc-500 dark:border-white/10 dark:text-zinc-400">No declarations selected yet.</p>}
+      </div>
+    </section>
+  );
+}
+
+function EditableField({
+  label,
+  value,
+  onChange,
+  type = 'text',
+  options,
+}: {
+  label: string;
+  value: unknown;
+  onChange: (value: string | string[]) => void;
+  type?: string;
+  options?: string[];
+}) {
+  const fieldValue = Array.isArray(value) ? value.join(', ') : value ? String(value) : '';
+
+  return (
+    <label className="block">
+      <span className="mb-2 block text-[0.68rem] font-black uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400">{label}</span>
+      {options ? (
+        <select className={inputClass} value={fieldValue} onChange={(event) => onChange(event.target.value)}>
+          <option value="">Select</option>
+          {options.map((option) => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+      ) : label.toLowerCase().includes('address') ? (
+        <textarea className={textareaClass} value={fieldValue} onChange={(event) => onChange(event.target.value)} />
+      ) : (
+        <input className={inputClass} value={fieldValue} onChange={(event) => onChange(Array.isArray(value) ? event.target.value.split(',').map((item) => item.trim()).filter(Boolean) : event.target.value)} type={type} />
+      )}
+    </label>
+  );
+}
+
 function IconButton({
   label,
   children,
@@ -202,6 +320,8 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
+  const [editingApplicantId, setEditingApplicantId] = useState('');
+  const [editData, setEditData] = useState<ApplicationData | null>(null);
   const [yearFilter, setYearFilter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -248,6 +368,72 @@ export default function AdminPage() {
     }
   }, [token]);
 
+  const beginEditApplicant = (applicant: Applicant) => {
+    const data = getApplicationData(applicant);
+    setEditingApplicantId(applicant.id);
+    setEditData({
+      ...data,
+      students: getStudents(applicant).length ? getStudents(applicant).map((student) => ({ ...student })) : [{}],
+      guardians: getGuardians(applicant).length ? getGuardians(applicant).map((guardian) => ({ ...guardian })) : [{}],
+      declarations: Array.isArray(data.declarations) ? data.declarations : [],
+    });
+  };
+
+  const cancelEditApplicant = () => {
+    setEditingApplicantId('');
+    setEditData(null);
+  };
+
+  const updateEditField = (key: keyof ApplicationData, value: string | string[]) => {
+    setEditData((current) => (current ? { ...current, [key]: value } : current));
+  };
+
+  const updateNestedEditField = (section: 'students' | 'guardians', index: number, key: string, value: string | string[]) => {
+    setEditData((current) => {
+      if (!current) return current;
+      const list = [...((current[section] as Record<string, unknown>[] | undefined) ?? [])];
+      list[index] = { ...(list[index] ?? {}), [key]: value };
+      return { ...current, [section]: list };
+    });
+  };
+
+  const toggleDeclaration = (declaration: string) => {
+    setEditData((current) => {
+      if (!current) return current;
+      const declarations = Array.isArray(current.declarations) ? current.declarations : [];
+      return {
+        ...current,
+        declarations: declarations.includes(declaration) ? declarations.filter((item) => item !== declaration) : [...declarations, declaration],
+      };
+    });
+  };
+
+  const saveApplicantEdit = async () => {
+    if (!selectedApplicant || !editData) return;
+
+    setIsLoading(true);
+    setMessage('');
+    try {
+      const response = await fetch(`/api/admin/applications/${selectedApplicant.id}`, {
+        method: 'PATCH',
+        headers: { ...authHeaders, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: editData, status: selectedApplicant.status }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error ?? 'Unable to update application.');
+
+      const updatedApplicant: Applicant = { ...selectedApplicant, data: result.application.data, status: result.application.status, updatedAt: result.application.updatedAt };
+      setApplicants((current) => current.map((applicant) => (applicant.id === selectedApplicant.id ? updatedApplicant : applicant)));
+      setSelectedApplicant(updatedApplicant);
+      cancelEditApplicant();
+      setMessage('Application form updated successfully.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to update application.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     queueMicrotask(() => {
       const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
@@ -259,21 +445,6 @@ export default function AdminPage() {
     if (!token) return;
     queueMicrotask(() => loadApplicants(token));
   }, [loadApplicants, token]);
-
-  const seedAdmin = async () => {
-    setIsLoading(true);
-    setMessage('');
-    try {
-      const response = await fetch('/api/admin/seed', { method: 'POST' });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? 'Unable to create admin.');
-      setMessage('Admin account is ready. You can login now.');
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Unable to create admin.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const loginAdmin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -537,6 +708,7 @@ export default function AdminPage() {
                         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{selectedApplicant.email}</p>
                       </div>
                       <div className="flex gap-2">
+                        <IconButton label="Edit registration form" onClick={() => beginEditApplicant(selectedApplicant)} disabled={isLoading}><Edit3 className="h-4 w-4" /></IconButton>
                         <IconButton label="Approve" tone="approve" onClick={() => updateStatus(selectedApplicant.id, 'approve')} disabled={isLoading}><CheckCircle2 className="h-4 w-4" /></IconButton>
                         <IconButton label="Reject" tone="reject" onClick={() => updateStatus(selectedApplicant.id, 'reject')} disabled={isLoading}><XCircle className="h-4 w-4" /></IconButton>
                         <IconButton label="Delete" tone="delete" onClick={() => deleteApplicant(selectedApplicant.id)} disabled={isLoading}><Trash2 className="h-4 w-4" /></IconButton>
@@ -544,12 +716,98 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="grid gap-5 lg:grid-cols-2">
-                    <DetailGrid title="Application" values={{ howFound: getApplicationData(selectedApplicant).howFound, email: selectedApplicant.email, createdAt: formatDate(selectedApplicant.createdAt), updatedAt: formatDate(selectedApplicant.updatedAt), paymentReceiptFileName: getApplicationData(selectedApplicant).paymentReceiptFileName }} />
-                    {getGuardians(selectedApplicant).length ? getGuardians(selectedApplicant).map((guardian, index) => <DetailGrid key={`guardian-${index}`} title={`Guardian ${index + 1}`} values={guardian} />) : <EmptyDetail title="Guardian" message="Guardian details are not completed yet." />}
-                    {getStudents(selectedApplicant).length ? getStudents(selectedApplicant).map((student, index) => <DetailGrid key={`student-${index}`} title={`Student ${index + 1}`} values={student} />) : <EmptyDetail title="Student" message="Student details are not completed yet. Ask the applicant to finish the Student step and wait for autosave." />}
-                    <DetailGrid title="Declarations" values={{ declarations: getApplicationData(selectedApplicant).declarations ?? [] }} />
-                  </div>
+                  {editingApplicantId === selectedApplicant.id && editData ? (
+                    <section className="rounded-3xl border border-[#C8102E]/15 bg-white p-5 shadow-2xl shadow-zinc-900/8 dark:border-[#ff8fa0]/20 dark:bg-zinc-900/88">
+                      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                        <div>
+                          <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-50">Edit Registration Form</h3>
+                          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Update saved application details. Uploaded image files are managed separately.</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button type="button" onClick={saveApplicantEdit} disabled={isLoading} className="inline-flex items-center gap-2 rounded-full bg-[#C8102E] px-5 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-60">
+                            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                            Save
+                          </button>
+                          <button type="button" onClick={cancelEditApplicant} className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-black text-zinc-700 transition hover:-translate-y-0.5 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100">
+                            <X className="h-4 w-4" />
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 grid gap-5">
+                        <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+                          <h4 className="text-base font-black text-zinc-950 dark:text-zinc-50">Application</h4>
+                          <div className="mt-4 grid gap-4 md:grid-cols-2">
+                            <EditableField label="How You Found BIST?" value={editData.howFound} onChange={(value) => updateEditField('howFound', value)} options={['School Website', 'Current BIST Staff or Student', 'Online Search']} />
+                            <EditableField label="Payment Receipt File Name" value={editData.paymentReceiptFileName} onChange={(value) => updateEditField('paymentReceiptFileName', value)} />
+                          </div>
+                        </div>
+
+                        {(editData.students ?? []).map((student, index) => (
+                          <div key={`edit-student-${index}`} className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+                            <h4 className="text-base font-black text-zinc-950 dark:text-zinc-50">Student {index + 1}</h4>
+                            <div className="mt-4 grid gap-4 md:grid-cols-2">
+                              {studentFields.map((field) => (
+                                <EditableField
+                                  key={String(field.key)}
+                                  label={field.label}
+                                  type={field.type}
+                                  options={field.options}
+                                  value={student[field.key]}
+                                  onChange={(value) => updateNestedEditField('students', index, String(field.key), value)}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+
+                        {(editData.guardians ?? []).map((guardian, index) => (
+                          <div key={`edit-guardian-${index}`} className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+                            <h4 className="text-base font-black text-zinc-950 dark:text-zinc-50">Guardian {index + 1}</h4>
+                            <div className="mt-4 grid gap-4 md:grid-cols-2">
+                              {guardianFields.map((field) => (
+                                <EditableField
+                                  key={String(field.key)}
+                                  label={field.label}
+                                  type={field.type}
+                                  options={field.options}
+                                  value={guardian[field.key]}
+                                  onChange={(value) => updateNestedEditField('guardians', index, String(field.key), value)}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+
+                        <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+                          <h4 className="text-base font-black text-zinc-950 dark:text-zinc-50">Final Declarations</h4>
+                          <div className="mt-4 space-y-3">
+                            {declarationOptions.map((declaration, index) => {
+                              const checked = (editData.declarations ?? []).includes(declaration);
+
+                              return (
+                                <label key={declaration} className={`flex cursor-pointer gap-3 rounded-2xl border p-4 transition ${checked ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-400/20 dark:bg-emerald-400/10' : 'border-zinc-200 bg-white dark:border-white/10 dark:bg-zinc-950/40'}`}>
+                                  <input type="checkbox" checked={checked} onChange={() => toggleDeclaration(declaration)} className="mt-1 h-4 w-4 rounded border-zinc-300 text-[#C8102E] focus:ring-[#C8102E]" />
+                                  <span>
+                                    <span className="block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Declaration {index + 1}</span>
+                                    <span className="mt-2 block text-sm font-semibold leading-7 text-zinc-700 dark:text-zinc-200">{declaration}</span>
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  ) : (
+                    <div className="grid gap-5 lg:grid-cols-2">
+                      <DetailGrid title="Application" values={{ howFound: getApplicationData(selectedApplicant).howFound, email: selectedApplicant.email, createdAt: formatDate(selectedApplicant.createdAt), updatedAt: formatDate(selectedApplicant.updatedAt), paymentReceiptFileName: getApplicationData(selectedApplicant).paymentReceiptFileName }} />
+                      {getGuardians(selectedApplicant).length ? getGuardians(selectedApplicant).map((guardian, index) => <DetailGrid key={`guardian-${index}`} title={`Guardian ${index + 1}`} values={guardian} />) : <EmptyDetail title="Guardian" message="Guardian details are not completed yet." />}
+                      {getStudents(selectedApplicant).length ? getStudents(selectedApplicant).map((student, index) => <DetailGrid key={`student-${index}`} title={`Student ${index + 1}`} values={student} />) : <EmptyDetail title="Student" message="Student details are not completed yet. Ask the applicant to finish the Student step and wait for autosave." />}
+                      <DeclarationsView declarations={getApplicationData(selectedApplicant).declarations ?? []} />
+                    </div>
+                  )}
 
                   <section className="rounded-3xl border border-zinc-200/80 bg-white p-5 shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
                     <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">Uploaded Images</h3>
