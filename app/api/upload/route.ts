@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
+import { deleteCloudinaryAssets } from '@/lib/server/cloudinary';
+import { getAdminFromRequest } from '@/lib/server/adminAuth';
+import { getUserFromRequest } from '@/lib/server/userAuth';
 
 export async function POST(request: Request) {
   try {
@@ -23,5 +26,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, url: result.secure_url, publicId: result.public_id, name: file.name });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Upload failed.' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    if (!getUserFromRequest(request) && !getAdminFromRequest(request)) {
+      return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
+    }
+
+    const { publicId, url } = (await request.json()) as { publicId?: string; url?: string };
+    if (!publicId && !url) return NextResponse.json({ error: 'publicId or url is required.' }, { status: 400 });
+
+    const result = await deleteCloudinaryAssets([{ publicId, url }]);
+    return NextResponse.json({ ok: true, result });
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unable to delete upload.' }, { status: 500 });
   }
 }

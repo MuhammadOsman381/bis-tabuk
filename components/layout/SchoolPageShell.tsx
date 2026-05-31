@@ -50,7 +50,7 @@ type SchoolPageShellProps = {
   ctaLabel?: string;
   ctaHref?: string;
   ctaTitle?: string;
-  isContact:boolean;
+  isContact?: boolean;
 };
 
 function DataTable({ table }: { table: ShellTable }) {

@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, UsersRound } from 'lucide-react';
+import { LayoutDashboard, Sparkles, UsersRound } from 'lucide-react';
 
 type AdminSidebarProps = {
-  active?: 'dashboard' | 'teachers';
+  active?: 'dashboard' | 'teachers' | 'school-life';
 };
 
 const adminLinks = [
@@ -15,12 +15,18 @@ const adminLinks = [
     href: '/',
     icon: LayoutDashboard,
   },
-  // {
-  //   key: 'teachers',
-  //   label: 'Teachers',
-  //   href: '/admin/teachers',
-  //   icon: UsersRound,
-  // },
+  {
+    key: 'teachers',
+    label: 'Teachers',
+    href: '/admin/teachers',
+    icon: UsersRound,
+  },
+  {
+    key: 'school-life',
+    label: 'School Life',
+    href: '/admin/school-life',
+    icon: Sparkles,
+  },
 ] as const;
 
 export default function AdminSidebar({ active }: AdminSidebarProps) {

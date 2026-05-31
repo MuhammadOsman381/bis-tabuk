@@ -59,3 +59,14 @@ export const materials = pgTable('materials', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
+
+export const schoolLifeItems = pgTable('school_life_items', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  category: text('category').notNull(),
+  imageUrl: text('image_url').notNull(),
+  imagePublicId: text('image_public_id'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});

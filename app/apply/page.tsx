@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  Edit3,
   FileCheck2,
   GraduationCap,
   Plus,
@@ -69,6 +70,14 @@ type ApplyDraft = {
   paymentReceiptPublicId: string;
   declarations: string[];
   status: 'Pending' | 'approve' | 'reject';
+};
+
+type SavedApplication = {
+  id: string;
+  data: ApplyDraft | { data?: ApplyDraft; draft?: ApplyDraft; application?: ApplyDraft };
+  status: ApplyDraft['status'];
+  createdAt: string;
+  updatedAt: string;
 };
 
 type CountryApiItem = {
@@ -357,13 +366,51 @@ function stripFileData(draft: ApplyDraft): ApplyDraft {
   };
 }
 
+function normalizeDraft(data: SavedApplication['data'] | Partial<ApplyDraft> | null | undefined): ApplyDraft {
+  const nestedData = data as { data?: Partial<ApplyDraft>; draft?: Partial<ApplyDraft>; application?: Partial<ApplyDraft> } | null | undefined;
+  const parsed = (nestedData?.data ?? nestedData?.draft ?? nestedData?.application ?? data ?? {}) as Partial<ApplyDraft>;
+
+  return {
+    howFound: parsed.howFound ?? '',
+    students: parsed.students?.length ? parsed.students : [emptyStudent()],
+    guardians: parsed.guardians?.length ? parsed.guardians : [emptyGuardian()],
+    paymentReceiptFileName: parsed.paymentReceiptFileName ?? '',
+    paymentReceiptUrl: parsed.paymentReceiptUrl ?? '',
+    paymentReceiptPublicId: parsed.paymentReceiptPublicId ?? '',
+    declarations: parsed.declarations ?? [],
+    status: parsed.status ?? 'Pending',
+  };
+}
+
+function formatApplicationDate(value: string) {
+  return new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
+}
+
+function getApplicationTitle(application: SavedApplication) {
+  const data = normalizeDraft(application.data);
+  const names = data.students
+    .map((student, index) => [student.firstName, student.lastName].filter(Boolean).join(' ') || `Student ${index + 1}`)
+    .join(', ');
+
+  return names || 'Untitled application';
+}
+
+function getApplicationYear(application: SavedApplication) {
+  const data = normalizeDraft(application.data);
+  const years = data.students.map((student) => student.admissionYearGroup).filter(Boolean);
+  return years.length ? years.join(', ') : 'Year not selected';
+}
+
 export default function ApplyPage() {
   const router = useRouter();
   const pathname = usePathname();
   const [submitted, setSubmitted] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'form'>('list');
+  const [editingApplicationId, setEditingApplicationId] = useState('');
   const [activeStep, setActiveStep] = useState(0);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [draft, setDraft] = useState<ApplyDraft>(() => initialDraft());
+  const [applications, setApplications] = useState<SavedApplication[]>([]);
   const [countries, setCountries] = useState(fallbackCountries);
   const [languages, setLanguages] = useState(fallbackLanguages);
   const [phoneCodes, setPhoneCodes] = useState(fallbackPhoneCodes);
@@ -373,6 +420,15 @@ export default function ApplyPage() {
   const [submitError, setSubmitError] = useState('');
   const [studentPassportFiles, setStudentPassportFiles] = useState<Record<number, File>>({});
   const [guardianPassportFiles, setGuardianPassportFiles] = useState<Record<number, File>>({});
+
+  const loadApplications = useCallback(async (token: string) => {
+    const response = await fetch('/api/applications/draft', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error ?? 'Unable to load applications.');
+    setApplications(result.applications ?? []);
+  }, []);
 
   const persistDraft = useCallback((nextDraft: ApplyDraft) => {
     window.localStorage.setItem(APPLY_DRAFT_KEY, JSON.stringify(stripFileData(nextDraft)));
@@ -409,17 +465,7 @@ export default function ApplyPage() {
 
       if (savedDraft) {
         try {
-          const parsed = JSON.parse(savedDraft) as Partial<ApplyDraft>;
-          setDraft(stripFileData({
-            howFound: parsed.howFound ?? '',
-            students: parsed.students?.length ? parsed.students : [emptyStudent()],
-            guardians: parsed.guardians?.length ? parsed.guardians : [emptyGuardian()],
-            paymentReceiptFileName: '',
-            paymentReceiptUrl: '',
-            paymentReceiptPublicId: '',
-            declarations: parsed.declarations ?? [],
-            status: parsed.status ?? 'Pending',
-          }));
+          setDraft(stripFileData(normalizeDraft(JSON.parse(savedDraft) as Partial<ApplyDraft>)));
         } catch {
           window.localStorage.removeItem(APPLY_DRAFT_KEY);
         }
@@ -430,13 +476,15 @@ export default function ApplyPage() {
         }));
       }
 
-      setIsCheckingAuth(false);
+      loadApplications(token)
+        .catch((error) => setSubmitError(error instanceof Error ? error.message : 'Unable to load applications.'))
+        .finally(() => setIsCheckingAuth(false));
     });
 
     return () => {
       isActive = false;
     };
-  }, [pathname, router, updateDraft]);
+  }, [loadApplications, pathname, router, updateDraft]);
 
   useEffect(() => {
     async function loadDirectoryData() {
@@ -491,6 +539,20 @@ export default function ApplyPage() {
     return result as { url: string; publicId: string; name: string };
   };
 
+  const deleteUploadedFile = async ({ publicId, url, token }: { publicId?: string; url?: string; token: string }) => {
+    if (!publicId && !url) return;
+
+    try {
+      await fetch('/api/upload', {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId, url }),
+      });
+    } catch {
+      // A failed cleanup should not block application submission after the replacement upload succeeds.
+    }
+  };
+
   const updateStudent = (index: number, updates: Partial<StudentForm>) => {
     updateDraft((current) => ({
       ...current,
@@ -523,8 +585,10 @@ export default function ApplyPage() {
       const studentsWithUploads = await Promise.all(
         draft.students.map(async (student, index) => {
           const file = studentPassportFiles[index];
+          if (!file && student.passportUrl) return student;
           if (!file) throw new Error(`Please upload passport image for Student ${index + 1}.`);
           const result = await uploadFile(file);
+          await deleteUploadedFile({ publicId: student.passportPublicId, url: student.passportUrl, token });
           return { ...student, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
         }),
       );
@@ -532,8 +596,10 @@ export default function ApplyPage() {
       const guardiansWithUploads = await Promise.all(
         draft.guardians.map(async (guardian, index) => {
           const file = guardianPassportFiles[index];
+          if (!file && guardian.passportUrl) return guardian;
           if (!file) throw new Error(`Please upload passport image for Guardian ${index + 1}.`);
           const result = await uploadFile(file);
+          await deleteUploadedFile({ publicId: guardian.passportPublicId, url: guardian.passportUrl, token });
           return { ...guardian, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
         }),
       );
@@ -548,20 +614,23 @@ export default function ApplyPage() {
         status: 'Pending',
       };
 
+      const tokenHeaders = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
       const response = await fetch('/api/applications/draft', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: finalDraft, status: 'Pending' }),
+        method: editingApplicationId ? 'PUT' : 'POST',
+        headers: tokenHeaders,
+        body: JSON.stringify({ id: editingApplicationId || undefined, data: finalDraft, status: 'Pending' }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? 'Unable to submit application.');
 
       setSyncState('saved');
       setSubmitted(true);
+      setEditingApplicationId('');
       setDraft(initialDraft());
       setStudentPassportFiles({});
       setGuardianPassportFiles({});
       window.localStorage.removeItem(APPLY_DRAFT_KEY);
+      await loadApplications(token);
     } catch (error) {
       setSyncState('error');
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit application.');
@@ -580,6 +649,41 @@ export default function ApplyPage() {
     if (!file) return;
     setGuardianPassportFiles((current) => ({ ...current, [index]: file }));
     updateGuardian(index, { passportFileName: file.name });
+  };
+
+  const startNewApplication = () => {
+    const savedEmail = userEmail || decodeEmail(window.localStorage.getItem(USER_EMAIL_ENCODED_KEY));
+    const nextDraft = initialDraft();
+    if (savedEmail) nextDraft.guardians[0].email = savedEmail;
+    setDraft(nextDraft);
+    setStudentPassportFiles({});
+    setGuardianPassportFiles({});
+    setEditingApplicationId('');
+    setSubmitted(false);
+    setSubmitError('');
+    setSyncState('idle');
+    setActiveStep(0);
+    window.localStorage.removeItem(APPLY_DRAFT_KEY);
+    setViewMode('form');
+  };
+
+  const editApplication = (application: SavedApplication) => {
+    setDraft(normalizeDraft(application.data));
+    setStudentPassportFiles({});
+    setGuardianPassportFiles({});
+    setEditingApplicationId(application.id);
+    setSubmitted(false);
+    setSubmitError('');
+    setSyncState('idle');
+    setActiveStep(0);
+    setViewMode('form');
+  };
+
+  const returnToApplications = () => {
+    setViewMode('list');
+    setSubmitted(false);
+    setEditingApplicationId('');
+    setSubmitError('');
   };
 
   const declarationOptions = useMemo(
@@ -606,6 +710,61 @@ export default function ApplyPage() {
               <div className="h-5 w-44 rounded-full bg-zinc-100 dark:bg-white/10" />
               <div className="mt-4 h-3 w-full rounded-full bg-zinc-100 dark:bg-white/10" />
               <div className="mt-2 h-3 w-3/4 rounded-full bg-zinc-100 dark:bg-white/10" />
+            </div>
+          </div>
+        ) : viewMode === 'list' ? (
+          <div className="mx-auto max-w-5xl">
+            <Link href="/" className="mb-6 inline-flex items-center gap-2 rounded-full text-sm font-bold text-[#C8102E] transition hover:gap-3 dark:text-[#ff8fa0]">
+              <ArrowLeft className="h-4 w-4" />
+              Return to Home
+            </Link>
+
+            <div className="mb-8 flex flex-col justify-between gap-5 rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-xl shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88 sm:p-8 md:flex-row md:items-center">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.24em] text-[#8796B3] dark:text-zinc-500">BIST admissions</p>
+                <h1 className="mt-3 text-3xl font-black text-zinc-950 dark:text-zinc-50 sm:text-4xl">Your Applications</h1>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">View previously submitted forms, edit an existing application, or start a fresh application.</p>
+              </div>
+              <button type="button" onClick={startNewApplication} className="inline-flex items-center justify-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5 hover:bg-[#9B0D23]">
+                <Plus className="h-4 w-4" />
+                Submit New Form
+              </button>
+            </div>
+
+            {submitError && (
+              <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 shadow-sm dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-200">
+                {submitError}
+              </div>
+            )}
+
+            <div className="grid gap-4">
+              {applications.length ? applications.map((application, index) => (
+                <motion.div
+                  key={application.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.035 }}
+                  className="flex flex-col justify-between gap-5 rounded-3xl border border-zinc-200/80 bg-white p-5 shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88 md:flex-row md:items-center"
+                >
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-black text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-200">{application.status}</span>
+                      <span className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-400">Updated {formatApplicationDate(application.updatedAt)}</span>
+                    </div>
+                    <h2 className="mt-3 text-xl font-black text-zinc-950 dark:text-zinc-50">{getApplicationTitle(application)}</h2>
+                    <p className="mt-1 text-sm font-bold text-zinc-500 dark:text-zinc-400">{getApplicationYear(application)}</p>
+                  </div>
+                  <button type="button" onClick={() => editApplication(application)} className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-black text-zinc-700 transition hover:-translate-y-0.5 hover:border-[#C8102E]/30 hover:text-[#C8102E] dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:text-[#C9A84C]">
+                    <Edit3 className="h-4 w-4" />
+                    Edit Form
+                  </button>
+                </motion.div>
+              )) : (
+                <div className="rounded-3xl border border-dashed border-zinc-300 bg-white/70 p-10 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+                  <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">No submitted forms yet</h2>
+                  <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-500 dark:text-zinc-400">Start a new admissions form. After submission, it will appear here for review and editing.</p>
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -642,12 +801,17 @@ export default function ApplyPage() {
             </aside>
 
             <div>
-              <Link href="/" className="mb-6 inline-flex items-center gap-2 rounded-full text-sm font-bold text-[#C8102E] transition hover:gap-3 dark:text-[#ff8fa0]">
-                <ArrowLeft className="h-4 w-4" />
-                Return to Home
-              </Link>
+              <div className="mb-6 flex flex-wrap gap-3">
+                <button type="button" onClick={returnToApplications} className="inline-flex items-center gap-2 rounded-full text-sm font-bold text-[#C8102E] transition hover:gap-3 dark:text-[#ff8fa0]">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Applications
+                </button>
+                <Link href="/" className="inline-flex items-center gap-2 rounded-full text-sm font-bold text-zinc-500 transition hover:text-[#C8102E] dark:text-zinc-400 dark:hover:text-[#ff8fa0]">
+                  Return to Home
+                </Link>
+              </div>
               <div className="mb-6 rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3 text-sm font-bold text-zinc-600 shadow-sm dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300">
-                Draft: {syncState === 'saving' ? 'Submitting to database...' : syncState === 'saved' ? 'Saved locally' : syncState === 'error' ? 'Submit failed. Local draft is still saved.' : 'Local draft ready'}
+                {editingApplicationId ? 'Editing submitted application' : 'New application'}: {syncState === 'saving' ? 'Submitting to database...' : syncState === 'saved' ? 'Saved locally' : syncState === 'error' ? 'Submit failed. Local draft is still saved.' : 'Local draft ready'}
               </div>
               {submitError && (
                 <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 shadow-sm dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-200">
@@ -662,6 +826,9 @@ export default function ApplyPage() {
                       <Check className="h-8 w-8" />
                     </div>
                     <p className="max-w-xl text-zinc-500 dark:text-zinc-400">Our admissions team will review your application and contact you using the email address provided.</p>
+                    <button type="button" onClick={returnToApplications} className="mt-8 inline-flex rounded-full bg-[#C8102E] px-6 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5 hover:bg-[#9B0D23]">
+                      Back to Applications
+                    </button>
                   </div>
                 </ApplicationCard>
               ) : (
@@ -839,7 +1006,7 @@ export default function ApplyPage() {
                       </button>
                     ) : (
                       <button type="submit" disabled={isSubmitting} className="inline-flex items-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-70">
-                        {isSubmitting ? 'Submitting...' : 'Submit Application'}
+                        {isSubmitting ? 'Submitting...' : editingApplicationId ? 'Update Application' : 'Submit Application'}
                         <FileCheck2 className="h-4 w-4" />
                       </button>
                     )}

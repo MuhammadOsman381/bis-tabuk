@@ -2,10 +2,11 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Trash2, UserCheck, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Download, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Trash2, UserCheck, XCircle } from 'lucide-react';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
+import { yearGroups } from '@/lib/yearGroups';
 
 type ApplicantStatus = 'Pending' | 'approve' | 'reject';
 
@@ -85,8 +86,31 @@ function getAdmissionYearGroups(applicant: Applicant) {
   return groups.length ? groups.join(', ') : 'Year not selected';
 }
 
+function getPrimaryYearGroup(applicant: Applicant) {
+  return getStudents(applicant)[0]?.admissionYearGroup || 'Year not selected';
+}
+
+function getYearSortIndex(year: string) {
+  const index = yearGroups.indexOf(year);
+  return index === -1 ? yearGroups.length + 1 : index;
+}
+
 function getGuardian(applicant: Applicant) {
   return getGuardians(applicant)[0];
+}
+
+function sanitizeExportValue(value: unknown): string {
+  if (Array.isArray(value)) return value.join(', ');
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+}
+
+function stripExportFields(values: Record<string, unknown>) {
+  return Object.entries(values).filter(([key]) => {
+    const normalizedKey = key.toLowerCase();
+    return !normalizedKey.includes('url') && !normalizedKey.includes('publicid') && !normalizedKey.includes('filename') && normalizedKey !== 'declarations';
+  });
 }
 
 function getGuardianPhone(applicant: Applicant) {
@@ -178,10 +202,20 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
+  const [yearFilter, setYearFilter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   const authHeaders = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
+  const visibleApplicants = useMemo(() => {
+    return applicants
+      .filter((applicant) => !yearFilter || getStudents(applicant).some((student) => student.admissionYearGroup === yearFilter))
+      .sort((a, b) => {
+        const yearDifference = getYearSortIndex(getPrimaryYearGroup(a)) - getYearSortIndex(getPrimaryYearGroup(b));
+        if (yearDifference !== 0) return yearDifference;
+        return getStudentName(a).localeCompare(getStudentName(b));
+      });
+  }, [applicants, yearFilter]);
 
   const loadApplicants = useCallback(async (adminToken = token) => {
     if (!adminToken) return;
@@ -215,8 +249,10 @@ export default function AdminPage() {
   }, [token]);
 
   useEffect(() => {
-    const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
-    if (savedToken) setToken(savedToken);
+    queueMicrotask(() => {
+      const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
+      if (savedToken) setToken(savedToken);
+    });
   }, []);
 
   useEffect(() => {
@@ -332,6 +368,62 @@ export default function AdminPage() {
     }
   };
 
+  const downloadExcel = () => {
+    const rows = visibleApplicants.flatMap((applicant) => {
+      const data = getApplicationData(applicant);
+      const guardians = getGuardians(applicant);
+      const primaryGuardian = guardians[0] ?? {};
+      const students = getStudents(applicant);
+      const exportStudents = students.length ? students : [{} as StudentData];
+
+      return exportStudents.map((student, index) => {
+        const baseValues: Record<string, unknown> = {
+          applicationId: applicant.id,
+          status: applicant.status,
+          guardianEmail: primaryGuardian.email || applicant.email,
+          guardianPhone: getGuardianPhone(applicant),
+          howFound: data.howFound,
+          createdAt: formatDate(applicant.createdAt),
+          updatedAt: formatDate(applicant.updatedAt),
+          studentNumber: index + 1,
+          ...Object.fromEntries(stripExportFields(student)),
+          ...Object.fromEntries(stripExportFields(primaryGuardian).map(([key, value]) => [`guardian_${key}`, value])),
+        };
+
+        return baseValues;
+      });
+    });
+
+    if (!rows.length) {
+      setMessage('There are no applicants to export.');
+      return;
+    }
+
+    const headers = Array.from(new Set(rows.flatMap((row) => Object.keys(row))));
+    const escapeCell = (value: unknown) => sanitizeExportValue(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const html = `
+      <html>
+        <head><meta charset="utf-8" /></head>
+        <body>
+          <table>
+            <thead><tr>${headers.map((header) => `<th>${escapeCell(header)}</th>`).join('')}</tr></thead>
+            <tbody>${rows.map((row) => `<tr>${headers.map((header) => `<td>${escapeCell(row[header])}</td>`).join('')}</tr>`).join('')}</tbody>
+          </table>
+        </body>
+      </html>
+    `;
+
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `bist-applicants${yearFilter ? `-${yearFilter.replace(/\s+/g, '-').toLowerCase()}` : ''}.xls`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <PortalHeader />
@@ -390,6 +482,22 @@ export default function AdminPage() {
             </motion.div>
           ) : (
             <div className="grid gap-5">
+              <div className="flex flex-col justify-between gap-3 rounded-3xl border border-zinc-200/80 bg-white p-4 shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88 sm:flex-row sm:items-center">
+                <label className="block sm:w-72">
+                  <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Filter by year</span>
+                  <select className={inputClass} value={yearFilter} onChange={(event) => setYearFilter(event.target.value)}>
+                    <option value="">All year groups</option>
+                    {yearGroups.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </label>
+                <button type="button" onClick={downloadExcel} disabled={!visibleApplicants.length} className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-black text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#C8102E]/30 hover:text-[#C8102E] disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:text-[#C9A84C]">
+                  <Download className="h-4 w-4" />
+                  Download Excel
+                </button>
+              </div>
+
               {isLoading && applicants.length === 0 && (
                 <div className="rounded-3xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
                   <div className="h-5 w-48 rounded-full bg-zinc-100 dark:bg-white/10" />
@@ -402,6 +510,13 @@ export default function AdminPage() {
                 <div className="rounded-3xl border border-dashed border-zinc-300 bg-white/70 p-10 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
                   <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">No applicants yet</h2>
                   <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Submitted and in-progress applications will appear here after the admissions form syncs to the database.</p>
+                </div>
+              )}
+
+              {!isLoading && applicants.length > 0 && visibleApplicants.length === 0 && (
+                <div className="rounded-3xl border border-dashed border-zinc-300 bg-white/70 p-10 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+                  <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">No students in this year group</h2>
+                  <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Choose another year group or reset the filter to view all applicants.</p>
                 </div>
               )}
 
@@ -450,7 +565,7 @@ export default function AdminPage() {
                 </motion.div>
               ) : (
                 <>
-                {applicants.length > 0 ? (
+                {visibleApplicants.length > 0 ? (
                 <div className="overflow-hidden rounded-3xl border border-zinc-200/80 bg-white shadow-xl shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[880px] text-left">
@@ -465,7 +580,7 @@ export default function AdminPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-zinc-200 dark:divide-white/10">
-                        {applicants.map((applicant, index) => {
+                        {visibleApplicants.map((applicant, index) => {
                           const guardian = getGuardian(applicant);
 
                           return (
