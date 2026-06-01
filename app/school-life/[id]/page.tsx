@@ -14,7 +14,18 @@ type SchoolLifeItem = {
   description: string;
   category: string;
   imageUrl: string;
+  imageGallery?: GalleryImage[];
 };
+
+type GalleryImage = {
+  url: string;
+  publicId?: string;
+};
+
+function getGallery(item: SchoolLifeItem) {
+  if (Array.isArray(item.imageGallery) && item.imageGallery.length) return item.imageGallery.slice(0, 3);
+  return item.imageUrl ? [{ url: item.imageUrl }] : [];
+}
 
 export default function SchoolLifeDetailPage() {
   const params = useParams<{ id: string }>();
@@ -66,19 +77,40 @@ export default function SchoolLifeDetailPage() {
           </div>
         ) : item ? (
           <article>
-            <div className="relative min-h-[58vh] overflow-hidden sm:min-h-[64vh]">
-              <Image src={item.imageUrl} alt={item.title} fill sizes="100vw" className="object-cover" priority />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/28 to-black/75" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.20),transparent_32%)]" />
-
-              <div className="relative z-10 mx-auto flex min-h-[58vh] max-w-5xl flex-col items-center justify-center px-4 py-20 text-center text-white sm:min-h-[64vh] sm:px-6">
-                <span className="rounded-full border border-white/20 bg-white/15 px-5 py-2 text-xs font-black uppercase tracking-[0.22em] text-[#f4d77a] shadow-2xl shadow-black/25 backdrop-blur-md">
+            <div className="relative overflow-hidden px-4 pb-4 pt-8 text-center sm:px-6 sm:pb-8 sm:pt-12 lg:px-10">
+              <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-[#C8102E]/10 blur-3xl dark:bg-[#C9A84C]/10" />
+              <div className="relative mx-auto max-w-5xl">
+                <span className="inline-flex rounded-full border border-[#C8102E]/15 bg-white/80 px-5 py-2 text-xs font-black uppercase tracking-[0.22em] text-[#C8102E] shadow-lg shadow-zinc-900/5 backdrop-blur-md dark:border-[#C9A84C]/20 dark:bg-white/[0.06] dark:text-[#C9A84C]">
                   {item.category}
                 </span>
-                <h1 className="mt-6 max-w-4xl text-5xl font-black tracking-tight drop-shadow-2xl sm:text-6xl lg:text-7xl">{item.title}</h1>
+                <h1 className="mx-auto mt-6 max-w-4xl text-5xl font-black tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-6xl lg:text-7xl">{item.title}</h1>
               </div>
+            </div>
 
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#f6fbff] to-transparent dark:from-zinc-950" />
+            <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-14 lg:px-8">
+              <div className="grid gap-4 md:grid-cols-3 md:grid-rows-2">
+                {getGallery(item).map((image, index) => (
+                  <motion.div
+                    key={`${image.url}-${index}`}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.45, delay: index * 0.08 }}
+                    className={`group relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-white shadow-2xl shadow-zinc-900/10 dark:border-white/10 dark:bg-zinc-900 dark:shadow-black/30 ${
+                      index === 0 ? 'aspect-[16/10] md:col-span-2 md:row-span-2 md:aspect-auto' : 'aspect-[4/3]'
+                    }`}
+                  >
+                    <Image
+                      src={image.url}
+                      alt={`${item.title} gallery image ${index + 1}`}
+                      fill
+                      sizes={index === 0 ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/24 to-transparent opacity-70" />
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
             <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">

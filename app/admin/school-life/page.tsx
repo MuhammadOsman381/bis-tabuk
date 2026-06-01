@@ -16,7 +16,13 @@ type SchoolLifeItem = {
   category: string;
   imageUrl: string;
   imagePublicId?: string | null;
+  imageGallery?: GalleryImage[];
   updatedAt?: string;
+};
+
+type GalleryImage = {
+  url: string;
+  publicId?: string;
 };
 
 const inputClass =
@@ -29,7 +35,7 @@ export default function AdminSchoolLifePage() {
   const [items, setItems] = useState<SchoolLifeItem[]>([]);
   const [form, setForm] = useState({ title: '', description: '', category: '' });
   const [editingItemId, setEditingItemId] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFiles, setImageFiles] = useState<Array<File | null>>([null, null, null]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -108,29 +114,52 @@ export default function AdminSchoolLifePage() {
   const resetForm = () => {
     setForm({ title: '', description: '', category: '' });
     setEditingItemId('');
-    setImageFile(null);
+    setImageFiles([null, null, null]);
   };
 
   const editItem = (item: SchoolLifeItem) => {
     setForm({ title: item.title, description: item.description, category: item.category });
     setEditingItemId(item.id);
-    setImageFile(null);
+    setImageFiles([null, null, null]);
     setMessage('');
+  };
+
+  const getItemGallery = (item?: SchoolLifeItem | null): GalleryImage[] => {
+    if (!item) return [];
+    if (Array.isArray(item.imageGallery) && item.imageGallery.length) return item.imageGallery.slice(0, 3);
+    return item.imageUrl ? [{ url: item.imageUrl, publicId: item.imagePublicId ?? undefined }] : [];
   };
 
   const saveItem = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const currentItem = editingItemId ? items.find((item) => item.id === editingItemId) : null;
+    const existingGallery = getItemGallery(currentItem);
 
-    if (!imageFile && !currentItem) {
-      setMessage('Please select an image.');
+    if (!editingItemId && imageFiles.some((file) => !file)) {
+      setMessage('Please select exactly 3 images.');
+      return;
+    }
+
+    if (editingItemId && existingGallery.length < 3 && imageFiles.some((file) => !file)) {
+      setMessage('Please complete the 3 image gallery.');
       return;
     }
 
     setIsLoading(true);
     setMessage('');
     try {
-      const upload = imageFile ? await uploadFile(imageFile) : null;
+      const uploads = await Promise.all(
+        imageFiles.map(async (file, index) => {
+          if (file) {
+            const upload = await uploadFile(file);
+            return { url: upload.url, publicId: upload.publicId };
+          }
+          return existingGallery[index];
+        }),
+      );
+      const gallery = uploads.filter((image): image is GalleryImage => Boolean(image?.url)).slice(0, 3);
+      if (gallery.length !== 3) throw new Error('Please select exactly 3 images.');
+
       const response = await fetch(editingItemId ? `/api/admin/school-life/${editingItemId}` : '/api/admin/school-life', {
         method: editingItemId ? 'PATCH' : 'POST',
         headers: { ...authHeaders, 'Content-Type': 'application/json' },
@@ -138,8 +167,9 @@ export default function AdminSchoolLifePage() {
           title: form.title,
           description: form.description,
           category: form.category,
-          imageUrl: upload?.url ?? currentItem?.imageUrl,
-          imagePublicId: upload?.publicId ?? currentItem?.imagePublicId,
+          imageUrl: gallery[0].url,
+          imagePublicId: gallery[0].publicId,
+          imageGallery: gallery,
         }),
       });
       const result = await response.json();
@@ -233,8 +263,35 @@ export default function AdminSchoolLifePage() {
                       <RichTextEditor value={form.description} onChange={(description) => setForm((current) => ({ ...current, description }))} />
                     </div>
                     <label className="block">
-                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Image</span>
-                      <input className={inputClass} type="file" accept="image/*" onChange={(event) => setImageFile(event.target.files?.[0] ?? null)} required={!editingItemId} />
+                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Gallery Images (3)</span>
+                      <div className="grid gap-3 md:grid-cols-3">
+                        {[0, 1, 2].map((index) => {
+                          const currentImage = getItemGallery(items.find((item) => item.id === editingItemId))[index];
+
+                          return (
+                            <div key={index} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-white/10 dark:bg-white/[0.04]">
+                              {currentImage?.url && !imageFiles[index] && (
+                                <div className="relative mb-3 aspect-[4/3] overflow-hidden rounded-xl">
+                                  <Image src={currentImage.url} alt={`Current gallery image ${index + 1}`} fill sizes="220px" className="object-cover" />
+                                </div>
+                              )}
+                              <input
+                                className={inputClass}
+                                type="file"
+                                accept="image/*"
+                                onChange={(event) => {
+                                  const file = event.target.files?.[0] ?? null;
+                                  setImageFiles((current) => current.map((item, itemIndex) => (itemIndex === index ? file : item)));
+                                }}
+                                required={!editingItemId}
+                              />
+                              <p className="mt-2 text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                                {imageFiles[index]?.name || currentImage?.url ? `Image ${index + 1}` : `Select image ${index + 1}`}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </label>
                     <div className="flex flex-wrap gap-3">
                       <button type="submit" disabled={isLoading} className="inline-flex w-fit items-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-60">
@@ -254,8 +311,12 @@ export default function AdminSchoolLifePage() {
                 <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {items.map((item) => (
                     <article key={item.id} className="overflow-hidden rounded-3xl border border-zinc-200/80 bg-white shadow-xl shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
-                      <div className="relative aspect-[4/3]">
-                        <Image src={item.imageUrl} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                      <div className="grid aspect-[4/3] grid-cols-3 gap-1 bg-zinc-100 p-1 dark:bg-zinc-950">
+                        {getItemGallery(item).slice(0, 3).map((image, index) => (
+                          <div key={`${image.url}-${index}`} className={`relative overflow-hidden rounded-2xl ${index === 0 ? 'col-span-2 row-span-2' : ''}`}>
+                            <Image src={image.url} alt={`${item.title} gallery ${index + 1}`} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                          </div>
+                        ))}
                       </div>
                       <div className="p-5">
                         <p className="text-xs font-black uppercase tracking-[0.16em] text-[#C8102E] dark:text-[#C9A84C]">{item.category}</p>

@@ -12,10 +12,22 @@ type SchoolLifeItem = {
   description: string;
   category: string;
   imageUrl: string;
+  imageGallery?: GalleryImage[];
 };
+
+type GalleryImage = {
+  url: string;
+  publicId?: string;
+};
+
+function getGallery(item: SchoolLifeItem) {
+  if (Array.isArray(item.imageGallery) && item.imageGallery.length) return item.imageGallery.slice(0, 3);
+  return item.imageUrl ? [{ url: item.imageUrl }] : [];
+}
 
 export default function SchoolLife() {
   const [items, setItems] = useState<SchoolLifeItem[]>([]);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   useEffect(() => {
     let isActive = true;
@@ -36,6 +48,15 @@ export default function SchoolLife() {
       isActive = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!items.length) return;
+    const interval = window.setInterval(() => {
+      setCarouselIndex((current) => (current + 1) % 3);
+    }, 3600);
+
+    return () => window.clearInterval(interval);
+  }, [items.length]);
 
   return (
     <section id="school-life" className="relative overflow-hidden bg-[#0f1434] py-20 text-white dark:bg-zinc-950 sm:py-28">
@@ -60,6 +81,8 @@ export default function SchoolLife() {
           >
             {items.map((item, index) => {
               const isLarge = index === 0;
+              const gallery = getGallery(item);
+              const activeImageIndex = gallery.length ? carouselIndex % gallery.length : 0;
 
               return (
                 <motion.div
@@ -73,14 +96,27 @@ export default function SchoolLife() {
                     href={`/school-life/${item.id}`}
                     className="group relative block h-full overflow-hidden rounded-[1.75rem] border border-white/10 shadow-2xl shadow-black/20 outline-none focus-visible:ring-4 focus-visible:ring-[#C9A84C]/25"
                   >
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.title}
-                      fill
-                      sizes={isLarge ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw'}
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+                    {gallery.map((image, imageIndex) => (
+                      <Image
+                        key={`${image.url}-${imageIndex}`}
+                        src={image.url}
+                        alt={`${item.title} image ${imageIndex + 1}`}
+                        fill
+                        sizes={isLarge ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw'}
+                        className={`object-cover transition-all duration-1000 group-hover:scale-105 ${imageIndex === activeImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                      />
+                    ))}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/34 to-transparent" />
+                    {gallery.length > 1 && (
+                      <div className="absolute bottom-4 right-4 z-10 flex gap-1.5">
+                        {gallery.map((image, imageIndex) => (
+                          <span
+                            key={`dot-${image.url}-${imageIndex}`}
+                            className={`h-1.5 rounded-full transition-all ${imageIndex === activeImageIndex ? 'w-5 bg-[#C9A84C]' : 'w-1.5 bg-white/50'}`}
+                          />
+                        ))}
+                      </div>
+                    )}
                     <div className="absolute left-4 top-4 rounded-full bg-[#C8102E]/90 px-4 py-1.5 text-xs font-bold text-white shadow-lg">
                       {item.category}
                     </div>

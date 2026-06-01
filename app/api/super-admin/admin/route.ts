@@ -42,6 +42,7 @@ export async function PATCH(request: Request) {
     const { id, email, password } = (await request.json()) as { id?: string; email?: string; password?: string };
     const normalizedEmail = email?.trim().toLowerCase();
 
+    if (!id) return NextResponse.json({ error: 'Admin id is required.' }, { status: 400 });
     if (!normalizedEmail) return NextResponse.json({ error: 'Admin email is required.' }, { status: 400 });
     if (password !== undefined && password.length > 0 && password.length < 8) {
       return NextResponse.json({ error: 'Password must be at least 8 characters.' }, { status: 400 });
@@ -57,28 +58,13 @@ export async function PATCH(request: Request) {
       updatedAt: new Date(),
     };
 
-    const [admin] = id
-      ? await db.update(users).set(values).where(eq(users.id, id)).returning({
-          id: users.id,
-          email: users.email,
-          role: users.role,
-          createdAt: users.createdAt,
-          updatedAt: users.updatedAt,
-        })
-      : await db
-          .insert(users)
-          .values({ ...values, passwordHash: passwordHash ?? (await hashPassword('12345678')) })
-          .onConflictDoUpdate({
-            target: users.email,
-            set: values,
-          })
-          .returning({
-            id: users.id,
-            email: users.email,
-            role: users.role,
-            createdAt: users.createdAt,
-            updatedAt: users.updatedAt,
-          });
+    const [admin] = await db.update(users).set(values).where(eq(users.id, id)).returning({
+      id: users.id,
+      email: users.email,
+      role: users.role,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+    });
 
     if (!admin) return NextResponse.json({ error: 'Admin not found.' }, { status: 404 });
 

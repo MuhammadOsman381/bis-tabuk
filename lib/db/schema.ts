@@ -67,6 +67,7 @@ export const schoolLifeItems = pgTable('school_life_items', {
   category: text('category').notNull(),
   imageUrl: text('image_url').notNull(),
   imagePublicId: text('image_public_id'),
+  imageGallery: jsonb('image_gallery').notNull().default([]),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
