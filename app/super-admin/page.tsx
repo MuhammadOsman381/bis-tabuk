@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Loader2, LockKeyhole, RefreshCw, Save, ShieldCheck } from 'lucide-react';
 import PortalHeader from '@/components/layout/PortalHeader';
@@ -32,7 +32,7 @@ function formatDate(value: string) {
 export default function SuperAdminPage() {
   const [accessKey, setAccessKey] = useState('');
   const [admins, setAdmins] = useState<AdminAccount[]>([]);
-  const [selectedAdminId, setSelectedAdminId] = useState('');
+  const [adminId, setAdminId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [externalName, setExternalName] = useState('');
@@ -46,7 +46,7 @@ export default function SuperAdminPage() {
   const [isExternalLoading, setIsExternalLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const selectedAdmin = useMemo(() => admins.find((admin) => admin.id === selectedAdminId), [admins, selectedAdminId]);
+  const selectedAdmin = admins.find((admin) => admin.id === adminId);
 
   const loadExternalAdmin = useCallback(async (key = accessKey) => {
     if (!key) return;
@@ -90,13 +90,13 @@ export default function SuperAdminPage() {
       window.localStorage.setItem(superAdminKeyStorage, key);
 
       const firstAdmin = nextAdmins[0];
-      setSelectedAdminId(firstAdmin?.id ?? '');
+      setAdminId(firstAdmin?.id ?? '');
       setEmail(firstAdmin?.email ?? '');
       setPassword('');
     } catch (error) {
       setIsUnlocked(false);
       setAdmins([]);
-      setSelectedAdminId('');
+      setAdminId('');
       setMessage(error instanceof Error ? error.message.slice(0, 240) : 'Unable to unlock super admin.');
     } finally {
       setIsLoading(false);
@@ -127,7 +127,7 @@ export default function SuperAdminPage() {
       const response = await fetch('/api/super-admin/admin', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'x-super-admin-key': accessKey },
-        body: JSON.stringify({ id: selectedAdminId, email, password: password || undefined }),
+        body: JSON.stringify({ id: adminId, email, password: password || undefined }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? 'Unable to save admin.');
@@ -137,7 +137,7 @@ export default function SuperAdminPage() {
         const exists = current.some((admin) => admin.id === updatedAdmin.id);
         return exists ? current.map((admin) => (admin.id === updatedAdmin.id ? updatedAdmin : admin)) : [updatedAdmin, ...current];
       });
-      setSelectedAdminId(updatedAdmin.id);
+      setAdminId(updatedAdmin.id);
       setEmail(updatedAdmin.email);
       setPassword('');
       setMessage('Admin account updated successfully.');
@@ -231,29 +231,14 @@ export default function SuperAdminPage() {
 
               <form onSubmit={saveAdmin} className="rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-2xl shadow-zinc-900/8 dark:border-white/10 dark:bg-zinc-900/88 sm:p-8">
                 <div className="grid gap-5">
-                  {admins.length > 0 ? (
-                    <label className="block">
-                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-zinc-600 dark:text-zinc-400">Select Admin</span>
-                      <select
-                        className={inputClass}
-                        value={selectedAdminId}
-                        onChange={(event) => {
-                          const adminId = event.target.value;
-                          const admin = admins.find((item) => item.id === adminId);
-                          setSelectedAdminId(adminId);
-                          setEmail(admin?.email ?? '');
-                          setPassword('');
-                        }}
-                      >
-                        {admins.map((admin) => (
-                          <option key={admin.id} value={admin.id}>{admin.email}</option>
-                        ))}
-                      </select>
-                    </label>
-                  ) : (
+                  {admins.length === 0 ? (
                     <p className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm font-bold text-zinc-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-400">
                       No website admin exists. Use the existing admin seed route or database seed before editing.
                     </p>
+                  ) : (
+                    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm font-bold text-zinc-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-200">
+                      Editing website admin: {email}
+                    </div>
                   )}
 
                   <label className="block">
@@ -263,7 +248,7 @@ export default function SuperAdminPage() {
 
                   <label className="block">
                     <span className="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-zinc-600 dark:text-zinc-400">
-                      Password {selectedAdminId && <span className="normal-case tracking-normal text-zinc-400">(leave empty to keep current)</span>}
+                      Password <span className="normal-case tracking-normal text-zinc-400">(leave empty to keep current)</span>
                     </span>
                     <div className="flex overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-zinc-900/5 transition focus-within:border-[#C8102E] focus-within:ring-4 focus-within:ring-[#C8102E]/10 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-black/20">
                       <input
@@ -290,7 +275,7 @@ export default function SuperAdminPage() {
                   )}
                 </div>
 
-                <button type="submit" disabled={isLoading || !selectedAdminId} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C8102E] px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-60">
+                <button type="submit" disabled={isLoading || !adminId} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C8102E] px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-60">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   Save Admin
                 </button>
