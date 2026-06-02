@@ -35,6 +35,7 @@ export default function AdminSchoolLifePage() {
   const [items, setItems] = useState<SchoolLifeItem[]>([]);
   const [form, setForm] = useState({ title: '', description: '', category: '' });
   const [editingItemId, setEditingItemId] = useState('');
+  const [editingGallery, setEditingGallery] = useState<Array<GalleryImage | null>>([null, null, null]);
   const [imageFiles, setImageFiles] = useState<Array<File | null>>([null, null, null]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -114,12 +115,14 @@ export default function AdminSchoolLifePage() {
   const resetForm = () => {
     setForm({ title: '', description: '', category: '' });
     setEditingItemId('');
+    setEditingGallery([null, null, null]);
     setImageFiles([null, null, null]);
   };
 
   const editItem = (item: SchoolLifeItem) => {
     setForm({ title: item.title, description: item.description, category: item.category });
     setEditingItemId(item.id);
+    setEditingGallery(normalizeGallerySlots(getItemGallery(item)));
     setImageFiles([null, null, null]);
     setMessage('');
   };
@@ -137,7 +140,7 @@ export default function AdminSchoolLifePage() {
   const saveItem = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const currentItem = editingItemId ? items.find((item) => item.id === editingItemId) : null;
-    const existingGallery = getItemGallery(currentItem);
+    const existingGallery = editingItemId ? editingGallery : normalizeGallerySlots(getItemGallery(currentItem));
 
     if (!editingItemId && !imageFiles.some(Boolean)) {
       setMessage('Please select at least 1 image.');
@@ -147,14 +150,13 @@ export default function AdminSchoolLifePage() {
     setIsLoading(true);
     setMessage('');
     try {
-      const existingSlots = normalizeGallerySlots(existingGallery);
       const gallerySlots = await Promise.all(
         imageFiles.map(async (file, index) => {
           if (file) {
             const upload = await uploadFile(file);
             return { url: upload.url, publicId: upload.publicId };
           }
-          return existingSlots[index];
+          return existingGallery[index] ?? null;
         }),
       );
       const seenImages = new Set<string>();
@@ -271,11 +273,11 @@ export default function AdminSchoolLifePage() {
                       <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Description</span>
                       <RichTextEditor value={form.description} onChange={(description) => setForm((current) => ({ ...current, description }))} />
                     </div>
-                    <label className="block">
+                    <div className="block">
                       <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Gallery Images (1 to 3)</span>
                       <div className="grid gap-3 md:grid-cols-3">
                         {[0, 1, 2].map((index) => {
-                          const currentImage = normalizeGallerySlots(getItemGallery(items.find((item) => item.id === editingItemId)))[index];
+                          const currentImage = editingItemId ? editingGallery[index] : null;
 
                           return (
                             <div key={index} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-white/10 dark:bg-white/[0.04]">
@@ -301,7 +303,7 @@ export default function AdminSchoolLifePage() {
                           );
                         })}
                       </div>
-                    </label>
+                    </div>
                     <div className="flex flex-wrap gap-3">
                       <button type="submit" disabled={isLoading} className="inline-flex w-fit items-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-60">
                         {editingItemId ? <Edit3 className="h-4 w-4" /> : <ImagePlus className="h-4 w-4" />}
