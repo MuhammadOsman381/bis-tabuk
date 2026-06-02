@@ -130,6 +130,10 @@ export default function AdminSchoolLifePage() {
     return item.imageUrl ? [{ url: item.imageUrl, publicId: item.imagePublicId ?? undefined }] : [];
   };
 
+  const normalizeGallerySlots = (gallery: GalleryImage[]) => {
+    return [0, 1, 2].map((index) => gallery[index] ?? null);
+  };
+
   const saveItem = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const currentItem = editingItemId ? items.find((item) => item.id === editingItemId) : null;
@@ -143,16 +147,26 @@ export default function AdminSchoolLifePage() {
     setIsLoading(true);
     setMessage('');
     try {
-      const uploads = await Promise.all(
+      const existingSlots = normalizeGallerySlots(existingGallery);
+      const gallerySlots = await Promise.all(
         imageFiles.map(async (file, index) => {
           if (file) {
             const upload = await uploadFile(file);
             return { url: upload.url, publicId: upload.publicId };
           }
-          return existingGallery[index];
+          return existingSlots[index];
         }),
       );
-      const gallery = uploads.filter((image): image is GalleryImage => Boolean(image?.url)).slice(0, 3);
+      const seenImages = new Set<string>();
+      const gallery = gallerySlots
+        .filter((image): image is GalleryImage => Boolean(image?.url))
+        .filter((image) => {
+          const key = image.publicId || image.url;
+          if (seenImages.has(key)) return false;
+          seenImages.add(key);
+          return true;
+        })
+        .slice(0, 3);
       if (gallery.length < 1) throw new Error('Please select at least 1 image.');
 
       const response = await fetch(editingItemId ? `/api/admin/school-life/${editingItemId}` : '/api/admin/school-life', {
@@ -261,7 +275,7 @@ export default function AdminSchoolLifePage() {
                       <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Gallery Images (1 to 3)</span>
                       <div className="grid gap-3 md:grid-cols-3">
                         {[0, 1, 2].map((index) => {
-                          const currentImage = getItemGallery(items.find((item) => item.id === editingItemId))[index];
+                          const currentImage = normalizeGallerySlots(getItemGallery(items.find((item) => item.id === editingItemId)))[index];
 
                           return (
                             <div key={index} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-white/10 dark:bg-white/[0.04]">
@@ -281,7 +295,7 @@ export default function AdminSchoolLifePage() {
                                 required={!editingItemId && index === 0}
                               />
                               <p className="mt-2 text-xs font-bold text-zinc-500 dark:text-zinc-400">
-                                {imageFiles[index]?.name || currentImage?.url ? `Image ${index + 1}` : `Select image ${index + 1}`}
+                                {imageFiles[index]?.name || currentImage?.url ? `Image ${index + 1} ready` : `Optional image ${index + 1}`}
                               </p>
                             </div>
                           );
