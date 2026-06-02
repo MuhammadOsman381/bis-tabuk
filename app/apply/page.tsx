@@ -470,6 +470,7 @@ export default function ApplyPage() {
   const [userEmail, setUserEmail] = useState('');
   const [syncState, setSyncState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitProgress, setSubmitProgress] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [studentPassportFiles, setStudentPassportFiles] = useState<Record<number, File>>({});
   const [guardianPassportFiles, setGuardianPassportFiles] = useState<Record<number, File>>({});
@@ -643,30 +644,49 @@ export default function ApplyPage() {
 
     setIsSubmitting(true);
     setSubmitError('');
+    setSubmitProgress('Preparing documents...');
     setSyncState('saving');
 
     try {
-      const studentsWithUploads = await Promise.all(
-        draft.students.map(async (student, index) => {
-          const file = studentPassportFiles[index];
-          if (!file && student.passportUrl) return student;
-          if (!file) throw new Error(`Please upload passport image for Student ${index + 1}.`);
-          const result = await uploadFile(file);
-          await deleteUploadedFile({ publicId: student.passportPublicId, url: student.passportUrl, token });
-          return { ...student, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
-        }),
-      );
+      draft.students.forEach((student, index) => {
+        if (!studentPassportFiles[index] && !student.passportUrl) throw new Error(`Please upload passport image for Student ${index + 1}.`);
+      });
+      draft.guardians.forEach((guardian, index) => {
+        if (!guardianPassportFiles[index] && !guardian.passportUrl) throw new Error(`Please upload passport image for Guardian ${index + 1}.`);
+      });
 
-      const guardiansWithUploads = await Promise.all(
-        draft.guardians.map(async (guardian, index) => {
-          const file = guardianPassportFiles[index];
-          if (!file && guardian.passportUrl) return guardian;
-          if (!file) throw new Error(`Please upload passport image for Guardian ${index + 1}.`);
-          const result = await uploadFile(file);
-          await deleteUploadedFile({ publicId: guardian.passportPublicId, url: guardian.passportUrl, token });
-          return { ...guardian, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
-        }),
-      );
+      const totalUploads = Object.keys(studentPassportFiles).length + Object.keys(guardianPassportFiles).length;
+      let completedUploads = 0;
+      const markUploadDone = () => {
+        completedUploads += 1;
+        setSubmitProgress(totalUploads ? `Uploading documents ${completedUploads}/${totalUploads}...` : 'Saving application...');
+      };
+
+      setSubmitProgress(totalUploads ? `Uploading documents 0/${totalUploads}...` : 'Saving application...');
+      const [studentsWithUploads, guardiansWithUploads] = await Promise.all([
+        Promise.all(
+          draft.students.map(async (student, index) => {
+            const file = studentPassportFiles[index];
+            if (!file && student.passportUrl) return student;
+            if (!file) throw new Error(`Please upload passport image for Student ${index + 1}.`);
+            const result = await uploadFile(file);
+            await deleteUploadedFile({ publicId: student.passportPublicId, url: student.passportUrl, token });
+            markUploadDone();
+            return { ...student, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
+          }),
+        ),
+        Promise.all(
+          draft.guardians.map(async (guardian, index) => {
+            const file = guardianPassportFiles[index];
+            if (!file && guardian.passportUrl) return guardian;
+            if (!file) throw new Error(`Please upload passport image for Guardian ${index + 1}.`);
+            const result = await uploadFile(file);
+            await deleteUploadedFile({ publicId: guardian.passportPublicId, url: guardian.passportUrl, token });
+            markUploadDone();
+            return { ...guardian, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
+          }),
+        ),
+      ]);
 
       const finalDraft: ApplyDraft = {
         ...draft,
@@ -679,6 +699,7 @@ export default function ApplyPage() {
       };
 
       const tokenHeaders = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+      setSubmitProgress('Saving application...');
       const response = await fetch('/api/applications/draft', {
         method: editingApplicationId ? 'PUT' : 'POST',
         headers: tokenHeaders,
@@ -693,6 +714,7 @@ export default function ApplyPage() {
       setDraft(initialDraft());
       setStudentPassportFiles({});
       setGuardianPassportFiles({});
+      setSubmitProgress('');
       window.localStorage.removeItem(APPLY_DRAFT_KEY);
       await loadApplications(token);
     } catch (error) {
@@ -725,6 +747,7 @@ export default function ApplyPage() {
     setEditingApplicationId('');
     setSubmitted(false);
     setSubmitError('');
+    setSubmitProgress('');
     setSyncState('idle');
     setActiveStep(0);
     window.localStorage.removeItem(APPLY_DRAFT_KEY);
@@ -738,6 +761,7 @@ export default function ApplyPage() {
     setEditingApplicationId(application.id);
     setSubmitted(false);
     setSubmitError('');
+    setSubmitProgress('');
     setSyncState('idle');
     setActiveStep(0);
     setViewMode('form');
@@ -748,6 +772,7 @@ export default function ApplyPage() {
     setSubmitted(false);
     setEditingApplicationId('');
     setSubmitError('');
+    setSubmitProgress('');
   };
 
   const allDeclarationsAccepted = declarationOptions.every((declaration) => draft.declarations.includes(declaration));
@@ -867,7 +892,7 @@ export default function ApplyPage() {
                 </Link>
               </div>
               <div className="mb-6 rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3 text-sm font-bold text-zinc-600 shadow-sm dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300">
-                {editingApplicationId ? 'Editing submitted application' : 'New application'}: {syncState === 'saving' ? 'Submitting to database...' : syncState === 'saved' ? 'Saved locally' : syncState === 'error' ? 'Submit failed. Local draft is still saved.' : 'Local draft ready'}
+                {editingApplicationId ? 'Editing submitted application' : 'New application'}: {syncState === 'saving' ? submitProgress || 'Submitting...' : syncState === 'saved' ? 'Saved locally' : syncState === 'error' ? 'Submit failed. Local draft is still saved.' : 'Local draft ready'}
               </div>
               {submitError && (
                 <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 shadow-sm dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-200">
