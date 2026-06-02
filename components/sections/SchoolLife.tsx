@@ -25,6 +25,20 @@ function getGallery(item: SchoolLifeItem) {
   return item.imageUrl ? [{ url: item.imageUrl }] : [];
 }
 
+function getDescriptionPreview(description: string, wordLimit = 4) {
+  const plainText = description
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+  const words = plainText.split(' ').filter(Boolean);
+  if (words.length <= wordLimit) return plainText;
+  return `${words.slice(0, wordLimit).join(' ')}...`;
+}
+
 export default function SchoolLife() {
   const [items, setItems] = useState<SchoolLifeItem[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -125,10 +139,7 @@ export default function SchoolLife() {
                     </div>
                     <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
                       <h3 className="mb-2 text-2xl font-bold leading-tight">{item.title}</h3>
-                      <div
-                        className="line-clamp-3 text-sm leading-relaxed text-white/80 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:m-0 [&_strong]:font-black [&_ul]:list-disc [&_ul]:pl-5"
-                        dangerouslySetInnerHTML={{ __html: item.description }}
-                      />
+                      <p className="text-sm leading-relaxed text-white/80">{getDescriptionPreview(item.description)}</p>
                     </div>
                   </Link>
                 </motion.div>
