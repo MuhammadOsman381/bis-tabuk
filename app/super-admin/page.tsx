@@ -2,7 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Loader2, LockKeyhole, RefreshCw, Save, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, Loader2, LockKeyhole, LogOut, RefreshCw, Save, ShieldCheck } from 'lucide-react';
 import PortalHeader from '@/components/layout/PortalHeader';
 
 type AdminAccount = {
@@ -175,6 +175,21 @@ export default function SuperAdminPage() {
     }
   };
 
+  const logout = () => {
+    window.localStorage.removeItem(superAdminKeyStorage);
+    setAccessKey('');
+    setAdmins([]);
+    setAdminId('');
+    setEmail('');
+    setPassword('');
+    setExternalAdmin(null);
+    setExternalName('');
+    setExternalEmail('');
+    setExternalPassword('');
+    setIsUnlocked(false);
+    setMessage('');
+  };
+
   return (
     <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
       <PortalHeader />
@@ -225,6 +240,9 @@ export default function SuperAdminPage() {
                 <div className="flex gap-2">
                   <button type="button" onClick={() => loadAdmins()} disabled={isLoading} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition hover:-translate-y-0.5 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                  </button>
+                  <button type="button" onClick={logout} title="Logout" aria-label="Logout" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition hover:-translate-y-0.5 hover:bg-red-50 hover:text-red-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-red-400/10 dark:hover:text-red-200">
+                    <LogOut className="h-4 w-4" />
                   </button>
                 </div>
               </div>
