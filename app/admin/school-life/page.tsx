@@ -135,13 +135,8 @@ export default function AdminSchoolLifePage() {
     const currentItem = editingItemId ? items.find((item) => item.id === editingItemId) : null;
     const existingGallery = getItemGallery(currentItem);
 
-    if (!editingItemId && imageFiles.some((file) => !file)) {
-      setMessage('Please select exactly 3 images.');
-      return;
-    }
-
-    if (editingItemId && existingGallery.length < 3 && imageFiles.some((file) => !file)) {
-      setMessage('Please complete the 3 image gallery.');
+    if (!editingItemId && !imageFiles.some(Boolean)) {
+      setMessage('Please select at least 1 image.');
       return;
     }
 
@@ -158,7 +153,7 @@ export default function AdminSchoolLifePage() {
         }),
       );
       const gallery = uploads.filter((image): image is GalleryImage => Boolean(image?.url)).slice(0, 3);
-      if (gallery.length !== 3) throw new Error('Please select exactly 3 images.');
+      if (gallery.length < 1) throw new Error('Please select at least 1 image.');
 
       const response = await fetch(editingItemId ? `/api/admin/school-life/${editingItemId}` : '/api/admin/school-life', {
         method: editingItemId ? 'PATCH' : 'POST',
@@ -263,7 +258,7 @@ export default function AdminSchoolLifePage() {
                       <RichTextEditor value={form.description} onChange={(description) => setForm((current) => ({ ...current, description }))} />
                     </div>
                     <label className="block">
-                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Gallery Images (3)</span>
+                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Gallery Images (1 to 3)</span>
                       <div className="grid gap-3 md:grid-cols-3">
                         {[0, 1, 2].map((index) => {
                           const currentImage = getItemGallery(items.find((item) => item.id === editingItemId))[index];
@@ -283,7 +278,7 @@ export default function AdminSchoolLifePage() {
                                   const file = event.target.files?.[0] ?? null;
                                   setImageFiles((current) => current.map((item, itemIndex) => (itemIndex === index ? file : item)));
                                 }}
-                                required={!editingItemId}
+                                required={!editingItemId && index === 0}
                               />
                               <p className="mt-2 text-xs font-bold text-zinc-500 dark:text-zinc-400">
                                 {imageFiles[index]?.name || currentImage?.url ? `Image ${index + 1}` : `Select image ${index + 1}`}

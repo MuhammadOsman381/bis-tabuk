@@ -47,8 +47,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const primaryImage = imageUrl || gallery[0]?.url;
     const primaryPublicId = imagePublicId || gallery[0]?.publicId;
 
-    if (!title?.trim() || !description?.trim() || !category?.trim() || !primaryImage?.trim() || gallery.length !== 3) {
-      return NextResponse.json({ error: 'Title, description, category, and exactly 3 images are required.' }, { status: 400 });
+    if (!title?.trim() || !description?.trim() || !category?.trim() || !primaryImage?.trim() || gallery.length < 1 || gallery.length > 3) {
+      return NextResponse.json({ error: 'Title, description, category, and 1 to 3 images are required.' }, { status: 400 });
     }
 
     const db = getDb();
