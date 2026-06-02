@@ -3,6 +3,7 @@ import { desc } from 'drizzle-orm';
 import { getDb } from '@/lib/db';
 import { schoolLifeItems } from '@/lib/db/schema';
 import { getAdminFromRequest } from '@/lib/server/adminAuth';
+import { ensureSchoolLifeGalleryColumn } from '@/lib/server/schoolLifeSchema';
 
 type GalleryImage = {
   url: string;
@@ -25,6 +26,7 @@ export async function GET(request: Request) {
   try {
     if (!getAdminFromRequest(request)) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
 
+    await ensureSchoolLifeGalleryColumn();
     const db = getDb();
     const items = await db.select().from(schoolLifeItems).orderBy(desc(schoolLifeItems.createdAt));
     return NextResponse.json({ ok: true, items });
@@ -37,6 +39,7 @@ export async function POST(request: Request) {
   try {
     if (!getAdminFromRequest(request)) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
 
+    await ensureSchoolLifeGalleryColumn();
     const { title, description, category, imageUrl, imagePublicId, imageGallery } = (await request.json()) as {
       title?: string;
       description?: string;

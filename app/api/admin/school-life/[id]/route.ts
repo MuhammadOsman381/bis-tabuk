@@ -4,6 +4,7 @@ import { getDb } from '@/lib/db';
 import { schoolLifeItems } from '@/lib/db/schema';
 import { getAdminFromRequest } from '@/lib/server/adminAuth';
 import { deleteCloudinaryAssets } from '@/lib/server/cloudinary';
+import { ensureSchoolLifeGalleryColumn } from '@/lib/server/schoolLifeSchema';
 
 type GalleryImage = {
   url: string;
@@ -32,6 +33,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   try {
     if (!getAdminFromRequest(request)) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
 
+    await ensureSchoolLifeGalleryColumn();
     const { id } = await params;
     const { title, description, category, imageUrl, imagePublicId, imageGallery } = (await request.json()) as {
       title?: string;
@@ -85,6 +87,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   try {
     if (!getAdminFromRequest(request)) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
 
+    await ensureSchoolLifeGalleryColumn();
     const { id } = await params;
     const db = getDb();
     const [item] = await db.select().from(schoolLifeItems).where(eq(schoolLifeItems.id, id)).limit(1);
