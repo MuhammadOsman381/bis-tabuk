@@ -1,0 +1,1 @@
+ALTER TABLE "school_life_items" ADD COLUMN "image_gallery" jsonb DEFAULT '[]'::jsonb NOT NULL;

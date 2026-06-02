@@ -27,6 +27,54 @@ function getGallery(item: SchoolLifeItem) {
   return item.imageUrl ? [{ url: item.imageUrl }] : [];
 }
 
+function GalleryGrid({ item }: { item: SchoolLifeItem }) {
+  const gallery = getGallery(item);
+
+  if (gallery.length === 0) return null;
+
+  const gridClass =
+    gallery.length === 1
+      ? 'mx-auto max-w-5xl'
+      : gallery.length === 2
+        ? 'grid gap-4 md:grid-cols-2'
+        : 'grid gap-4 md:grid-cols-3 md:grid-rows-2';
+
+  return (
+    <div className={gridClass}>
+      {gallery.map((image, index) => {
+        const cardClass =
+          gallery.length === 1
+            ? 'aspect-[16/9]'
+            : gallery.length === 2
+              ? 'aspect-[4/3]'
+              : index === 0
+                ? 'aspect-[16/10] md:col-span-2 md:row-span-2 md:aspect-auto'
+                : 'aspect-[4/3]';
+
+        return (
+          <motion.div
+            key={`${image.url}-${index}`}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.45, delay: index * 0.08 }}
+            className={`group relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-white shadow-2xl shadow-zinc-900/10 dark:border-white/10 dark:bg-zinc-900 dark:shadow-black/30 ${cardClass}`}
+          >
+            <Image
+              src={image.url}
+              alt={`${item.title} gallery image ${index + 1}`}
+              fill
+              sizes={gallery.length === 1 ? '960px' : gallery.length === 2 ? '(min-width: 768px) 50vw, 100vw' : index === 0 ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/24 to-transparent opacity-70" />
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function SchoolLifeDetailPage() {
   const params = useParams<{ id: string }>();
   const [item, setItem] = useState<SchoolLifeItem | null>(null);
@@ -88,29 +136,7 @@ export default function SchoolLifeDetailPage() {
             </div>
 
             <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-14 lg:px-8">
-              <div className="grid gap-4 md:grid-cols-3 md:grid-rows-2">
-                {getGallery(item).map((image, index) => (
-                  <motion.div
-                    key={`${image.url}-${index}`}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-80px' }}
-                    transition={{ duration: 0.45, delay: index * 0.08 }}
-                    className={`group relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-white shadow-2xl shadow-zinc-900/10 dark:border-white/10 dark:bg-zinc-900 dark:shadow-black/30 ${
-                      index === 0 ? 'aspect-[16/10] md:col-span-2 md:row-span-2 md:aspect-auto' : 'aspect-[4/3]'
-                    }`}
-                  >
-                    <Image
-                      src={image.url}
-                      alt={`${item.title} gallery image ${index + 1}`}
-                      fill
-                      sizes={index === 0 ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/24 to-transparent opacity-70" />
-                  </motion.div>
-                ))}
-              </div>
+              <GalleryGrid item={item} />
             </div>
 
             <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
