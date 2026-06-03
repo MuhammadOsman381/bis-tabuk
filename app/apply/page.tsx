@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { APPLY_DRAFT_KEY, AUTH_TOKEN_KEY, USER_EMAIL_ENCODED_KEY } from '@/lib/storageKeys';
-import { yearGroups } from '@/lib/yearGroups';
+import { fallbackYearGroups } from '@/lib/yearGroups';
 
 type StudentForm = {
   firstName: string;
@@ -467,6 +467,7 @@ export default function ApplyPage() {
   const [countries, setCountries] = useState(fallbackCountries);
   const [languages, setLanguages] = useState(fallbackLanguages);
   const [phoneCodes, setPhoneCodes] = useState(fallbackPhoneCodes);
+  const [yearOptions, setYearOptions] = useState(fallbackYearGroups);
   const [userEmail, setUserEmail] = useState('');
   const [syncState, setSyncState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -576,6 +577,20 @@ export default function ApplyPage() {
     }
 
     loadDirectoryData();
+  }, []);
+
+  useEffect(() => {
+    async function loadYearGroups() {
+      try {
+        const response = await fetch('/api/year-groups', { cache: 'no-store' });
+        const result = await readJsonResponse<{ years?: string[] }>(response, 'Unable to load year groups.');
+        if (Array.isArray(result.years) && result.years.length) setYearOptions(result.years);
+      } catch {
+        setYearOptions(fallbackYearGroups);
+      }
+    }
+
+    loadYearGroups();
   }, []);
 
   useEffect(() => {
@@ -968,7 +983,7 @@ export default function ApplyPage() {
                                   <Field label="First Name" required><TextInput value={student.firstName} onChange={(value) => updateStudent(index, { firstName: value })} required /></Field>
                                   <Field label="Last Name" required><TextInput value={student.lastName} onChange={(value) => updateStudent(index, { lastName: value })} required /></Field>
                                   <Field label="Date of Birth" required><TextInput type="date" value={student.dateOfBirth} onChange={(value) => updateStudent(index, { dateOfBirth: value })} required /></Field>
-                                  <Field label="Admission Year Group" required><SelectInput value={student.admissionYearGroup} onChange={(value) => updateStudent(index, { admissionYearGroup: value })} options={yearGroups} required /></Field>
+                                  <Field label="Admission Year Group" required><SelectInput value={student.admissionYearGroup} onChange={(value) => updateStudent(index, { admissionYearGroup: value })} options={yearOptions} required /></Field>
                                   <Field label="Gender" required><RadioGroup value={student.gender} onChange={(value) => updateStudent(index, { gender: value })} options={['Male', 'Female']} /></Field>
                                   <Field label="Nationality" required><SearchableInput value={student.nationality} onChange={(value) => updateStudent(index, { nationality: value })} options={countries} listId={`student-nationality-${index}`} placeholder="Search country" required /></Field>
                                   <Field label="Country of Birth" required><SearchableInput value={student.countryOfBirth} onChange={(value) => updateStudent(index, { countryOfBirth: value })} options={countries} listId={`student-birth-country-${index}`} placeholder="Search country" required /></Field>

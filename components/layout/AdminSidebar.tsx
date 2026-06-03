@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Sparkles, UsersRound } from 'lucide-react';
+import { Layers3, LayoutDashboard, Sparkles } from 'lucide-react';
 
 type AdminSidebarProps = {
-  active?: 'dashboard' | 'teachers' | 'school-life';
+  active?: 'dashboard' | 'teachers' | 'school-life' | 'classes';
 };
 
 const adminLinks = [
@@ -21,6 +21,12 @@ const adminLinks = [
   //   href: '/admin/teachers',
   //   icon: UsersRound,
   // },
+  {
+    key: 'classes',
+    label: 'Classes / Years',
+    href: '/admin/classes',
+    icon: Layers3,
+  },
   {
     key: 'school-life',
     label: 'School Life',

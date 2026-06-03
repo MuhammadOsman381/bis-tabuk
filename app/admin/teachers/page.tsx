@@ -6,7 +6,7 @@ import { Loader2, LockKeyhole, LogOut, RefreshCw, UsersRound } from 'lucide-reac
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
-import { yearGroups } from '@/lib/yearGroups';
+import { fallbackYearGroups } from '@/lib/yearGroups';
 
 type TeacherRecord = {
   id: string;
@@ -31,6 +31,7 @@ export default function AdminTeachersPage() {
   const [password, setPassword] = useState('12345678');
   const [teachers, setTeachers] = useState<TeacherRecord[]>([]);
   const [teacherForm, setTeacherForm] = useState({ name: '', email: '', assignedClasses: [] as string[] });
+  const [yearOptions, setYearOptions] = useState(fallbackYearGroups);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -62,10 +63,23 @@ export default function AdminTeachersPage() {
     }
   }, [token]);
 
-  useEffect(() => {
-    const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
-    if (savedToken) setToken(savedToken);
+  const loadYearGroups = useCallback(async () => {
+    try {
+      const response = await fetch('/api/year-groups', { cache: 'no-store' });
+      const result = (await response.json()) as { years?: string[] };
+      if (Array.isArray(result.years) && result.years.length) setYearOptions(result.years);
+    } catch {
+      setYearOptions(fallbackYearGroups);
+    }
   }, []);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
+      if (savedToken) setToken(savedToken);
+      loadYearGroups();
+    });
+  }, [loadYearGroups]);
 
   useEffect(() => {
     if (!token) return;
@@ -193,7 +207,7 @@ export default function AdminTeachersPage() {
                   <div className="lg:col-span-3">
                     <p className="mb-2 text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Classes</p>
                     <div className="flex flex-wrap gap-2">
-                      {yearGroups.map((className) => (
+                      {yearOptions.map((className) => (
                         <button key={className} type="button" onClick={() => toggleTeacherClass(className)} className={`rounded-full border px-3 py-1.5 text-xs font-black transition ${teacherForm.assignedClasses.includes(className) ? 'border-[#C8102E] bg-[#C8102E] text-white' : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-[#C8102E]/30 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300'}`}>
                           {className}
                         </button>

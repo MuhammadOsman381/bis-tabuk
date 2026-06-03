@@ -6,7 +6,6 @@ import { ArrowLeft, CheckCircle2, Download, Edit3, Eye, Loader2, LockKeyhole, Lo
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
-import { yearGroups } from '@/lib/yearGroups';
 
 type ApplicantStatus = 'Pending' | 'approve' | 'reject';
 
@@ -57,7 +56,7 @@ const studentFields: Array<{ key: keyof StudentData; label: string; type?: strin
   { key: 'firstName', label: 'First Name' },
   { key: 'lastName', label: 'Last Name' },
   { key: 'dateOfBirth', label: 'Date of Birth', type: 'date' },
-  { key: 'admissionYearGroup', label: 'Admission Year Group', options: yearGroups },
+  { key: 'admissionYearGroup', label: 'Admission Year Group' },
   { key: 'gender', label: 'Gender', options: ['Male', 'Female'] },
   { key: 'nationality', label: 'Nationality' },
   { key: 'countryOfBirth', label: 'Country of Birth' },
@@ -131,9 +130,9 @@ function getPrimaryYearGroup(applicant: Applicant) {
   return getStudents(applicant)[0]?.admissionYearGroup || 'Year not selected';
 }
 
-function getYearSortIndex(year: string) {
-  const index = yearGroups.indexOf(year);
-  return index === -1 ? yearGroups.length + 1 : index;
+function getYearSortIndex(year: string, yearOptions: string[]) {
+  const index = yearOptions.indexOf(year);
+  return index === -1 ? yearOptions.length + 1 : index;
 }
 
 function getGuardian(applicant: Applicant) {
@@ -157,6 +156,21 @@ function stripExportFields(values: Record<string, unknown>) {
 function getGuardianPhone(applicant: Applicant) {
   const guardian = getGuardian(applicant);
   return [guardian?.phoneCode, guardian?.phone].filter(Boolean).join(' ') || 'Not added';
+}
+
+function getPrimaryStudentImage(applicant: Applicant) {
+  return getStudents(applicant).find((student) => student.passportUrl)?.passportUrl;
+}
+
+async function readJsonResponse<T>(response: Response, fallbackMessage: string): Promise<T> {
+  const text = await response.text();
+  if (!text) return {} as T;
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error(text.replace(/\s+/g, ' ').trim() || fallbackMessage);
+  }
 }
 
 function DetailGrid({ title, values }: { title: string; values: Record<string, unknown> }) {
@@ -323,6 +337,7 @@ export default function AdminPage() {
   const [editingApplicantId, setEditingApplicantId] = useState('');
   const [editData, setEditData] = useState<ApplicationData | null>(null);
   const [yearFilter, setYearFilter] = useState('');
+  const [yearOptions, setYearOptions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -331,11 +346,21 @@ export default function AdminPage() {
     return applicants
       .filter((applicant) => !yearFilter || getStudents(applicant).some((student) => student.admissionYearGroup === yearFilter))
       .sort((a, b) => {
-        const yearDifference = getYearSortIndex(getPrimaryYearGroup(a)) - getYearSortIndex(getPrimaryYearGroup(b));
+        const yearDifference = getYearSortIndex(getPrimaryYearGroup(a), yearOptions) - getYearSortIndex(getPrimaryYearGroup(b), yearOptions);
         if (yearDifference !== 0) return yearDifference;
         return getStudentName(a).localeCompare(getStudentName(b));
       });
-  }, [applicants, yearFilter]);
+  }, [applicants, yearFilter, yearOptions]);
+
+  const loadYearGroups = useCallback(async () => {
+    try {
+      const response = await fetch('/api/year-groups', { cache: 'no-store' });
+      const result = await readJsonResponse<{ years?: string[] }>(response, 'Unable to load year groups.');
+      setYearOptions(Array.isArray(result.years) ? result.years : []);
+    } catch {
+      setYearOptions([]);
+    }
+  }, []);
 
   const loadApplicants = useCallback(async (adminToken = token) => {
     if (!adminToken) return;
@@ -439,7 +464,8 @@ export default function AdminPage() {
       const savedToken = window.localStorage.getItem(ADMIN_TOKEN_KEY);
       if (savedToken) setToken(savedToken);
     });
-  }, []);
+    queueMicrotask(() => loadYearGroups());
+  }, [loadYearGroups]);
 
   useEffect(() => {
     if (!token) return;
@@ -658,7 +684,7 @@ export default function AdminPage() {
                   <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Filter by year</span>
                   <select className={inputClass} value={yearFilter} onChange={(event) => setYearFilter(event.target.value)}>
                     <option value="">All year groups</option>
-                    {yearGroups.map((year) => (
+                    {yearOptions.map((year) => (
                       <option key={year} value={year}>{year}</option>
                     ))}
                   </select>
@@ -753,7 +779,7 @@ export default function AdminPage() {
                                   key={String(field.key)}
                                   label={field.label}
                                   type={field.type}
-                                  options={field.options}
+                                  options={field.key === 'admissionYearGroup' ? yearOptions : field.options}
                                   value={student[field.key]}
                                   onChange={(value) => updateNestedEditField('students', index, String(field.key), value)}
                                 />
@@ -840,12 +866,24 @@ export default function AdminPage() {
                       <tbody className="divide-y divide-zinc-200 dark:divide-white/10">
                         {visibleApplicants.map((applicant, index) => {
                           const guardian = getGuardian(applicant);
+                          const studentImage = getPrimaryStudentImage(applicant);
 
                           return (
                             <motion.tr key={applicant.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.025 }} className="text-sm text-zinc-700 transition hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/[0.04]">
                               <td className="px-5 py-4">
-                                <p className="font-black text-zinc-950 dark:text-zinc-50">{getStudentName(applicant)}</p>
-                                <p className="mt-1 text-xs text-zinc-500">{getAdmissionYearGroups(applicant)}</p>
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 bg-cover bg-center dark:border-white/10 dark:bg-zinc-800"
+                                    style={studentImage ? { backgroundImage: `url(${studentImage})` } : undefined}
+                                    aria-label="Student image"
+                                  >
+                                    {!studentImage && <div className="flex h-full w-full items-center justify-center text-xs font-black text-zinc-400">STD</div>}
+                                  </div>
+                                  <div>
+                                    <p className="font-black text-zinc-950 dark:text-zinc-50">{getStudentName(applicant)}</p>
+                                    <p className="mt-1 text-xs text-zinc-500">{getAdmissionYearGroups(applicant)}</p>
+                                  </div>
+                                </div>
                               </td>
                               <td className="px-5 py-4 break-all font-bold">{guardian?.email || applicant.email}</td>
                               <td className="px-5 py-4 font-bold">{getGuardianPhone(applicant)}</td>

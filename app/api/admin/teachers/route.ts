@@ -6,7 +6,7 @@ import { teachers } from '@/lib/db/schema';
 import { getAdminFromRequest } from '@/lib/server/adminAuth';
 import { hashPassword } from '@/lib/server/auth';
 import { sendTeacherAccessEmail } from '@/lib/server/mailer';
-import { yearGroups } from '@/lib/yearGroups';
+import { getYearGroupsForServer } from '@/lib/server/yearGroups';
 
 function generatePassword() {
   return `BIST-T-${randomBytes(4).toString('hex').toUpperCase()}`;
@@ -39,6 +39,7 @@ export async function POST(request: Request) {
     const { name, email, assignedClasses } = (await request.json()) as { name?: string; email?: string; assignedClasses?: string[] };
     if (!name || !email || !assignedClasses?.length) return NextResponse.json({ error: 'Name, email, and classes are required.' }, { status: 400 });
 
+    const yearGroups = await getYearGroupsForServer();
     const validClasses = assignedClasses.filter((className) => yearGroups.includes(className));
     if (!validClasses.length) return NextResponse.json({ error: 'Please select valid classes.' }, { status: 400 });
 
