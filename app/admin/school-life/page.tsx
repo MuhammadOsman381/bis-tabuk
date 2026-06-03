@@ -27,6 +27,54 @@ type GalleryImage = {
 
 const inputClass =
   'focus-ring w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-950 placeholder:text-zinc-400 shadow-sm shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-950/70 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:shadow-black/20';
+const MAX_UPLOAD_BYTES = 3.8 * 1024 * 1024;
+const IMAGE_COMPRESSION_THRESHOLD_BYTES = 1.8 * 1024 * 1024;
+
+async function readJsonResponse<T>(response: Response, fallbackMessage: string): Promise<T> {
+  const text = await response.text();
+  if (!text) return {} as T;
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    const cleanText = text.replace(/\s+/g, ' ').trim();
+    const message = cleanText || fallbackMessage;
+    throw new Error(message.startsWith('Request Entity Too Large') ? 'The selected image is too large. Please choose a smaller image.' : message);
+  }
+}
+
+async function compressImageForUpload(file: File) {
+  if (!file.type.startsWith('image/') || file.size <= IMAGE_COMPRESSION_THRESHOLD_BYTES) return file;
+
+  const imageUrl = URL.createObjectURL(file);
+
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = document.createElement('img');
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Unable to prepare image for upload.'));
+      img.src = imageUrl;
+    });
+
+    const maxDimension = 1800;
+    const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.width * scale));
+    canvas.height = Math.max(1, Math.round(image.height * scale));
+
+    const context = canvas.getContext('2d');
+    if (!context) return file;
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.78));
+    if (!blob || blob.size >= file.size) return file;
+
+    const safeName = file.name.replace(/\.[^.]+$/, '') || 'school-life';
+    return new File([blob], `${safeName}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+  } finally {
+    URL.revokeObjectURL(imageUrl);
+  }
+}
 
 export default function AdminSchoolLifePage() {
   const [token, setToken] = useState('');
@@ -104,10 +152,15 @@ export default function AdminSchoolLifePage() {
   };
 
   const uploadFile = async (file: File) => {
+    const uploadableFile = await compressImageForUpload(file);
+    if (uploadableFile.size > MAX_UPLOAD_BYTES) {
+      throw new Error('The selected image is too large. Please choose a smaller image.');
+    }
+
     const body = new FormData();
-    body.append('file', file);
+    body.append('file', uploadableFile);
     const response = await fetch('/api/upload', { method: 'POST', body });
-    const result = await response.json();
+    const result = await readJsonResponse<{ error?: string; url: string; publicId: string; name: string }>(response, 'Upload failed.');
     if (!response.ok) throw new Error(result.error ?? 'Upload failed.');
     return result as { url: string; publicId: string; name: string };
   };
@@ -183,7 +236,7 @@ export default function AdminSchoolLifePage() {
           imageGallery: gallery,
         }),
       });
-      const result = await response.json();
+      const result = await readJsonResponse<{ error?: string; item: SchoolLifeItem }>(response, 'Unable to save school life item.');
       if (!response.ok) throw new Error(result.error ?? 'Unable to save school life item.');
 
       resetForm();
