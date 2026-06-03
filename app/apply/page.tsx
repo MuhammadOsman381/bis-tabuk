@@ -34,6 +34,9 @@ type StudentForm = {
   spokenLanguages: string[];
   startDate: string;
   requiresSupport: string;
+  photoFileName: string;
+  photoUrl: string;
+  photoPublicId: string;
   passportFileName: string;
   passportUrl: string;
   passportPublicId: string;
@@ -116,6 +119,9 @@ const emptyStudent = (): StudentForm => ({
   spokenLanguages: [],
   startDate: '',
   requiresSupport: '',
+  photoFileName: '',
+  photoUrl: '',
+  photoPublicId: '',
   passportFileName: '',
   passportUrl: '',
   passportPublicId: '',
@@ -357,6 +363,9 @@ function stripFileData(draft: ApplyDraft): ApplyDraft {
     ...draft,
     students: draft.students.map((student) => ({
       ...student,
+      photoFileName: '',
+      photoUrl: '',
+      photoPublicId: '',
       passportFileName: '',
       passportUrl: '',
       passportPublicId: '',
@@ -473,6 +482,7 @@ export default function ApplyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitProgress, setSubmitProgress] = useState('');
   const [submitError, setSubmitError] = useState('');
+  const [studentPhotoFiles, setStudentPhotoFiles] = useState<Record<number, File>>({});
   const [studentPassportFiles, setStudentPassportFiles] = useState<Record<number, File>>({});
   const [guardianPassportFiles, setGuardianPassportFiles] = useState<Record<number, File>>({});
 
@@ -664,13 +674,14 @@ export default function ApplyPage() {
 
     try {
       draft.students.forEach((student, index) => {
+        if (!studentPhotoFiles[index] && !student.photoUrl) throw new Error(`Please upload student photo for Student ${index + 1}.`);
         if (!studentPassportFiles[index] && !student.passportUrl) throw new Error(`Please upload passport image for Student ${index + 1}.`);
       });
       draft.guardians.forEach((guardian, index) => {
         if (!guardianPassportFiles[index] && !guardian.passportUrl) throw new Error(`Please upload passport image for Guardian ${index + 1}.`);
       });
 
-      const totalUploads = Object.keys(studentPassportFiles).length + Object.keys(guardianPassportFiles).length;
+      const totalUploads = Object.keys(studentPhotoFiles).length + Object.keys(studentPassportFiles).length + Object.keys(guardianPassportFiles).length;
       let completedUploads = 0;
       const markUploadDone = () => {
         completedUploads += 1;
@@ -681,13 +692,32 @@ export default function ApplyPage() {
       const [studentsWithUploads, guardiansWithUploads] = await Promise.all([
         Promise.all(
           draft.students.map(async (student, index) => {
-            const file = studentPassportFiles[index];
-            if (!file && student.passportUrl) return student;
-            if (!file) throw new Error(`Please upload passport image for Student ${index + 1}.`);
-            const result = await uploadFile(file);
-            await deleteUploadedFile({ publicId: student.passportPublicId, url: student.passportUrl, token });
-            markUploadDone();
-            return { ...student, passportFileName: result.name, passportUrl: result.url, passportPublicId: result.publicId };
+            const photoFile = studentPhotoFiles[index];
+            const passportFile = studentPassportFiles[index];
+            const [photoResult, passportResult] = await Promise.all([
+              (async () => {
+                if (!photoFile && student.photoUrl) return null;
+                if (!photoFile) throw new Error(`Please upload student photo for Student ${index + 1}.`);
+                const result = await uploadFile(photoFile);
+                await deleteUploadedFile({ publicId: student.photoPublicId, url: student.photoUrl, token });
+                markUploadDone();
+                return result;
+              })(),
+              (async () => {
+                if (!passportFile && student.passportUrl) return null;
+                if (!passportFile) throw new Error(`Please upload passport image for Student ${index + 1}.`);
+                const result = await uploadFile(passportFile);
+                await deleteUploadedFile({ publicId: student.passportPublicId, url: student.passportUrl, token });
+                markUploadDone();
+                return result;
+              })(),
+            ]);
+
+            return {
+              ...student,
+              ...(photoResult ? { photoFileName: photoResult.name, photoUrl: photoResult.url, photoPublicId: photoResult.publicId } : {}),
+              ...(passportResult ? { passportFileName: passportResult.name, passportUrl: passportResult.url, passportPublicId: passportResult.publicId } : {}),
+            };
           }),
         ),
         Promise.all(
@@ -727,6 +757,7 @@ export default function ApplyPage() {
       setSubmitted(true);
       setEditingApplicationId('');
       setDraft(initialDraft());
+      setStudentPhotoFiles({});
       setStudentPassportFiles({});
       setGuardianPassportFiles({});
       setSubmitProgress('');
@@ -746,6 +777,12 @@ export default function ApplyPage() {
     updateStudent(index, { passportFileName: file.name });
   };
 
+  const handleStudentPhoto = async (index: number, file: File | undefined) => {
+    if (!file) return;
+    setStudentPhotoFiles((current) => ({ ...current, [index]: file }));
+    updateStudent(index, { photoFileName: file.name });
+  };
+
   const handleGuardianPassport = async (index: number, file: File | undefined) => {
     if (!file) return;
     setGuardianPassportFiles((current) => ({ ...current, [index]: file }));
@@ -757,6 +794,7 @@ export default function ApplyPage() {
     const nextDraft = initialDraft();
     if (savedEmail) nextDraft.guardians[0].email = savedEmail;
     setDraft(nextDraft);
+    setStudentPhotoFiles({});
     setStudentPassportFiles({});
     setGuardianPassportFiles({});
     setEditingApplicationId('');
@@ -771,6 +809,7 @@ export default function ApplyPage() {
 
   const editApplication = (application: SavedApplication) => {
     setDraft(normalizeDraft(application.data));
+    setStudentPhotoFiles({});
     setStudentPassportFiles({});
     setGuardianPassportFiles({});
     setEditingApplicationId(application.id);
@@ -991,6 +1030,7 @@ export default function ApplyPage() {
                                   <div className="md:col-span-2"><Field label="Spoken Language(s)"><MultiSelect values={student.spokenLanguages} onChange={(values) => updateStudent(index, { spokenLanguages: values })} options={languages} /></Field></div>
                                   <Field label="Does your child require special educational support?"><RadioGroup value={student.requiresSupport} onChange={(value) => updateStudent(index, { requiresSupport: value })} options={['Yes', 'No']} /></Field>
                                   <Field label="Does Child Have Iqama? Optional"><RadioGroup value={student.hasIqama} onChange={(value) => updateStudent(index, { hasIqama: value })} options={['Yes', 'No']} /></Field>
+                                  <Field label="Student Photo" required><input className={inputClass} type="file" accept="image/*" onChange={(event) => handleStudentPhoto(index, event.target.files?.[0])} required={!student.photoFileName} />{student.photoFileName && <p className="mt-2 text-xs text-zinc-500">{student.photoFileName}</p>}{student.photoUrl && <a className="mt-1 block text-xs font-bold text-[#C8102E]" href={student.photoUrl} target="_blank">View uploaded student photo</a>}</Field>
                                   <Field label="Passport" required><input className={inputClass} type="file" accept="image/*" onChange={(event) => handleStudentPassport(index, event.target.files?.[0])} required={!student.passportFileName} />{student.passportFileName && <p className="mt-2 text-xs text-zinc-500">{student.passportFileName}</p>}{student.passportUrl && <a className="mt-1 block text-xs font-bold text-[#C8102E]" href={student.passportUrl} target="_blank">View uploaded passport</a>}</Field>
                                 </div>
                               </div>

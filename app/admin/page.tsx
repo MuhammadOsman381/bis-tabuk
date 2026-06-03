@@ -9,7 +9,7 @@ import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
 
 type ApplicantStatus = 'Pending' | 'approve' | 'reject';
 
-type StudentData = Record<string, unknown> & { firstName?: string; lastName?: string; admissionYearGroup?: string; passportUrl?: string };
+type StudentData = Record<string, unknown> & { firstName?: string; lastName?: string; admissionYearGroup?: string; photoUrl?: string; passportUrl?: string };
 type GuardianData = Record<string, unknown> & { firstName?: string; lastName?: string; email?: string; phoneCode?: string; phone?: string; passportUrl?: string };
 type ApplicationData = {
   howFound?: string;
@@ -159,7 +159,8 @@ function getGuardianPhone(applicant: Applicant) {
 }
 
 function getPrimaryStudentImage(applicant: Applicant) {
-  return getStudents(applicant).find((student) => student.passportUrl)?.passportUrl;
+  const students = getStudents(applicant);
+  return students.find((student) => student.photoUrl)?.photoUrl || students.find((student) => student.passportUrl)?.passportUrl;
 }
 
 async function readJsonResponse<T>(response: Response, fallbackMessage: string): Promise<T> {
@@ -838,10 +839,11 @@ export default function AdminPage() {
                   <section className="rounded-3xl border border-zinc-200/80 bg-white p-5 shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
                     <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">Uploaded Images</h3>
                     <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                      {getStudents(selectedApplicant).map((student, index) => <ImagePreview key={`student-photo-${index}`} title={`Student ${index + 1} photo`} url={student.photoUrl} />)}
                       {getStudents(selectedApplicant).map((student, index) => <ImagePreview key={`student-passport-${index}`} title={`Student ${index + 1} passport`} url={student.passportUrl} />)}
                       {getGuardians(selectedApplicant).map((guardian, index) => <ImagePreview key={`guardian-passport-${index}`} title={`Guardian ${index + 1} passport`} url={guardian.passportUrl} />)}
                       <ImagePreview title="Payment receipt" url={getApplicationData(selectedApplicant).paymentReceiptUrl} />
-                      {!getApplicationData(selectedApplicant).paymentReceiptUrl && !getStudents(selectedApplicant).some((student) => student.passportUrl) && !getGuardians(selectedApplicant).some((guardian) => guardian.passportUrl) && (
+                      {!getApplicationData(selectedApplicant).paymentReceiptUrl && !getStudents(selectedApplicant).some((student) => student.photoUrl || student.passportUrl) && !getGuardians(selectedApplicant).some((guardian) => guardian.passportUrl) && (
                         <p className="text-sm font-bold text-zinc-500 dark:text-zinc-400">No uploaded images yet.</p>
                       )}
                     </div>

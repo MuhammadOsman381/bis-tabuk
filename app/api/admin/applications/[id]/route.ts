@@ -6,6 +6,8 @@ import { getAdminFromRequest } from '@/lib/server/adminAuth';
 import { deleteCloudinaryAssets } from '@/lib/server/cloudinary';
 
 type AssetContainer = {
+  photoUrl?: string;
+  photoPublicId?: string;
   passportUrl?: string;
   passportPublicId?: string;
   paymentReceiptUrl?: string;
@@ -29,7 +31,10 @@ function collectApplicationAssets(data: unknown) {
   const applicationData = getApplicationData(data);
   return [
     { url: applicationData.paymentReceiptUrl, publicId: applicationData.paymentReceiptPublicId },
-    ...(applicationData.students ?? []).map((student) => ({ url: student.passportUrl, publicId: student.passportPublicId })),
+    ...(applicationData.students ?? []).flatMap((student) => [
+      { url: student.photoUrl, publicId: student.photoPublicId },
+      { url: student.passportUrl, publicId: student.passportPublicId },
+    ]),
     ...(applicationData.guardians ?? []).map((guardian) => ({ url: guardian.passportUrl, publicId: guardian.passportPublicId })),
   ].filter((asset) => asset.url || asset.publicId);
 }
