@@ -34,6 +34,8 @@ export default function Footer() {
               <li><a href="#" className="hover:text-white transition-colors">About BIST</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Leadership Team</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Accreditations</a></li>
+              <li><a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms-of-use" className="hover:text-white transition-colors">Terms of Use</a></li>
             </ul>
           </div>
 

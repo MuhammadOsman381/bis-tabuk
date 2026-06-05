@@ -5,11 +5,9 @@ import type React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import Topbar from '@/components/layout/Topbar';
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
-import Footer from '@/components/layout/Footer';
 import { Reveal, staggerContainer } from '@/components/ui/Motion';
 
 export type ShellCard = {
@@ -51,6 +49,7 @@ type SchoolPageShellProps = {
   ctaHref?: string;
   ctaTitle?: string;
   isContact?: boolean;
+  showVideo?: boolean;
 };
 
 function DataTable({ table }: { table: ShellTable }) {
@@ -187,10 +186,8 @@ export default function SchoolPageShell({
   quote,
   sections,
   children,
-  ctaLabel = 'Join Our School',
-  ctaHref = '/apply',
-  ctaTitle = 'Register Online',
   isContact = false,
+  showVideo = true,
 }: SchoolPageShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -238,7 +235,7 @@ export default function SchoolPageShell({
                 ))}
               </Reveal>
             )}
-             {!isContact && <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
+             {!isContact && showVideo && <div className="mt-5 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-2xl shadow-zinc-900/12 dark:border-white/10 dark:shadow-black/40">
                 <iframe
                   className="aspect-video w-full"
                   src="https://www.youtube.com/embed/5VnQgM32YCs"

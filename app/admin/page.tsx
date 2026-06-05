@@ -6,6 +6,7 @@ import { ArrowLeft, CheckCircle2, Download, Edit3, Eye, Loader2, LockKeyhole, Lo
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
+import { fallbackYearGroups } from '@/lib/yearGroups';
 
 type ApplicantStatus = 'Pending' | 'approve' | 'reject';
 
@@ -339,6 +340,7 @@ export default function AdminPage() {
   const [editData, setEditData] = useState<ApplicationData | null>(null);
   const [yearFilter, setYearFilter] = useState('');
   const [yearOptions, setYearOptions] = useState<string[]>([]);
+  const [isksafhYearOptions, setIsksafhYearOptions] = useState<string[]>(fallbackYearGroups);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -360,6 +362,17 @@ export default function AdminPage() {
       setYearOptions(Array.isArray(result.years) ? result.years : []);
     } catch {
       setYearOptions([]);
+    }
+  }, []);
+
+  const loadIsksafhYearGroups = useCallback(async () => {
+    try {
+      const response = await fetch('https://isksafh.vercel.app/api/public/years', { cache: 'no-store' });
+      const result = await readJsonResponse<{ years?: string[] }>(response, 'Unable to load ISKSAFH year groups.');
+      const years = Array.isArray(result.years) ? result.years.filter((year): year is string => typeof year === 'string' && Boolean(year.trim())) : [];
+      setIsksafhYearOptions(years.length ? Array.from(new Set(years.map((year) => year.trim()))) : fallbackYearGroups);
+    } catch {
+      setIsksafhYearOptions(fallbackYearGroups);
     }
   }, []);
 
@@ -466,7 +479,8 @@ export default function AdminPage() {
       if (savedToken) setToken(savedToken);
     });
     queueMicrotask(() => loadYearGroups());
-  }, [loadYearGroups]);
+    queueMicrotask(() => loadIsksafhYearGroups());
+  }, [loadIsksafhYearGroups, loadYearGroups]);
 
   useEffect(() => {
     if (!token) return;
@@ -780,7 +794,7 @@ export default function AdminPage() {
                                   key={String(field.key)}
                                   label={field.label}
                                   type={field.type}
-                                  options={field.key === 'admissionYearGroup' ? yearOptions : field.options}
+                                  options={field.key === 'admissionYearGroup' ? isksafhYearOptions : field.options}
                                   value={student[field.key]}
                                   onChange={(value) => updateNestedEditField('students', index, String(field.key), value)}
                                 />
