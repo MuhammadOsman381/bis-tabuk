@@ -16,7 +16,7 @@ export default function Topbar() {
         <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2">
         <a href="tel:+966126656700" className="inline-flex items-center gap-1.5 text-white/80 hover:text-[#C9A84C] transition-colors">
           <Phone className="h-3 w-3" />
-              +966 (01) 4 4411 088 x 83103
+              +966 (14) 4411088 x 83013
         </a>
         <a href="mailto:admissions@bis-jeddah.com" className="inline-flex items-center gap-1.5 truncate text-white/80 hover:text-[#C9A84C] transition-colors">
           <Mail className="h-3 w-3" />

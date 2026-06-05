@@ -57,7 +57,8 @@ export default function Footer() {
             </p>
             <a href="tel:+966126656700" className="mt-4 flex gap-3 text-white/70 hover:text-white transition-colors">
               <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              +966 (01) 4 4411 088 x 83103
+              +966 (14) 4411088 x 83013
+              
             </a>
             <a href="mailto:admissions@bis-tabuk.com" className="mt-3 flex gap-3 text-white/70 hover:text-white transition-colors">
               <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />

@@ -12,7 +12,7 @@ const adminLinks = [
   {
     key: 'dashboard',
     label: 'Dashboard',
-    href: '/',
+    href: '/admin',
     icon: LayoutDashboard,
   },
   // {
