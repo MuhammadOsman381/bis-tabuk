@@ -67,7 +67,7 @@ export default function Footer() {
             </p>
             <a href="tel:+966126656700" className="mt-4 flex gap-3 text-white/70 hover:text-white transition-colors">
               <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              +966 (14) 4411088 x 83013
+              +966 (14) 4411088 x 83103
               
             </a>
             <a href="mailto:admissions@bis-tabuk.com" className="mt-3 flex gap-3 text-white/70 hover:text-white transition-colors">
@@ -79,7 +79,7 @@ export default function Footer() {
       </Reveal>
 
       <div className="relative border-t border-white/10 py-6 text-center text-xs text-white/40">
-        © 2025 The British International School of Tabuk. All rights reserved.
+        © {new Date().getFullYear()} The British International School of Tabuk. All rights reserved.
       </div>
     </footer>
   );
