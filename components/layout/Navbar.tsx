@@ -13,6 +13,7 @@ import { APPLY_DRAFT_KEY, AUTH_TOKEN_KEY, USER_EMAIL_ENCODED_KEY, USER_EMAIL_HAS
 const navItems = [
   { href: '#school-life', label: 'School Life' },
   { href: '#calendar', label: 'Calendar' },
+  { href: '/handbook', label: 'Handbook' },
   // { href: '#stages', label: 'Stages' },
   // { href: '#life', label: 'School Life' },
   // { href: '#news', label: 'News' },
@@ -35,7 +36,9 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(Boolean(window.localStorage.getItem(AUTH_TOKEN_KEY)));
+    queueMicrotask(() => {
+      setIsLoggedIn(Boolean(window.localStorage.getItem(AUTH_TOKEN_KEY)));
+    });
   }, []);
 
   const handleLogout = () => {

@@ -36,6 +36,16 @@ export default function Footer() {
               <li><a href="#" className="hover:text-white transition-colors">Accreditations</a></li>
               <li><a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a></li>
               <li><a href="/terms-of-use" className="hover:text-white transition-colors">Terms of Use</a></li>
+              <li>
+                <a
+                  href="https://forms.office.com/Pages/ResponsePage.aspx?id=Hs57TK9chEez4-l7QdcFbm2YmLkVaHVBk9F5SCztM1VUQklJUEQ3M0lOMEpJWVIzUEtJQ1dGUktXUi4u"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Reference Check Form
+                </a>
+              </li>
             </ul>
           </div>
 
