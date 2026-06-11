@@ -2,7 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, Download, Edit3, Eye, Loader2, LockKeyhole, LogOut, RefreshCw, Save, Trash2, UserCheck, X, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Download, Edit3, Eye, EyeOff, Loader2, LockKeyhole, LogOut, RefreshCw, Save, Trash2, UserCheck, X, XCircle } from 'lucide-react';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import PortalHeader from '@/components/layout/PortalHeader';
 import { ADMIN_TOKEN_KEY } from '@/lib/storageKeys';
@@ -10,14 +10,15 @@ import { fallbackYearGroups } from '@/lib/yearGroups';
 
 type ApplicantStatus = 'Pending' | 'approve' | 'reject';
 
-type StudentData = Record<string, unknown> & { firstName?: string; lastName?: string; admissionYearGroup?: string; photoUrl?: string; passportUrl?: string };
-type GuardianData = Record<string, unknown> & { firstName?: string; lastName?: string; email?: string; phoneCode?: string; phone?: string; passportUrl?: string };
+type StudentData = Record<string, unknown> & { firstName?: string; lastName?: string; admissionYearGroup?: string; photoFileName?: string; photoUrl?: string; photoPublicId?: string; passportFileName?: string; passportUrl?: string; passportPublicId?: string };
+type GuardianData = Record<string, unknown> & { firstName?: string; lastName?: string; email?: string; phoneCode?: string; phone?: string; passportFileName?: string; passportUrl?: string; passportPublicId?: string };
 type ApplicationData = {
   howFound?: string;
   students?: StudentData[];
   guardians?: GuardianData[];
   paymentReceiptUrl?: string;
   paymentReceiptFileName?: string;
+  paymentReceiptPublicId?: string;
   declarations?: string[];
   status?: ApplicantStatus;
   data?: ApplicationData;
@@ -173,6 +174,51 @@ async function readJsonResponse<T>(response: Response, fallbackMessage: string):
   } catch {
     throw new Error(text.replace(/\s+/g, ' ').trim() || fallbackMessage);
   }
+}
+
+function editImageKey(section: 'students' | 'guardians', index: number, kind: 'photo' | 'passport') {
+  return `${section}-${index}-${kind}`;
+}
+
+const paymentReceiptImageKey = 'application-payment-receipt';
+
+function EditableImageField({
+  label,
+  currentUrl,
+  currentFileName,
+  selectedFileName,
+  onChange,
+}: {
+  label: string;
+  currentUrl?: string;
+  currentFileName?: string;
+  selectedFileName?: string;
+  onChange: (file?: File) => void;
+}) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-950/40">
+      <span className="block text-xs font-black uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400">{label}</span>
+      <div className="mt-3 flex items-center gap-4">
+        <div
+          className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 bg-cover bg-center dark:border-white/10 dark:bg-zinc-800"
+          style={currentUrl ? { backgroundImage: `url(${currentUrl})` } : undefined}
+        >
+          {!currentUrl && <div className="flex h-full w-full items-center justify-center text-xs font-black text-zinc-400">IMG</div>}
+        </div>
+        <div className="min-w-0 flex-1">
+          {currentUrl ? (
+            <a href={currentUrl} target="_blank" className="text-sm font-black text-[#C8102E] underline-offset-4 hover:underline dark:text-[#ff8fa0]">
+              View current image
+            </a>
+          ) : (
+            <p className="text-sm font-bold text-zinc-500 dark:text-zinc-400">No image uploaded yet.</p>
+          )}
+          <p className="mt-1 truncate text-xs font-semibold text-zinc-400">{selectedFileName || currentFileName || 'Choose a replacement image'}</p>
+        </div>
+      </div>
+      <input className={`${inputClass} mt-4`} type="file" accept="image/*" onChange={(event) => onChange(event.target.files?.[0])} />
+    </div>
+  );
 }
 
 function DetailGrid({ title, values }: { title: string; values: Record<string, unknown> }) {
@@ -334,10 +380,12 @@ export default function AdminPage() {
   const [token, setToken] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
   const [editingApplicantId, setEditingApplicantId] = useState('');
   const [editData, setEditData] = useState<ApplicationData | null>(null);
+  const [editImageFiles, setEditImageFiles] = useState<Record<string, File>>({});
   const [yearFilter, setYearFilter] = useState('');
   const [yearOptions, setYearOptions] = useState<string[]>([]);
   const [isksafhYearOptions, setIsksafhYearOptions] = useState<string[]>(fallbackYearGroups);
@@ -410,6 +458,7 @@ export default function AdminPage() {
   const beginEditApplicant = (applicant: Applicant) => {
     const data = getApplicationData(applicant);
     setEditingApplicantId(applicant.id);
+    setEditImageFiles({});
     setEditData({
       ...data,
       students: getStudents(applicant).length ? getStudents(applicant).map((student) => ({ ...student })) : [{}],
@@ -421,6 +470,7 @@ export default function AdminPage() {
   const cancelEditApplicant = () => {
     setEditingApplicantId('');
     setEditData(null);
+    setEditImageFiles({});
   };
 
   const updateEditField = (key: keyof ApplicationData, value: string | string[]) => {
@@ -434,6 +484,38 @@ export default function AdminPage() {
       list[index] = { ...(list[index] ?? {}), [key]: value };
       return { ...current, [section]: list };
     });
+  };
+
+  const updateEditImageFile = (key: string, file?: File) => {
+    if (!file) return;
+    setEditImageFiles((current) => ({ ...current, [key]: file }));
+  };
+
+  const uploadEditImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const result = await readJsonResponse<{ error?: string; url: string; publicId: string; name: string }>(response, 'Upload failed.');
+    if (!response.ok) throw new Error(result.error ?? 'Upload failed.');
+    return result;
+  };
+
+  const deletePreviousImage = async ({ publicId, url }: { publicId?: string; url?: string }) => {
+    if (!publicId && !url) return;
+
+    try {
+      await fetch('/api/upload', {
+        method: 'DELETE',
+        headers: { ...authHeaders, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId, url }),
+      });
+    } catch {
+      // Old-file cleanup should not block a successful registration update.
+    }
   };
 
   const toggleDeclaration = (declaration: string) => {
@@ -453,12 +535,57 @@ export default function AdminPage() {
     setIsLoading(true);
     setMessage('');
     try {
+      const students = await Promise.all(
+        (editData.students ?? []).map(async (student, index) => {
+          let nextStudent: StudentData = { ...student };
+          const photoFile = editImageFiles[editImageKey('students', index, 'photo')];
+          const passportFile = editImageFiles[editImageKey('students', index, 'passport')];
+
+          if (photoFile) {
+            const uploaded = await uploadEditImage(photoFile);
+            await deletePreviousImage({ publicId: nextStudent.photoPublicId, url: nextStudent.photoUrl });
+            nextStudent = { ...nextStudent, photoFileName: uploaded.name, photoUrl: uploaded.url, photoPublicId: uploaded.publicId };
+          }
+
+          if (passportFile) {
+            const uploaded = await uploadEditImage(passportFile);
+            await deletePreviousImage({ publicId: nextStudent.passportPublicId, url: nextStudent.passportUrl });
+            nextStudent = { ...nextStudent, passportFileName: uploaded.name, passportUrl: uploaded.url, passportPublicId: uploaded.publicId };
+          }
+
+          return nextStudent;
+        }),
+      );
+
+      const guardians = await Promise.all(
+        (editData.guardians ?? []).map(async (guardian, index) => {
+          let nextGuardian: GuardianData = { ...guardian };
+          const passportFile = editImageFiles[editImageKey('guardians', index, 'passport')];
+
+          if (passportFile) {
+            const uploaded = await uploadEditImage(passportFile);
+            await deletePreviousImage({ publicId: nextGuardian.passportPublicId, url: nextGuardian.passportUrl });
+            nextGuardian = { ...nextGuardian, passportFileName: uploaded.name, passportUrl: uploaded.url, passportPublicId: uploaded.publicId };
+          }
+
+          return nextGuardian;
+        }),
+      );
+
+      let nextData: ApplicationData = { ...editData, students, guardians };
+      const paymentReceiptFile = editImageFiles[paymentReceiptImageKey];
+
+      if (paymentReceiptFile) {
+        const uploaded = await uploadEditImage(paymentReceiptFile);
+        await deletePreviousImage({ publicId: nextData.paymentReceiptPublicId, url: nextData.paymentReceiptUrl });
+        nextData = { ...nextData, paymentReceiptFileName: uploaded.name, paymentReceiptUrl: uploaded.url, paymentReceiptPublicId: uploaded.publicId };
+      }
       const response = await fetch(`/api/admin/applications/${selectedApplicant.id}`, {
         method: 'PATCH',
         headers: { ...authHeaders, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: editData, status: selectedApplicant.status }),
+        body: JSON.stringify({ data: nextData, status: selectedApplicant.status }),
       });
-      const result = await response.json();
+      const result = await readJsonResponse<{ error?: string; application: Applicant }>(response, 'Unable to update application.');
       if (!response.ok) throw new Error(result.error ?? 'Unable to update application.');
 
       const updatedApplicant: Applicant = { ...selectedApplicant, data: result.application.data, status: result.application.status, updatedAt: result.application.updatedAt };
@@ -685,7 +812,23 @@ export default function AdminPage() {
                 </label>
                 <label className="block">
                   <span className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-zinc-600 dark:text-zinc-400">Password</span>
-                  <input className={inputClass} value={password} onChange={(event) => setPassword(event.target.value)} type="password" required />
+                  <div className="flex overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-zinc-900/5 transition focus-within:border-[#C8102E] focus-within:ring-4 focus-within:ring-[#C8102E]/10 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-black/20">
+                    <input
+                      className="min-w-0 flex-1 border-0 bg-transparent px-4 py-3.5 text-sm text-zinc-950 outline-none placeholder:text-zinc-400 dark:text-zinc-100 dark:placeholder:text-zinc-600"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      type={showAdminPassword ? 'text' : 'password'}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowAdminPassword((current) => !current)}
+                      className="flex w-12 items-center justify-center text-zinc-500 transition hover:text-[#C8102E] dark:text-zinc-400 dark:hover:text-[#ff8fa0]"
+                      aria-label={showAdminPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showAdminPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </label>
                 <button type="submit" disabled={isLoading} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C8102E] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-70">
                   {isLoading ? 'Please wait...' : 'Login'}
@@ -782,6 +925,13 @@ export default function AdminPage() {
                           <div className="mt-4 grid gap-4 md:grid-cols-2">
                             <EditableField label="How You Found BIST?" value={editData.howFound} onChange={(value) => updateEditField('howFound', value)} options={['School Website', 'Current BIST Staff or Student', 'Online Search']} />
                             <EditableField label="Payment Receipt File Name" value={editData.paymentReceiptFileName} onChange={(value) => updateEditField('paymentReceiptFileName', value)} />
+                            <EditableImageField
+                              label="Payment Receipt"
+                              currentUrl={editData.paymentReceiptUrl}
+                              currentFileName={editData.paymentReceiptFileName}
+                              selectedFileName={editImageFiles[paymentReceiptImageKey]?.name}
+                              onChange={(file) => updateEditImageFile(paymentReceiptImageKey, file)}
+                            />
                           </div>
                         </div>
 
@@ -799,6 +949,20 @@ export default function AdminPage() {
                                   onChange={(value) => updateNestedEditField('students', index, String(field.key), value)}
                                 />
                               ))}
+                              <EditableImageField
+                                label="Student Photo"
+                                currentUrl={student.photoUrl}
+                                currentFileName={student.photoFileName}
+                                selectedFileName={editImageFiles[editImageKey('students', index, 'photo')]?.name}
+                                onChange={(file) => updateEditImageFile(editImageKey('students', index, 'photo'), file)}
+                              />
+                              <EditableImageField
+                                label="Student Passport"
+                                currentUrl={student.passportUrl}
+                                currentFileName={student.passportFileName}
+                                selectedFileName={editImageFiles[editImageKey('students', index, 'passport')]?.name}
+                                onChange={(file) => updateEditImageFile(editImageKey('students', index, 'passport'), file)}
+                              />
                             </div>
                           </div>
                         ))}
@@ -817,6 +981,13 @@ export default function AdminPage() {
                                   onChange={(value) => updateNestedEditField('guardians', index, String(field.key), value)}
                                 />
                               ))}
+                              <EditableImageField
+                                label="Guardian Passport"
+                                currentUrl={guardian.passportUrl}
+                                currentFileName={guardian.passportFileName}
+                                selectedFileName={editImageFiles[editImageKey('guardians', index, 'passport')]?.name}
+                                onChange={(file) => updateEditImageFile(editImageKey('guardians', index, 'passport'), file)}
+                              />
                             </div>
                           </div>
                         ))}

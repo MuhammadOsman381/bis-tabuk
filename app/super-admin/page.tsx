@@ -38,6 +38,7 @@ export default function SuperAdminPage() {
   const [externalName, setExternalName] = useState('');
   const [externalEmail, setExternalEmail] = useState('');
   const [externalPassword, setExternalPassword] = useState('');
+  const [showAccessKey, setShowAccessKey] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showExternalPassword, setShowExternalPassword] = useState(false);
   const [externalAdmin, setExternalAdmin] = useState<ExternalAdminAccount | null>(null);
@@ -223,7 +224,23 @@ export default function SuperAdminPage() {
               </div>
               <label className="block">
                 <span className="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-zinc-600 dark:text-zinc-400">Super Admin Key</span>
-                <input className={inputClass} type="password" value={accessKey} onChange={(event) => setAccessKey(event.target.value)} required />
+                <div className="flex overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-zinc-900/5 transition focus-within:border-[#C8102E] focus-within:ring-4 focus-within:ring-[#C8102E]/10 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-black/20">
+                  <input
+                    className="min-w-0 flex-1 border-0 bg-transparent px-4 py-3.5 text-sm text-zinc-950 outline-none placeholder:text-zinc-400 dark:text-zinc-100 dark:placeholder:text-zinc-600"
+                    type={showAccessKey ? 'text' : 'password'}
+                    value={accessKey}
+                    onChange={(event) => setAccessKey(event.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowAccessKey((current) => !current)}
+                    className="flex w-12 items-center justify-center text-zinc-500 transition hover:text-[#C8102E] dark:text-zinc-400 dark:hover:text-[#ff8fa0]"
+                    aria-label={showAccessKey ? 'Hide access key' : 'Show access key'}
+                  >
+                    {showAccessKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </label>
               <button type="submit" disabled={isLoading} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C8102E] px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-[#C8102E]/25 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] disabled:cursor-not-allowed disabled:opacity-60">
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LockKeyhole className="h-4 w-4" />}
