@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server';
-import { and, eq, lt, sql } from 'drizzle-orm';
-import { getDb } from '@/lib/db';
-import { otpCodes } from '@/lib/db/schema';
 import { createOtp } from '@/lib/server/auth';
-import { ensureOtpSchema } from '@/lib/server/ensureOtpSchema';
-import { ensureUserSchema } from '@/lib/server/ensureUserSchema';
 import { sendOtpEmail } from '@/lib/server/mailer';
+import { createOtpChallenge } from '@/lib/server/otpChallenge';
 
 export async function POST(request: Request) {
   try {
@@ -13,30 +9,10 @@ export async function POST(request: Request) {
     if (!email) return NextResponse.json({ error: 'Email is required.' }, { status: 400 });
 
     const normalizedEmail = email.trim().toLowerCase();
-    await Promise.all([ensureOtpSchema(), ensureUserSchema()]);
-    const db = getDb();
     const code = createOtp();
-    await db.delete(otpCodes).where(lt(otpCodes.expiresAt, new Date()));
-    const expiresAt = new Date(Date.now() + 60 * 1000);
-
-    await db.execute(sql`
-      INSERT INTO "users" ("email")
-      SELECT ${normalizedEmail}
-      WHERE NOT EXISTS (
-        SELECT 1 FROM "users" WHERE "email" = ${normalizedEmail}
-      )
-    `);
-    await db.delete(otpCodes).where(eq(otpCodes.email, normalizedEmail));
-    await db.insert(otpCodes).values({ email: normalizedEmail, code, expiresAt });
-    const cleanupTimer = setTimeout(async () => {
-      try {
-        await db.delete(otpCodes).where(and(eq(otpCodes.email, normalizedEmail), eq(otpCodes.code, code)));
-      } catch {}
-    }, 60 * 1000);
-    cleanupTimer.unref?.();
-
+    const challenge = createOtpChallenge(normalizedEmail, code);
     const delivery = await sendOtpEmail(normalizedEmail, code);
-    return NextResponse.json({ ok: true, delivery });
+    return NextResponse.json({ ok: true, delivery, challenge });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Unable to request OTP.' }, { status: 500 });
   }

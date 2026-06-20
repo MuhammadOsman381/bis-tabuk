@@ -110,13 +110,13 @@ export default function Home() {
     <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} className="luxury-section min-h-screen">
       <header className="relative z-30 border-b border-zinc-200/80 bg-white/80 shadow-sm shadow-zinc-950/5 backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/78 dark:shadow-black/30">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="BIST home">
+          <Link href="https://bis-tabuk.vercel.app/" className="group flex min-w-0 items-center gap-3" aria-label="International School home">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#C8102E] text-white shadow-lg shadow-[#C8102E]/20 transition group-hover:-translate-y-0.5 dark:bg-[#C9A84C] dark:text-zinc-950 dark:shadow-[#C9A84C]/15">
               <School className="h-5 w-5" />
             </span>
             <span className="min-w-0">
-              <strong className="block truncate text-base font-black text-zinc-950 dark:text-zinc-50">BIST</strong>
-              <span className="block truncate text-xs font-semibold text-zinc-500 dark:text-zinc-400">British International School of Tabuk</span>
+              <strong className="block truncate text-base font-black text-zinc-950 dark:text-zinc-50">IS</strong>
+              <span className="block truncate text-xs font-semibold text-zinc-500 dark:text-zinc-400">International School</span>
             </span>
           </Link>
 
@@ -134,7 +134,7 @@ export default function Home() {
           transition={{ duration: 0.55, ease: 'easeOut' }}
           className="max-w-3xl"
         >
-          <span className="luxury-kicker text-xs font-black uppercase tracking-[0.18em]">BIST Digital Hub</span>
+          <span className="luxury-kicker text-xs font-black uppercase tracking-[0.18em]">IS Digital Hub</span>
           <h1 className="mt-7 text-4xl font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-5xl lg:text-6xl">
             Everything you need, in one place.
           </h1>

@@ -16,10 +16,29 @@ function encodeEmail(email: string) {
   return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(email));
 }
 
+async function postJson<T>(url: string, body: Record<string, string>): Promise<{ response: Response; result: T }> {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const text = await response.text();
+  let result = {} as T;
+  if (text) {
+    try {
+      result = JSON.parse(text) as T;
+    } catch {
+      throw new Error(text.replace(/\s+/g, ' ').trim() || 'The server returned an invalid response.');
+    }
+  }
+  return { response, result };
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
+  const [otpChallenge, setOtpChallenge] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -34,21 +53,19 @@ export default function LoginPage() {
     setIsLoading(true);
     setMessage('');
 
-    const response = await fetch('/api/auth/request-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    const result = await response.json();
-    setIsLoading(false);
+    try {
+      const { response, result } = await postJson<{ error?: string; delivery?: { mode?: string }; challenge?: string }>('/api/auth/request-otp', { email });
+      if (!response.ok) throw new Error(result.error ?? 'Unable to send OTP.');
+      if (!result.challenge) throw new Error('The verification challenge was not returned. Please request a new OTP.');
 
-    if (!response.ok) {
-      setMessage(result.error ?? 'Unable to send OTP.');
-      return;
+      setOtpChallenge(result.challenge);
+      setOtpSent(true);
+      setMessage(result.delivery?.mode === 'console' ? 'OTP generated. Check the server console because SMTP is not configured.' : 'OTP sent to your email.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to send OTP.');
+    } finally {
+      setIsLoading(false);
     }
-
-    setOtpSent(true);
-    setMessage(result.delivery?.mode === 'console' ? 'OTP generated. Check the server console because SMTP is not configured.' : 'OTP sent to your email.');
   };
 
   const verifyOtp = async (event: FormEvent<HTMLFormElement>) => {
@@ -56,23 +73,19 @@ export default function LoginPage() {
     setIsLoading(true);
     setMessage('');
 
-    const response = await fetch('/api/auth/verify-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, code: otp }),
-    });
-    const result = await response.json();
-    setIsLoading(false);
+    try {
+      const { response, result } = await postJson<{ error?: string; token: string; emailHash: string; email: string }>('/api/auth/verify-otp', { email, code: otp, challenge: otpChallenge });
+      if (!response.ok) throw new Error(result.error ?? 'Unable to verify OTP.');
 
-    if (!response.ok) {
-      setMessage(result.error ?? 'Unable to verify OTP.');
-      return;
+      window.localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+      window.localStorage.setItem(USER_EMAIL_HASH_KEY, result.emailHash);
+      window.localStorage.setItem(USER_EMAIL_ENCODED_KEY, encodeEmail(result.email));
+      router.replace(redirectTo());
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to verify OTP.');
+    } finally {
+      setIsLoading(false);
     }
-
-    window.localStorage.setItem(AUTH_TOKEN_KEY, result.token);
-    window.localStorage.setItem(USER_EMAIL_HASH_KEY, result.emailHash);
-    window.localStorage.setItem(USER_EMAIL_ENCODED_KEY, encodeEmail(result.email));
-    router.replace(redirectTo());
   };
 
   return (
@@ -129,7 +142,7 @@ export default function LoginPage() {
               </motion.button>
 
               {otpSent && (
-                <button type="button" onClick={() => { setOtpSent(false); setOtp(''); setMessage(''); }} className="w-full text-center text-sm font-bold text-zinc-500 transition hover:text-[#C8102E]">
+                <button type="button" onClick={() => { setOtpSent(false); setOtp(''); setOtpChallenge(''); setMessage(''); }} className="w-full text-center text-sm font-bold text-zinc-500 transition hover:text-[#C8102E]">
                   Use a different email
                 </button>
               )}

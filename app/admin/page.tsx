@@ -771,7 +771,7 @@ export default function AdminPage() {
           <div>
           <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.24em] text-[#8796B3] dark:text-zinc-500">BIST admissions</p>
+              <p className="text-sm font-black uppercase tracking-[0.24em] text-[#8796B3] dark:text-zinc-500">IS admissions</p>
               <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-5xl">Admin Portal</h1>
               <p className="mt-4 max-w-2xl text-base leading-8 text-zinc-600 dark:text-zinc-400">Review saved applications, inspect guardian contact details, and approve or reject applicants.</p>
             </div>

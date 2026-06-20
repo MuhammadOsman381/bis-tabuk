@@ -5,10 +5,10 @@ import "./globals.css";
 import "leaflet/dist/leaflet.css";
 
 export const metadata: Metadata = {
-  title: "BIST – British International School of Tabuk",
+  title: "IS – International School",
   description: "Outstanding British international education in Tabuk for ages 2-18. British Curriculum & IB Diploma.",
   icons: {
-    icon: "/Logo.png",
+    icon: "favicon.ico",
   },
 };
 

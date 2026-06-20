@@ -1,31 +1,24 @@
 import { NextResponse } from 'next/server';
-import { and, eq, gt, lt, sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { getDb } from '@/lib/db';
-import { otpCodes, users } from '@/lib/db/schema';
+import { users } from '@/lib/db/schema';
 import { hashEmail } from '@/lib/server/auth';
-import { ensureOtpSchema } from '@/lib/server/ensureOtpSchema';
 import { ensureUserSchema } from '@/lib/server/ensureUserSchema';
+import { verifyOtpChallenge } from '@/lib/server/otpChallenge';
 import { createUserToken } from '@/lib/server/userAuth';
 
 export async function POST(request: Request) {
   try {
-    const { email, code } = (await request.json()) as { email?: string; code?: string };
-    if (!email || !code) return NextResponse.json({ error: 'Email and OTP are required.' }, { status: 400 });
+    const { email, code, challenge } = (await request.json()) as { email?: string; code?: string; challenge?: string };
+    if (!email || !code || !challenge) return NextResponse.json({ error: 'Email, OTP, and verification challenge are required.' }, { status: 400 });
 
     const normalizedEmail = email.trim().toLowerCase();
-    await Promise.all([ensureOtpSchema(), ensureUserSchema()]);
+    if (!verifyOtpChallenge(challenge, normalizedEmail, code)) {
+      return NextResponse.json({ error: 'Invalid or expired OTP.' }, { status: 401 });
+    }
+
+    await ensureUserSchema();
     const db = getDb();
-    await db.delete(otpCodes).where(lt(otpCodes.expiresAt, new Date()));
-    const [otp] = await db
-      .select()
-      .from(otpCodes)
-      .where(and(eq(otpCodes.email, normalizedEmail), eq(otpCodes.code, code), gt(otpCodes.expiresAt, new Date())))
-      .limit(1);
-
-    if (!otp) return NextResponse.json({ error: 'Invalid or expired OTP.' }, { status: 401 });
-
-    await db.delete(otpCodes).where(eq(otpCodes.email, normalizedEmail));
-
     const emailHash = hashEmail(normalizedEmail);
     await db.execute(sql`
       INSERT INTO "users" ("email")

@@ -27,13 +27,13 @@ export default function HandbookPage() {
           <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_22rem] lg:items-end">
             <div>
               <p className="inline-flex rounded-full border border-[#C8102E]/10 bg-white/70 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-[#C8102E] shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] dark:text-[#C9A84C]">
-                BIST Handbook
+                PARENT HANDBOOK
               </p>
               <h1 className="mt-6 max-w-3xl text-4xl font-black tracking-tight text-[#1A1F4B] dark:text-zinc-50 sm:text-6xl">
                 School Handbook
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
-                Access the British International School of Tabuk handbook in a clean document viewer, with options to open or download the original PDF.
+                Access the International School handbook in a clean document viewer, with options to open or download the original PDF.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href={handbookHref} target="_blank" className="inline-flex items-center gap-2 rounded-full bg-[#C8102E] px-6 py-3 text-sm font-black text-white shadow-lg shadow-[#C8102E]/20 transition hover:-translate-y-0.5 hover:bg-[#9B0D23] dark:bg-[#C9A84C] dark:text-zinc-950">
