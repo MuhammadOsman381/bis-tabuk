@@ -29,7 +29,6 @@ type ApplicationData = {
 type Applicant = {
   id: string;
   email: string;
-  emailHash: string;
   data: ApplicationData;
   status: ApplicantStatus;
   createdAt: string;

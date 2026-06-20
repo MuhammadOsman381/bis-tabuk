@@ -4,6 +4,7 @@ import { getDb } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { createAdminToken } from '@/lib/server/adminAuth';
 import { comparePassword } from '@/lib/server/auth';
+import { ensureUserSchema } from '@/lib/server/ensureUserSchema';
 
 export async function POST(request: Request) {
   try {
@@ -11,8 +12,17 @@ export async function POST(request: Request) {
     if (!email || !password) return NextResponse.json({ error: 'Email and password are required.' }, { status: 400 });
 
     const normalizedEmail = email.trim().toLowerCase();
+    await ensureUserSchema();
     const db = getDb();
-    const [admin] = await db.select().from(users).where(eq(users.email, normalizedEmail)).limit(1);
+    const [admin] = await db
+      .select({
+        email: users.email,
+        role: users.role,
+        passwordHash: users.passwordHash,
+      })
+      .from(users)
+      .where(eq(users.email, normalizedEmail))
+      .limit(1);
 
     if (!admin || admin.role !== 'admin' || !admin.passwordHash) {
       return NextResponse.json({ error: 'Invalid admin credentials.' }, { status: 401 });

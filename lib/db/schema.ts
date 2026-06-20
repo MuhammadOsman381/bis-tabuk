@@ -5,7 +5,6 @@ export const applicationStatusEnum = pgEnum('application_status', ['Pending', 'a
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
   email: text('email').notNull().unique(),
-  emailHash: text('email_hash').notNull().unique(),
   role: text('role').notNull().default('user'),
   passwordHash: text('password_hash'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),

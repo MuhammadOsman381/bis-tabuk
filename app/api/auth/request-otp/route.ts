@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
-import { and, eq, lt } from 'drizzle-orm';
+import { and, eq, lt, sql } from 'drizzle-orm';
 import { getDb } from '@/lib/db';
-import { otpCodes, users } from '@/lib/db/schema';
-import { createOtp, hashEmail } from '@/lib/server/auth';
+import { otpCodes } from '@/lib/db/schema';
+import { createOtp } from '@/lib/server/auth';
+import { ensureOtpSchema } from '@/lib/server/ensureOtpSchema';
+import { ensureUserSchema } from '@/lib/server/ensureUserSchema';
 import { sendOtpEmail } from '@/lib/server/mailer';
 
 export async function POST(request: Request) {
@@ -11,13 +13,19 @@ export async function POST(request: Request) {
     if (!email) return NextResponse.json({ error: 'Email is required.' }, { status: 400 });
 
     const normalizedEmail = email.trim().toLowerCase();
-    const emailHash = hashEmail(normalizedEmail);
+    await Promise.all([ensureOtpSchema(), ensureUserSchema()]);
     const db = getDb();
     const code = createOtp();
     await db.delete(otpCodes).where(lt(otpCodes.expiresAt, new Date()));
-    const expiresAt = new Date(Date.now() + 600 * 1000);
+    const expiresAt = new Date(Date.now() + 60 * 1000);
 
-    await db.insert(users).values({ email: normalizedEmail, emailHash }).onConflictDoNothing({ target: users.email });
+    await db.execute(sql`
+      INSERT INTO "users" ("email")
+      SELECT ${normalizedEmail}
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "users" WHERE "email" = ${normalizedEmail}
+      )
+    `);
     await db.delete(otpCodes).where(eq(otpCodes.email, normalizedEmail));
     await db.insert(otpCodes).values({ email: normalizedEmail, code, expiresAt });
     const cleanupTimer = setTimeout(async () => {

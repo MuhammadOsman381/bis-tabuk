@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { users } from '@/lib/db/schema';
-import { hashEmail, hashPassword } from '@/lib/server/auth';
+import { hashPassword } from '@/lib/server/auth';
 
 export async function GET() {
   try {
@@ -10,7 +10,7 @@ export async function GET() {
     const db = getDb();
     await db
       .insert(users)
-      .values({ email, emailHash: hashEmail(email), role: 'admin', passwordHash })
+      .values({ email, role: 'admin', passwordHash })
       .onConflictDoUpdate({
         target: users.email,
         set: { role: 'admin', passwordHash, updatedAt: new Date() },

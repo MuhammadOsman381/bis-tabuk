@@ -1,190 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import img from "../../app/Logo.png"
-import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { School } from 'lucide-react';
+import AuthAction from '../ui/AuthAction';
 import ThemeToggle from '../ui/ThemeToggle';
-import { APPLY_DRAFT_KEY, AUTH_TOKEN_KEY, USER_EMAIL_ENCODED_KEY, USER_EMAIL_HASH_KEY } from '@/lib/storageKeys';
-
-const navItems = [
-  { href: '#school-life', label: 'School Life' },
-  { href: '#calendar', label: 'Calendar' },
-  { href: '/handbook', label: 'Handbook' },
-  // { href: '#stages', label: 'Stages' },
-  // { href: '#life', label: 'School Life' },
-  // { href: '#news', label: 'News' },
-];
-
-const portalItems = [
-  { href: '/student', label: 'Student Portal' },
-  { href: 'https://isksafh.vercel.app/', label: 'Teacher Portal' },
-  { href: '/admin', label: 'Admin' },
-];
 
 type NavbarProps = {
   isSidebarOpen: boolean;
   onToggleSidebar: () => void;
 };
 
-export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) {
-  const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    queueMicrotask(() => {
-      setIsLoggedIn(Boolean(window.localStorage.getItem(AUTH_TOKEN_KEY)));
-    });
-  }, []);
-
-  const handleLogout = () => {
-    window.localStorage.removeItem(AUTH_TOKEN_KEY);
-    window.localStorage.removeItem(USER_EMAIL_HASH_KEY);
-    window.localStorage.removeItem(USER_EMAIL_ENCODED_KEY);
-    window.localStorage.removeItem(APPLY_DRAFT_KEY);
-    setIsLoggedIn(false);
-    setIsOpen(false);
-    router.push('/');
-  };
-
+export default function Navbar({}: NavbarProps) {
   return (
     <nav className="sticky top-0 z-50">
       <motion.div
         initial={{ opacity: 0, y: -12, filter: 'blur(8px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="border-b border-[#C8102E]/10 bg-[#fffdfa]/94 px-4 py-3 shadow-[0_12px_34px_rgba(200,16,46,0.07),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#09090b]/90 dark:shadow-[0_14px_42px_rgba(0,0,0,0.34),0_0_28px_rgba(200,16,46,0.06),inset_0_1px_0_rgba(255,255,255,0.08)] sm:px-6"
+        className="border-b border-[#C8102E]/10 bg-[#fffdfa]/94 px-4 py-3 shadow-[0_12px_34px_rgba(200,16,46,0.07),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#09090b]/90 dark:shadow-[0_14px_42px_rgba(0,0,0,0.34),0_0_28px_rgba(201,168,76,0.07),inset_0_1px_0_rgba(255,255,255,0.08)] sm:px-6"
       >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-        {/* Logo */}
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+          <Link href="/" className="group flex min-w-0 items-center gap-3 rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#C8102E] text-white shadow-lg shadow-[#C8102E]/20 transition-transform duration-300 group-hover:scale-105 dark:bg-[#C9A84C] dark:text-zinc-950 dark:shadow-[#C9A84C]/15">
+              <School className="h-5 w-5" />
+            </span>
+            <span className="min-w-0">
+              <strong className="block text-base font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-lg">BIST</strong>
+              <span className="block max-w-52 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">British International School of Tabuk</span>
+            </span>
+          </Link>
 
-      <div className="flex items-center justify-center gap-3">
-          <button
-            type="button"
-            onClick={onToggleSidebar}
-            aria-label={isSidebarOpen ? 'Close sidebar menu' : 'Open sidebar menu'}
-            className="hidden h-11 w-11 items-center justify-center rounded-full border border-[#C8102E]/10 bg-white/86 text-[#1A1F4B] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#FFF8F0] hover:text-[#C8102E] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-[#111113]/82 dark:text-zinc-100 dark:hover:bg-white/10 dark:hover:text-[#C9A84C] lg:inline-flex"
-          >
-            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-          <Link href="/" className="group flex items-center gap-3 rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15">
-          <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-transparent text-sm font-bold text-white shadow-lg transition-transform duration-300 group-hover:scale-105">
-            <Image src={img} alt="" className='shadow-[#1A1F4B]/20'  />
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#C9A84C] rounded-full border-2 border-white dark:border-zinc-950" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
+            <AuthAction />
           </div>
-          <div className="">
-            <strong className="text-[#C8102E] text-base sm:text-lg leading-tight block dark:text-zinc-50">British International</strong>
-            <strong className="text-[#C8102E]  text-base sm:text-lg  block leading-tight dark:text-zinc-50">School of Tabuk</strong>
-          </div>
-        </Link>
-      </div>
-
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-1.5">
-          {navItems.map((item) => (
-            <Link
-              key={`${item.href}-${item.label}`}
-              href={item.href}
-              className="group relative rounded-full px-3.5 py-2 text-sm font-semibold text-[#1A1F4B]/78 transition-all hover:bg-[#C8102E]/7 hover:text-[#C8102E] dark:text-zinc-300 dark:hover:bg-white/7 dark:hover:text-[#C9A84C]"
-            >
-              {item.label}
-              <span className="absolute inset-x-4 -bottom-0.5 h-px scale-x-0 rounded-full bg-current opacity-60 transition-transform duration-300 group-hover:scale-x-100" />
-            </Link>
-          ))}
-
-          <ThemeToggle />
-
-          {isLoggedIn ? (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="ml-2 rounded-full bg-[#C8102E] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9B0D23] dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link
-              href="/login"
-              className="ml-2 rounded-full bg-[#C8102E] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#C8102E]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9B0D23] dark:shadow-[#C8102E]/30 dark:hover:shadow-[#C8102E]/40"
-            >
-              Login
-            </Link>
-          )}
         </div>
-
-        <div className="hidden items-center gap-3 max-lg:flex">
-          <ThemeToggle />
-          <button
-            type="button"
-            onClick={() => setIsOpen((value) => !value)}
-            aria-label="Toggle navigation menu"
-            aria-expanded={isOpen}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#C8102E]/10 bg-white/86 text-[#1A1F4B] shadow-sm transition hover:bg-[#FFF8F0] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-[#111113]/82 dark:text-zinc-100 dark:hover:bg-white/10"
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </div>
       </motion.div>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="overflow-hidden rounded-b-[1.5rem] border border-t-0 border-white/80 bg-[#fffdfa]/96 shadow-[0_18px_44px_rgba(200,16,46,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#09090b]/94 lg:hidden"
-          >
-            <div className="flex flex-col gap-2 px-4 py-4 text-base">
-              {navItems
-                .filter((item, index, array) => array.findIndex((candidate) => candidate.label === item.label) === index)
-                .map((item) => (
-                  <Link
-                    key={`mobile-${item.label}`}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className="rounded-2xl px-4 py-3 font-semibold text-[#1A1F4B] transition hover:bg-[#FFF8F0] hover:text-[#C8102E] dark:text-zinc-200 dark:hover:bg-white/7 dark:hover:text-[#C9A84C]"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              <div className="my-2 h-px bg-zinc-200/80 dark:bg-white/10" />
-              {portalItems.map((item) => (
-                <Link
-                  key={`mobile-${item.label}`}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-2xl px-4 py-3 font-semibold text-[#1A1F4B] transition hover:bg-[#FFF8F0] hover:text-[#C8102E] dark:text-zinc-200 dark:hover:bg-white/7 dark:hover:text-[#C9A84C]"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              {isLoggedIn ? (
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="mt-2 rounded-full bg-[#C8102E] py-3 text-center font-bold text-white shadow-lg shadow-[#C8102E]/20 dark:shadow-[#C8102E]/30"
-                >
-                  Logout
-                </button>
-              ) : (
-                <Link
-                  href="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="mt-2 rounded-full bg-[#C8102E] py-3 text-center font-bold text-white shadow-lg shadow-[#C8102E]/20 dark:shadow-[#C8102E]/30"
-                >
-                  Login
-                </Link>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 }

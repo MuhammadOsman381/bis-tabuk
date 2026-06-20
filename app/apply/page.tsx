@@ -490,10 +490,17 @@ export default function ApplyPage() {
     const response = await fetch('/api/applications/draft', {
       headers: { Authorization: `Bearer ${token}` },
     });
+    if (response.status === 401) {
+      window.localStorage.removeItem(AUTH_TOKEN_KEY);
+      window.localStorage.removeItem(USER_EMAIL_ENCODED_KEY);
+      const redirect = encodeURIComponent(pathname);
+      router.replace(`/login?redirect=${redirect}&from=${redirect}`);
+      return;
+    }
     const result = await readJsonResponse<{ error?: string; applications?: SavedApplication[] }>(response, 'Unable to load applications.');
     if (!response.ok) throw new Error(result.error ?? 'Unable to load applications.');
     setApplications(result.applications ?? []);
-  }, []);
+  }, [pathname, router]);
 
   const persistDraft = useCallback((nextDraft: ApplyDraft) => {
     window.localStorage.setItem(APPLY_DRAFT_KEY, JSON.stringify(stripFileData(nextDraft)));
@@ -750,6 +757,13 @@ export default function ApplyPage() {
         headers: tokenHeaders,
         body: JSON.stringify({ id: editingApplicationId || undefined, data: finalDraft, status: 'Pending' }),
       });
+      if (response.status === 401) {
+        window.localStorage.removeItem(AUTH_TOKEN_KEY);
+        window.localStorage.removeItem(USER_EMAIL_ENCODED_KEY);
+        const redirect = encodeURIComponent(pathname);
+        router.replace(`/login?redirect=${redirect}&from=${redirect}`);
+        return;
+      }
       const result = await readJsonResponse<{ error?: string }>(response, 'Unable to submit application.');
       if (!response.ok) throw new Error(result.error ?? 'Unable to submit application.');
 

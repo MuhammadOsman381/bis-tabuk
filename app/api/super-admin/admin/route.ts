@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { getDb } from '@/lib/db';
 import { users } from '@/lib/db/schema';
-import { hashEmail, hashPassword } from '@/lib/server/auth';
+import { hashPassword } from '@/lib/server/auth';
 
 function getSuperAdminKey() {
   return process.env.SUPER_ADMIN_KEY || process.env.ADMIN_SESSION_SECRET || 'bist-local-super-admin-key';
@@ -52,7 +52,6 @@ export async function PATCH(request: Request) {
     const passwordHash = password ? await hashPassword(password) : undefined;
     const values = {
       email: normalizedEmail,
-      emailHash: hashEmail(normalizedEmail),
       role: 'admin',
       ...(passwordHash ? { passwordHash } : {}),
       updatedAt: new Date(),

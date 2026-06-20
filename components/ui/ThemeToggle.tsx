@@ -13,7 +13,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
-      className="group relative inline-flex h-11 w-[4.25rem] items-center rounded-full border border-zinc-200/80 bg-white/80 p-1 shadow-sm shadow-slate-900/5 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#C8102E]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-zinc-900/80 dark:shadow-black/30 dark:hover:shadow-[#C8102E]/20"
+      className="group relative inline-flex h-11 w-[4.25rem] items-center rounded-full border border-zinc-200/80 bg-white/80 p-1 shadow-sm shadow-slate-900/5 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#C8102E]/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-zinc-900/80 dark:shadow-black/30 dark:hover:shadow-[#C9A84C]/20 dark:focus-visible:ring-[#C9A84C]/20"
     >
       <Sun className="ml-1.5 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-600" />
       <Moon className="ml-auto mr-1.5 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />

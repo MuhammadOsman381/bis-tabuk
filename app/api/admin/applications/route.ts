@@ -14,7 +14,6 @@ export async function GET(request: Request) {
         id: applications.id,
         userId: applications.userId,
         email: users.email,
-        emailHash: users.emailHash,
         data: applications.data,
         status: applications.status,
         createdAt: applications.createdAt,
