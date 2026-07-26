@@ -73,14 +73,14 @@ export default function SchoolLife() {
   }, [items.length]);
 
   return (
-    <section id="school-life" className="relative overflow-hidden bg-[#0f1434] py-20 text-white dark:bg-zinc-950 sm:py-28">
-      <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-[#C8102E]/16 blur-3xl" />
-      <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-[#C9A84C]/10 blur-3xl" />
+    <section id="school-life" className="relative overflow-hidden bg-[#fffaf2] py-20 text-[#1A1F4B] dark:bg-zinc-950 dark:text-white sm:py-28">
+      <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-[#C8102E]/8 blur-3xl dark:bg-[#C9A84C]/10" />
+      <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-[#C9A84C]/14 blur-3xl dark:bg-[#C9A84C]/10" />
       <div className="relative mx-auto max-w-7xl px-6">
         <Reveal className="mb-14 text-center sm:mb-16">
-          <span className="inline-flex rounded-full border border-white/10 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[3px] text-[#C9A84C] backdrop-blur-xl">Life at BIST</span>
-          <h2 className="mt-3 text-4xl font-bold md:text-5xl">School Life & <span className="text-[#C9A84C]">Enrichment</span></h2>
-          <p className="mx-auto mt-6 max-w-xl leading-7 text-white/70">
+          <span className="inline-flex rounded-full border border-[#C8102E]/10 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-[3px] text-[#C8102E] shadow-sm shadow-[#1A1F4B]/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/8 dark:text-[#C9A84C]">Life at BIST</span>
+          <h2 className="mt-3 text-4xl font-bold md:text-5xl">School Life & <span className="text-[#C8102E] dark:text-[#C9A84C]">Enrichment</span></h2>
+          <p className="mx-auto mt-6 max-w-xl leading-7 text-zinc-600 dark:text-white/70">
             Education at BIST extends far beyond the classroom. We develop the whole person through extraordinary co-curricular experiences.
           </p>
         </Reveal>
@@ -108,7 +108,7 @@ export default function SchoolLife() {
                 >
                   <Link
                     href={`/school-life/${item.id}`}
-                    className="group relative block h-full overflow-hidden rounded-[1.75rem] border border-white/10 shadow-2xl shadow-black/20 outline-none focus-visible:ring-4 focus-visible:ring-[#C9A84C]/25"
+                    className="group relative block h-full overflow-hidden rounded-[1.75rem] border border-[#1A1F4B]/10 bg-white shadow-[0_22px_70px_rgba(26,31,75,0.12)] outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/20 dark:border-white/10 dark:bg-zinc-900 dark:shadow-2xl dark:shadow-black/20 dark:focus-visible:ring-[#C9A84C]/25"
                   >
                     {gallery.map((image, imageIndex) => (
                       <Image
@@ -120,7 +120,7 @@ export default function SchoolLife() {
                         className={`object-cover transition-all duration-1000 group-hover:scale-105 ${imageIndex === activeImageIndex ? 'opacity-100' : 'opacity-0'}`}
                       />
                     ))}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/34 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/22 to-transparent dark:from-black/88 dark:via-black/34" />
                     {gallery.length > 1 && (
                       <div className="absolute bottom-4 right-4 z-10 flex gap-1.5">
                         {gallery.map((image, imageIndex) => (
@@ -131,15 +131,15 @@ export default function SchoolLife() {
                         ))}
                       </div>
                     )}
-                    <div className="absolute left-4 top-4 rounded-full bg-[#C8102E]/90 px-4 py-1.5 text-xs font-bold text-white shadow-lg">
+                    <div className="absolute left-4 top-4 rounded-full bg-white/92 px-4 py-1.5 text-xs font-bold text-[#C8102E] shadow-lg shadow-black/10 backdrop-blur-md dark:bg-[#C9A84C]/95 dark:text-zinc-950">
                       {item.category}
                     </div>
-                    <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-all group-hover:bg-white group-hover:text-[#1A1F4B]">
+                    <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/88 text-[#1A1F4B] shadow-lg shadow-black/10 backdrop-blur-sm transition-all group-hover:bg-[#C8102E] group-hover:text-white dark:bg-white/20 dark:text-white dark:group-hover:bg-white dark:group-hover:text-[#1A1F4B]">
                       <ArrowUpRight className="h-4 w-4" />
                     </div>
                     <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
                       <h3 className="mb-2 text-2xl font-bold leading-tight">{item.title}</h3>
-                      <p className="text-sm leading-relaxed text-white/80">{getDescriptionPreview(item.description)}</p>
+                      <p className="text-sm leading-relaxed text-white/86 dark:text-white/80">{getDescriptionPreview(item.description)}</p>
                     </div>
                   </Link>
                 </motion.div>
@@ -147,7 +147,7 @@ export default function SchoolLife() {
             })}
           </motion.div>
         ) : (
-          <div className="rounded-[1.75rem] border border-dashed border-white/15 bg-white/5 p-10 text-center text-white/70">
+          <div className="rounded-[1.75rem] border border-dashed border-[#C8102E]/20 bg-white/80 p-10 text-center text-zinc-600 shadow-sm shadow-[#1A1F4B]/5 dark:border-white/15 dark:bg-white/5 dark:text-white/70">
             <p className="text-sm font-bold">No school life cards have been added yet.</p>
           </div>
         )}

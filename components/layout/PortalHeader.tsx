@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { School } from 'lucide-react';
 import AuthAction from '../ui/AuthAction';
 import ThemeToggle from '../ui/ThemeToggle';
 
@@ -18,8 +18,15 @@ export default function PortalHeader() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         <div className="flex min-w-0 items-center">
           <Link href="https://bis-tabuk.vercel.app/" className="flex min-w-0 items-center gap-2 rounded-2xl sm:gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#C8102E] text-white shadow-lg shadow-[#C8102E]/20 dark:bg-[#C9A84C] dark:text-zinc-950 dark:shadow-[#C9A84C]/15">
-              <School className="h-5 w-5" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg shadow-[#1A1F4B]/12 ring-1 ring-[#C8102E]/10 dark:bg-white dark:shadow-black/30 dark:ring-white/10">
+              <Image
+                src="/international-school-logo.jpeg"
+                alt="International School logo"
+                width={48}
+                height={48}
+                className="h-full w-full object-cover"
+                priority
+              />
             </div>
             <div className="min-w-0">
               <strong className="block text-base font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-lg">IS</strong>
