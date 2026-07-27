@@ -6,8 +6,8 @@ import { motion, MotionCard, Reveal, staggerContainer } from '../ui/Motion';
 
 const stages = [
   {
-    title: "Early Years",
-    age: "Age 2–5",
+    title: "Reception",
+    age: "Age 4",
     pupils: "280+",
     tagline: "A nurturing start to lifelong learning",
     desc: "Our EYFS provides a safe, stimulating environment where curiosity flourishes and confidence grows.",
@@ -60,7 +60,7 @@ export default function Stages() {
           <span className="luxury-kicker text-xs font-bold tracking-[3px] uppercase">Our School</span>
           <h2 className="text-4xl md:text-5xl font-bold text-[#1A1F4B] mt-3 dark:text-zinc-50">With You Every Step</h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto leading-7 dark:text-zinc-400">
-            From the earliest years to IB graduation, we walk alongside your child at every stage.
+            From Reception to graduation, we walk alongside your child at every stage.
           </p>
         </Reveal>
 

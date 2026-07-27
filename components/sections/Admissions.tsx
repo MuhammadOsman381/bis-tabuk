@@ -106,7 +106,7 @@ export default function Admissions() {
               <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1F4B] mb-2 dark:text-zinc-300">Year Group</label>
               <select className={fieldClass}>
                 <option>Select year group…</option>
-                <option>Early Years (Age 2–5)</option>
+                <option>Reception (Age 4)</option>
                 <option>Year 1–6 (Primary)</option>
                 <option>Year 7–9 (Key Stage 3)</option>
                 <option>Year 10–11 (IGCSE)</option>

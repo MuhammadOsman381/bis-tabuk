@@ -68,12 +68,12 @@ export default function Hero() {
         </motion.div>
 
         <h1 className="max-w-5xl text-5xl font-black leading-[0.95] text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.28)] sm:text-6xl md:text-7xl lg:text-8xl">
-          Welcome to <span className="text-[#C9A84C] block">BIST</span>
+          Welcome to <span className="text-[#C9A84C] block">International Leaders Education Foundation</span>
         </h1>
 
         <p className="mx-auto mt-6 max-w-4xl text-base  text-white/88 md:text-lg">
       
-      The International School of King Salman Armed Forces Hospital, formerly known as the British International School of Tabuk, is a non-profit educational institution operating under the administration of King Salman Armed Forces Hospital. The school is registered with the Ministry of Education and accredited by Cambridge Assessment International Education to offer IGCSE and A Level programmes following the British curriculum.
+      International Leaders Education Foundation, formerly known as the British International School of Tabuk, is a non-profit educational institution. The school is registered with the Ministry of Education and accredited by Cambridge Assessment International Education to offer IGCSE and A Level programmes following the British curriculum.
 
       
         </p>

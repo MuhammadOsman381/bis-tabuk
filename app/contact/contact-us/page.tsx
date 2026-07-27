@@ -14,10 +14,10 @@ const Map = dynamic(() => import('@/components/Map'), {
 });
 
 const contactItems = [
-  { icon: MapPin, label: 'Address', value: 'The British International School, P.O. Box 100, Tabuk, Kingdom of Saudia Arabia' },
-  { icon: Phone, label: 'General Phone', value: '+966 (01) 4 4411088 x 83103' },
-  { icon: Mail, label: 'General Email', value: 'admin@bis-tabuk.com' },
-  // { icon: Mail, label: 'Admissions Email', value: 'admissions@bis-tabuk.com' },
+  { icon: MapPin, label: 'Address', value: 'International Leaders Education Foundation, British International School of Tabuk, P.O. Box 100, Tabuk, Kingdom of Saudi Arabia' },
+  { icon: Phone, label: 'General Phone', value: '(00966) (01) 4 4411088 x 83103' },
+  { icon: Mail, label: 'General Email', value: 'admin@bis-tabuk.org' },
+  // { icon: Mail, label: 'Admissions Email', value: 'admin@bis-tabuk.org' },
 ];
 
 export default function ContactUsPage() {

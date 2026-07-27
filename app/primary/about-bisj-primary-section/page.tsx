@@ -58,7 +58,7 @@ export default function AboutPrimarySectionPage() {
               transition={{ delay: 0.12, duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
               className="mt-6 max-w-3xl text-base font-semibold leading-8 text-white/86 md:text-xl"
             >
-              For children aged 2-11 years old
+              For children aged 4-11 years old
             </motion.p>
           </div>
         </section>

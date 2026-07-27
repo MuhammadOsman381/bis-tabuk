@@ -50,7 +50,7 @@ const sidebarItems: SidebarItem[] = [
     icon: GraduationCap,
     children: [
       { label: 'About BIST Primary Section', href: '/primary/about-bisj-primary-section' },
-      { label: 'Early Years', href: '/primary/early-years' },
+      { label: 'Reception', href: '/primary/reception' },
       { label: 'Years 1-6', href: '/primary/years-1-6' },
     ],
   },

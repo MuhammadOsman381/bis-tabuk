@@ -5,8 +5,8 @@ import "./globals.css";
 import "leaflet/dist/leaflet.css";
 
 export const metadata: Metadata = {
-  title: "IS – International School",
-  description: "Outstanding British international education in Tabuk for ages 2-18. British Curriculum & IB Diploma.",
+  title: "International Leaders Education Foundation",
+  description: "Outstanding British international education in Tabuk for ages 4-18. British Curriculum, IGCSE, and A Level programmes.",
   icons: {
     icon: "favicon.ico",
   },

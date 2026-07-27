@@ -36,7 +36,7 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
               <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg shadow-[#1A1F4B]/12 ring-1 ring-[#C8102E]/10 transition-transform duration-300 group-hover:scale-105 dark:bg-white dark:shadow-black/30 dark:ring-white/10">
                 <Image
                   src="/international-school-logo.jpeg"
-                  alt="International School logo"
+                  alt="International Leaders Education Foundation logo"
                   width={48}
                   height={48}
                   className="h-full w-full object-cover"
@@ -44,8 +44,8 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
                 />
               </span>
               <span className="min-w-0">
-                <strong className="block text-base font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-lg">IS</strong>
-                <span className="block max-w-52 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">International School</span>
+                <strong className="block max-w-[13rem] truncate text-sm font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:max-w-[22rem] sm:text-base lg:max-w-none lg:text-lg">International Leaders Education Foundation</strong>
+                <span className="block max-w-52 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">British International School of Tabuk</span>
               </span>
             </Link>
           </div>

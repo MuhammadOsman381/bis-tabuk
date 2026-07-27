@@ -13,7 +13,7 @@ import { Reveal } from '@/components/ui/Motion';
 const faqs = [
   {
     question: 'What ages does BIST accept?',
-    answer: 'BIST welcomes students from ages 2-18, subject to availability, admissions requirements and year group placement.',
+    answer: 'BIST welcomes students from ages 4-18, subject to availability, admissions requirements and year group placement.',
   },
   {
     question: 'How do I start an application?',
@@ -88,7 +88,7 @@ export default function HowToApplyPage() {
           <div className="relative mx-auto max-w-4xl px-6">
             <Reveal className="space-y-7 text-left text-lg leading-8 text-zinc-700 dark:text-zinc-300">
               <p>
-                The British International School of Tabuk warmly welcomes students from ages 2-18 to join our diverse,
+                The British International School of Tabuk warmly welcomes students from ages 4-18 to join our diverse,
                 ambitious and caring international community.
               </p>
               <p>
