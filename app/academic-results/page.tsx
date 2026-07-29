@@ -9,9 +9,9 @@ import Footer from '@/components/layout/Footer';
 import { Reveal } from '@/components/ui/Motion';
 
 const igcseYears = ['2020', '2021', '2022', '2023', '2024'];
-const ibYears = ['2020', '2021', '2022', '2023', '2024', '2025'];
+const aLevelYears = ['2020', '2021', '2022', '2023', '2024', '2025'];
 const igcseRows = ['A*-A grades', 'A*-C grades'];
-const ibRows = ['Pass rate', 'Highest IB Diploma Score', 'BIST average IB score', 'World average', 'Average grade at BIST'];
+const aLevelRows = ['Pass rate', 'A*-A grades', 'A*-C grades', 'BIST average grade', 'World average'];
 
 function ResultsTable({ years, rows, title }: { years: string[]; rows: string[]; title: string }) {
   return (
@@ -74,17 +74,8 @@ export default function AcademicResultsPage() {
               <ResultsTable title="Cambridge IGCSE results" years={igcseYears} rows={igcseRows} />
             </Reveal>
 
-            <Reveal className="mx-auto mt-12 max-w-3xl">
-              <blockquote className="border-l-4 border-[#C8102E] pl-6 text-left text-xl font-semibold leading-9 text-[#1A1F4B] dark:text-zinc-50">
-                “The thing I love most about BIST is how they always support you in almost everything you do.”
-                <span className="mt-3 block text-sm font-bold uppercase tracking-[0.2em] text-[#C8102E] dark:text-[#ff8fa0]">
-                  Thomas, Y7-1
-                </span>
-              </blockquote>
-            </Reveal>
-
             <Reveal className="mt-12">
-              <ResultsTable title="IB Diploma results" years={ibYears} rows={ibRows} />
+              <ResultsTable title="A Level results" years={aLevelYears} rows={aLevelRows} />
             </Reveal>
           </div>
         </section>

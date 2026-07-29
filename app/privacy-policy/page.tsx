@@ -13,7 +13,7 @@ const sections: PolicySection[] = [
   {
     title: '2. Contact Details',
     paragraphs: [
-      'British International School of Tabuk (BIST) can be contacted at: Phone: +966 (14) 4411088 x 83103. Email: admin@bis-tabuk.org. Postal Address: British International School of Tabuk, P.O. Box 100, Tabuk, Kingdom of Saudi Arabia.',
+      'British International School of Tabuk (BIST) can be contacted at: Phone: +966 (14) 4411088 x 83103. Email: admin@ist-ksa.org. Postal Address: British International School of Tabuk, P.O. Box 100, Tabuk, Kingdom of Saudi Arabia.',
       'If you would like more information about how your personal data is used, or if you wish to exercise any of your data protection rights, you may contact the School Administration.',
     ],
   },

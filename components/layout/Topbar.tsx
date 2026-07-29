@@ -18,9 +18,9 @@ export default function Topbar() {
             <Phone className="h-3 w-3" />
             (00966) (01) 4 4411088 x 83103
           </a>
-          <a href="mailto:admin@bis-tabuk.org" className="inline-flex items-center gap-1.5 truncate text-white/80 transition-colors hover:text-[#C9A84C]">
+          <a href="mailto:admin@ist-ksa.org" className="inline-flex items-center gap-1.5 truncate text-white/80 transition-colors hover:text-[#C9A84C]">
             <Mail className="h-3 w-3" />
-            admin@bis-tabuk.org
+            admin@ist-ksa.org
           </a>
         </div>
 

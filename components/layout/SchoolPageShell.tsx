@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import Topbar from '@/components/layout/Topbar';
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
+import Footer from '@/components/layout/Footer';
 import { Reveal, staggerContainer } from '@/components/ui/Motion';
 
 export type ShellCard = {
@@ -262,7 +263,7 @@ export default function SchoolPageShell({
             </Reveal> */}
           </div>
         </section>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </motion.main>
   );

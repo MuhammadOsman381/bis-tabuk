@@ -4,17 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FileText, Mail, MapPin, Phone } from 'lucide-react';
 import { Reveal } from '../ui/Motion';
-import logo from '../../app/icon.png';
 
 const schoolLinks = [
   { label: 'About BIST', href: '/welcome-to-bist' },
   { label: 'Leadership Team', href: '/leadership-teams' },
-  { label: 'Accreditations', href: '/accreditations-and-inspection-reports' },
 ];
 
 const learningLinks = [
   { label: 'Reception', href: '/primary/reception' },
-  { label: 'Primary', href: '/primary/about-bisj-primary-section' },
+  { label: 'Primary', href: '/primary/about-bist-primary-section' },
   { label: 'IGCSE', href: '/secondary/years-10-11-igcse' },
   { label: 'A Levels', href: '/secondary/a-levels' },
 ];
@@ -30,7 +28,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="mb-6 flex w-fit items-center gap-3">
               <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-lg shadow-black/15">
-                <Image src={logo} alt="BIST logo" className="h-10 w-10 object-contain" />
+                <Image src="/international-school-logo.jpeg" alt="International Leaders Education Foundation logo" width={40} height={40} className="h-10 w-10 rounded-full object-cover" />
                 <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-[#C9A84C]" />
               </span>
               <span>
@@ -79,9 +77,9 @@ export default function Footer() {
               <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
               (00966) (01) 4 4411088 x 83103
             </a>
-            <a href="mailto:admin@bis-tabuk.org" className="mt-3 flex gap-3 text-white/70 transition-colors hover:text-white">
+            <a href="mailto:admin@ist-ksa.org" className="mt-3 flex gap-3 text-white/70 transition-colors hover:text-white">
               <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              admin@bis-tabuk.org
+              admin@ist-ksa.org
             </a>
             <Link href="/handbook" className="mt-3 flex gap-3 text-white/70 transition-colors hover:text-white">
               <FileText className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />

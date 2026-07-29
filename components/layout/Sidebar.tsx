@@ -35,35 +35,31 @@ const sidebarItems: SidebarItem[] = [
     children: [
       { label: 'Welcome to BIST', href: '/welcome-to-bist' },
       { label: 'Vision, Mission & Values', href: '/vision-mission-values' },
-      { label: 'Board of Trustees', href: '/board-of-trustees' },
-      { label: "Director's Welcome", href: '/directors-welcome' },
       { label: 'Leadership Teams', href: '/leadership-teams' },
       { label: 'Core Principles', href: '/core-principles' },
-      { label: 'Accreditations and Inspection Reports', href: '/accreditations-and-inspection-reports' },
       { label: 'Academic Results', href: '/academic-results' },
       { label: 'Policies', href: '/privacy-policy' },
     ],
   },
   {
     label: 'Primary',
-    href: '/primary/about-bisj-primary-section',
+    href: '/primary/about-bist-primary-section',
     icon: GraduationCap,
     children: [
-      { label: 'About BIST Primary Section', href: '/primary/about-bisj-primary-section' },
+      { label: 'About BIST Primary Section', href: '/primary/about-bist-primary-section' },
       { label: 'Reception', href: '/primary/reception' },
       { label: 'Years 1-6', href: '/primary/years-1-6' },
     ],
   },
   {
     label: 'Secondary',
-    href: '/secondary/about-bisj-secondary-section',
+    href: '/secondary/about-bist-secondary-section',
     icon: GraduationCap,
     children: [
-      { label: 'About BIST Secondary Section', href: '/secondary/about-bisj-secondary-section' },
+      { label: 'About BIST Secondary Section', href: '/secondary/about-bist-secondary-section' },
       { label: 'Years 7-9 (Key Stage Three)', href: '/secondary/years-7-9-key-stage-three' },
       { label: 'Years 10 & 11 (IGCSE)', href: '/secondary/years-10-11-igcse' },
       { label: 'A Levels', href: '/secondary/a-levels' },
-      { label: 'Sixth Form Pathways at BIST', href: '/secondary/sixth-form-pathways-at-bisj' },
       { label: 'Subjects', href: '/secondary/subjects' },
       { label: 'Learning Support (Secondary)', href: '/secondary/learning-support' },
     ],
@@ -111,9 +107,9 @@ const sidebarItems: SidebarItem[] = [
   },
   {
     label: 'Alumni',
-    href: '/alumni/conti-connect',
+    href: '/alumni/bist-connect',
     icon: Users,
-    children: [{ label: 'Conti Connect', href: '/alumni/conti-connect' }],
+    children: [{ label: 'BIST-Network', href: '/alumni/bist-connect' }],
   },
   {
     label: 'Employment Opportunities',
@@ -123,7 +119,6 @@ const sidebarItems: SidebarItem[] = [
       { label: 'Why Work at BIST', href: '/employment/why-work-at-bisj' },
       { label: 'Overseas Hire benefits', href: '/employment/overseas-hire-benefits' },
       { label: 'Local hires benefits', href: '/employment/local-hire-benefits' },
-      { label: 'Current vacancies', href: '/employment/current-vacancies' },
       { label: 'About Tabuk', href: '/employment/about-tabuk' },
     ],
   },
@@ -133,8 +128,6 @@ const sidebarItems: SidebarItem[] = [
     icon: Mail,
     children: [
       { label: 'Contact Us', href: '/contact/contact-us' },
-      { label: 'Partnership opportunity', href: '/contact/partnership-opportunities' },
-      { label: 'Sponsorship & Advertising Opportunities', href: '/contact/sponsorship-and-advertising-opportunities' },
     ],
   },
 ];

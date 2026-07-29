@@ -23,7 +23,6 @@ export default function WhyWorkPage() {
         //   title: 'Explore opportunities',
         //   cards: [y
         //     { title: 'Rewards and Benefits', description: 'Learn more about the benefits available to overseas and local hires.', cta: 'View our Rewards and Benefits', href: '/employment/overseas-hire-benefits' },
-        //     { title: 'Current Vacancies', description: 'Explore open roles across the school.', cta: 'View Current Vacancies', href: '/employment/current-vacancies' },
         //   ],
         // },
       ]}
