@@ -119,6 +119,7 @@ const sidebarItems: SidebarItem[] = [
       { label: 'Why Work at BIST', href: '/employment/why-work-at-bisj' },
       { label: 'Overseas Hire benefits', href: '/employment/overseas-hire-benefits' },
       { label: 'Local hires benefits', href: '/employment/local-hire-benefits' },
+      { label: 'Apply', href: '/employment/local-hire-benefits/apply' },
       { label: 'About Tabuk', href: '/employment/about-tabuk' },
     ],
   },

@@ -223,3 +223,92 @@ export async function sendTeacherAccessEmail({
 
   return { mode: 'email' as const };
 }
+
+export async function sendLocalHireApplicationEmail({
+  fullName,
+  email,
+  phone,
+  position,
+  availability,
+  message,
+  cv,
+}: {
+  fullName: string;
+  email: string;
+  phone: string;
+  position: string;
+  availability: string;
+  message: string;
+  cv: { filename: string; contentType: string; content: Buffer };
+}) {
+  const transporter = createTransporter();
+  const { from } = getTransportConfig();
+  const recipient = process.env.LOCAL_HIRE_APPLICATION_EMAIL || 'isksafh@gmail.com';
+  const safeFullName = escapeHtml(fullName);
+  const safeEmail = escapeHtml(email);
+  const safePhone = escapeHtml(phone);
+  const safePosition = escapeHtml(position);
+  const safeAvailability = escapeHtml(availability);
+  const safeMessage = escapeHtml(message || 'No additional message provided.');
+
+  if (!transporter || !from) {
+    console.log(`BIST local hire application for ${fullName} <${email}>. CV: ${cv.filename}`);
+    return { mode: 'console' as const };
+  }
+
+  await transporter.sendMail({
+    from,
+    to: recipient,
+    replyTo: email,
+    subject: `Local Hire Application - ${fullName}`,
+    text: [
+      `Full name: ${fullName}`,
+      `Email: ${email}`,
+      `Phone: ${phone}`,
+      `Position: ${position}`,
+      `Availability: ${availability}`,
+      '',
+      message || 'No additional message provided.',
+    ].join('\n'),
+    attachments: [
+      logoAttachment(),
+      {
+        filename: cv.filename,
+        content: cv.content,
+        contentType: cv.contentType,
+      },
+    ],
+    html: emailShell(`
+      <p style="margin:0;color:#52525b;font-size:16px;line-height:1.7;">A new local hire application has been submitted through the BIST website.</p>
+      <div style="margin:28px 0;padding:24px;border-radius:24px;background:#f8fafc;border:1px solid #e4e4e7;">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Candidate</div>
+          <div style="font-size:20px;font-weight:900;color:#18181b;">${safeFullName}</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Email</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeEmail}</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Phone</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safePhone}</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Position</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safePosition}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Availability</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeAvailability}</div>
+        </div>
+      </div>
+      <div style="margin:0;padding:22px;border-radius:22px;background:#fff5f6;border:1px solid rgba(200,16,46,.16);">
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#C8102E;">Candidate Note</div>
+        <p style="margin:10px 0 0;color:#52525b;font-size:15px;line-height:1.7;">${safeMessage}</p>
+      </div>
+      <p style="margin:22px 0 0;color:#71717a;font-size:14px;line-height:1.7;">The candidate CV is attached to this email.</p>
+    `),
+  });
+
+  return { mode: 'email' as const };
+}
