@@ -312,3 +312,92 @@ export async function sendLocalHireApplicationEmail({
 
   return { mode: 'email' as const };
 }
+
+export async function sendAlumniSuccessStoryEmail({
+  fullName,
+  email,
+  graduationYear,
+  currentLocation,
+  currentRole,
+  storyTitle,
+  story,
+  permission,
+}: {
+  fullName: string;
+  email: string;
+  graduationYear: string;
+  currentLocation: string;
+  currentRole: string;
+  storyTitle: string;
+  story: string;
+  permission: string;
+}) {
+  const transporter = createTransporter();
+  const { from } = getTransportConfig();
+  const recipient = process.env.ALUMNI_SUCCESS_STORY_EMAIL || 'isksafh@gmail.com';
+  const safeFullName = escapeHtml(fullName);
+  const safeEmail = escapeHtml(email);
+  const safeGraduationYear = escapeHtml(graduationYear);
+  const safeCurrentLocation = escapeHtml(currentLocation || 'Not provided');
+  const safeCurrentRole = escapeHtml(currentRole || 'Not provided');
+  const safeStoryTitle = escapeHtml(storyTitle);
+  const safeStory = escapeHtml(story);
+  const safePermission = escapeHtml(permission);
+
+  if (!transporter || !from) {
+    console.log(`BIST alumni success story from ${fullName} <${email}>: ${storyTitle}`);
+    return { mode: 'console' as const };
+  }
+
+  await transporter.sendMail({
+    from,
+    to: recipient,
+    replyTo: email,
+    subject: `Alumni Success Story - ${fullName}`,
+    text: [
+      `Full name: ${fullName}`,
+      `Email: ${email}`,
+      `Graduation/leaving year: ${graduationYear}`,
+      `Current location: ${currentLocation || 'Not provided'}`,
+      `Current role: ${currentRole || 'Not provided'}`,
+      `Permission: ${permission}`,
+      '',
+      `Story title: ${storyTitle}`,
+      '',
+      story,
+    ].join('\n'),
+    attachments: [logoAttachment()],
+    html: emailShell(`
+      <p style="margin:0;color:#52525b;font-size:16px;line-height:1.7;">A BIST alumnus has shared a success story through the website.</p>
+      <div style="margin:28px 0;padding:24px;border-radius:24px;background:#f8fafc;border:1px solid #e4e4e7;">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Alumnus</div>
+          <div style="font-size:20px;font-weight:900;color:#18181b;">${safeFullName}</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Email</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeEmail}</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Graduation / Leaving Year</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeGraduationYear}</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Current Location</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeCurrentLocation}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Current Role / Study</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeCurrentRole}</div>
+        </div>
+      </div>
+      <div style="margin:0 0 18px;padding:22px;border-radius:22px;background:#fff5f6;border:1px solid rgba(200,16,46,.16);">
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#C8102E;">${safeStoryTitle}</div>
+        <p style="margin:10px 0 0;color:#52525b;font-size:15px;line-height:1.7;white-space:pre-line;">${safeStory}</p>
+      </div>
+      <p style="margin:0;color:#71717a;font-size:14px;line-height:1.7;"><strong>Sharing permission:</strong> ${safePermission}</p>
+    `),
+  });
+
+  return { mode: 'email' as const };
+}
