@@ -6,9 +6,9 @@ import { GraduationCap, Mail, Menu, Phone, ShieldCheck, UsersRound, X } from 'lu
 import { motion } from 'framer-motion';
 
 const portalLinks = [
-  { label: 'Teachers', href: '/admin', icon: GraduationCap },
+  { label: 'Teachers', href: 'https://isksafh.vercel.app', icon: GraduationCap, isExternal: true },
   { label: 'Parents', href: '/apply', icon: UsersRound },
-  { label: 'Admin', href: '/admin/school-life', icon: ShieldCheck },
+  { label: 'Admin', href: '/admin', icon: ShieldCheck },
 ];
 
 export default function Topbar() {
@@ -34,13 +34,20 @@ export default function Topbar() {
         </div>
 
         <div className="hidden items-center gap-3 text-white/70 md:flex">
-          {portalLinks.map(({ label, href, icon: Icon }, index) => (
+          {portalLinks.map(({ label, href, icon: Icon, isExternal }, index) => (
             <span key={href} className="inline-flex items-center gap-3">
               {index > 0 && <span className="text-white/25">/</span>}
-              <Link href={href} className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
-                <Icon className="h-3.5 w-3.5 text-[#C9A84C]" />
-                {label}
-              </Link>
+              {isExternal ? (
+                <a href={href} className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
+                  <Icon className="h-3.5 w-3.5 text-[#C9A84C]" />
+                  {label}
+                </a>
+              ) : (
+                <Link href={href} className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
+                  <Icon className="h-3.5 w-3.5 text-[#C9A84C]" />
+                  {label}
+                </Link>
+              )}
             </span>
           ))}
         </div>
@@ -58,17 +65,29 @@ export default function Topbar() {
 
       {isPortalMenuOpen && (
         <div className="absolute inset-x-4 top-full z-[80] mt-2 overflow-hidden rounded-2xl border border-white/12 bg-[#11163c] p-2 shadow-2xl shadow-black/25 md:hidden">
-          {portalLinks.map(({ label, href, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setIsPortalMenuOpen(false)}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-white/82 transition hover:bg-white/8 hover:text-[#C9A84C]"
-            >
-              <Icon className="h-4 w-4 text-[#C9A84C]" />
-              {label}
-            </Link>
-          ))}
+          {portalLinks.map(({ label, href, icon: Icon, isExternal }) =>
+            isExternal ? (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setIsPortalMenuOpen(false)}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-white/82 transition hover:bg-white/8 hover:text-[#C9A84C]"
+              >
+                <Icon className="h-4 w-4 text-[#C9A84C]" />
+                {label}
+              </a>
+            ) : (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setIsPortalMenuOpen(false)}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-white/82 transition hover:bg-white/8 hover:text-[#C9A84C]"
+              >
+                <Icon className="h-4 w-4 text-[#C9A84C]" />
+                {label}
+              </Link>
+            ),
+          )}
         </div>
       )}
     </motion.div>
