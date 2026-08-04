@@ -2,12 +2,15 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { FileText, Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import { Reveal } from '../ui/Motion';
 
 const schoolLinks = [
   { label: 'About BIST', href: '/welcome-to-bist' },
   { label: 'Leadership Team', href: '/leadership-teams' },
+  { label: 'Handbook', href: '/handbook' },
+  { label: 'Privacy Policy', href: '/policies/privacy-policy.pdf', target: '_blank' },
+  { label: 'Terms of Use', href: '/policies/terms-of-use.pdf', target: '_blank' },
 ];
 
 const learningLinks = [
@@ -46,7 +49,7 @@ export default function Footer() {
             <ul className="space-y-3 text-white/70">
               {schoolLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="transition-colors hover:text-white">
+                  <Link href={link.href} target={link.target} className="transition-colors hover:text-white">
                     {link.label}
                   </Link>
                 </li>
@@ -81,18 +84,6 @@ export default function Footer() {
               <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
               admin@ist-ksa.org
             </a>
-            <Link href="/handbook" className="mt-3 flex gap-3 text-white/70 transition-colors hover:text-white">
-              <FileText className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              Handbook
-            </Link>
-            <Link href="/policies/privacy-policy.pdf" target="_blank" className="mt-3 flex gap-3 text-white/70 transition-colors hover:text-white">
-              <FileText className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              Privacy Policy
-            </Link>
-            <Link href="/policies/terms-of-use.pdf" target="_blank" className="mt-3 flex gap-3 text-white/70 transition-colors hover:text-white">
-              <FileText className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C9A84C]" />
-              Terms of Use
-            </Link>
           </div>
         </div>
       </Reveal>
