@@ -134,14 +134,11 @@ const sidebarItems: SidebarItem[] = [
 ];
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
-  const [openItems, setOpenItems] = useState<Record<string, boolean>>({
-    'About Us': true,
-    Primary: true,
-  });
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
   return (
-    <div className="flex h-full flex-col">
-      <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-5">
+    <div className="flex h-full min-h-0 flex-col">
+      <nav className="sidebar-scrollbar min-h-0 flex-1 space-y-1 overflow-y-auto px-4 py-5 pr-2">
         {sidebarItems.map((item) => {
           const Icon = item.icon;
           const isOpen = openItems[item.label];
@@ -237,7 +234,7 @@ export default function Sidebar({ isDesktopOpen, onDesktopClose, showMobileTrigg
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         className="fixed inset-y-0 left-0 z-[60] hidden w-80 border-r border-zinc-200/80 bg-white/90 shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/92 dark:shadow-black/40 lg:block"
       >
-        <div>
+        <div className="h-full">
           <SidebarContent onNavigate={onDesktopClose} />
         </div>
       </motion.aside>
@@ -280,7 +277,7 @@ export default function Sidebar({ isDesktopOpen, onDesktopClose, showMobileTrigg
               >
                 <X className="h-4 w-4" />
               </button>
-              <div className="pt-12">
+              <div className="h-full pt-12">
                 <SidebarContent onNavigate={() => setIsOpen(false)} />
               </div>
             </motion.aside>
