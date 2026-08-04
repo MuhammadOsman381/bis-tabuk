@@ -6,9 +6,9 @@ import { GraduationCap, Mail, Menu, Phone, ShieldCheck, UsersRound, X } from 'lu
 import { motion } from 'framer-motion';
 
 const portalLinks = [
-  { label: 'Teachers', href: '/teacher', icon: GraduationCap },
+  { label: 'Teachers', href: '/admin', icon: GraduationCap },
   { label: 'Parents', href: '/apply', icon: UsersRound },
-  { label: 'Admin', href: '/admin', icon: ShieldCheck },
+  { label: 'Admin', href: '/admin/school-life', icon: ShieldCheck },
 ];
 
 export default function Topbar() {
