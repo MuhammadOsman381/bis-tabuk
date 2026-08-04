@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
@@ -42,6 +42,7 @@ function getDescriptionPreview(description: string, wordLimit = 4) {
 export default function SchoolLife() {
   const [items, setItems] = useState<SchoolLifeItem[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const maxGalleryLength = useMemo(() => Math.max(1, ...items.map((item) => getGallery(item).length)), [items]);
 
   useEffect(() => {
     let isActive = true;
@@ -66,11 +67,11 @@ export default function SchoolLife() {
   useEffect(() => {
     if (!items.length) return;
     const interval = window.setInterval(() => {
-      setCarouselIndex((current) => (current + 1) % 3);
+      setCarouselIndex((current) => (current + 1) % maxGalleryLength);
     }, 3600);
 
     return () => window.clearInterval(interval);
-  }, [items.length]);
+  }, [items.length, maxGalleryLength]);
 
   return (
     <section id="school-life" className="relative overflow-hidden bg-[#fffaf2] py-20 text-[#1A1F4B] dark:bg-zinc-950 dark:text-white sm:py-28">
@@ -129,6 +130,11 @@ export default function SchoolLife() {
                             className={`h-1.5 rounded-full transition-all ${imageIndex === activeImageIndex ? 'w-5 bg-[#C9A84C]' : 'w-1.5 bg-white/50'}`}
                           />
                         ))}
+                      </div>
+                    )}
+                    {gallery.length > 1 && (
+                      <div className="absolute left-4 bottom-4 z-10 rounded-full bg-black/45 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-white/85 backdrop-blur-md">
+                        {activeImageIndex + 1} / {gallery.length}
                       </div>
                     )}
                     <div className="absolute left-4 top-4 rounded-full bg-white/92 px-4 py-1.5 text-xs font-bold text-[#C8102E] shadow-lg shadow-black/10 backdrop-blur-md dark:bg-[#C9A84C]/95 dark:text-zinc-950">

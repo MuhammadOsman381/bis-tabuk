@@ -317,7 +317,7 @@ export default function AdminSchoolLifePage() {
                 <section className="rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-xl shadow-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/88">
                   <div className="mb-5">
                     <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">{editingItemId ? 'Edit School Life Card' : 'Add School Life Card'}</h2>
-                    <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{editingItemId ? 'Update the selected homepage card. Choose a new image only if you want to replace the current one.' : 'This card will appear on the homepage and open a full detail page when clicked.'}</p>
+                    <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{editingItemId ? 'Update the selected homepage card. Use the three image slots to replace or add carousel photos.' : 'This card will appear on the homepage and can rotate through up to three uploaded photos.'}</p>
                   </div>
                   <form onSubmit={saveItem} className="grid gap-4">
                     <input className={inputClass} value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} placeholder="Title" required />
@@ -327,7 +327,7 @@ export default function AdminSchoolLifePage() {
                       <RichTextEditor value={form.description} onChange={(description) => setForm((current) => ({ ...current, description }))} />
                     </div>
                     <div className="block">
-                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Gallery Images (1 to 3)</span>
+                      <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-zinc-400">Carousel Photos (1 to 3)</span>
                       <div className="grid gap-3 md:grid-cols-3">
                         {[0, 1, 2].map((index) => {
                           const currentImage = editingItemId ? editingGallery[index] : null;

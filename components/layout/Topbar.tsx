@@ -1,16 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, ShieldCheck, UserCog, UsersRound } from 'lucide-react';
+import { GraduationCap, Mail, Menu, Phone, ShieldCheck, UsersRound, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const portalLinks = [
+  { label: 'Teachers', href: '/teacher', icon: GraduationCap },
+  { label: 'Parents', href: '/apply', icon: UsersRound },
+  { label: 'Admin', href: '/admin', icon: ShieldCheck },
+];
+
 export default function Topbar() {
+  const [isPortalMenuOpen, setIsPortalMenuOpen] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="bg-[#11163c] px-4 py-2.5 text-[11px] text-white dark:border-b dark:border-white/10 dark:bg-zinc-950"
+      className="relative bg-[#11163c] px-4 py-2.5 text-[11px] text-white dark:border-b dark:border-white/10 dark:bg-zinc-950"
     >
       <div className="mx-auto flex max-w-[140rem] items-center justify-between gap-4">
         <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2">
@@ -25,22 +34,43 @@ export default function Topbar() {
         </div>
 
         <div className="hidden items-center gap-3 text-white/70 md:flex">
-          <Link href="/teacher" className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
-            <UserCog className="h-3.5 w-3.5 text-[#C9A84C]" />
-            Teachers
-          </Link>
-          <span className="text-white/25">/</span>
-          <Link href="/apply" className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
-            <UsersRound className="h-3.5 w-3.5 text-[#C9A84C]" />
-            Parents
-          </Link>
-          <span className="text-white/25">/</span>
-          <Link href="/admin" className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
-            <ShieldCheck className="h-3.5 w-3.5 text-[#C9A84C]" />
-            Admin
-          </Link>
+          {portalLinks.map(({ label, href, icon: Icon }, index) => (
+            <span key={href} className="inline-flex items-center gap-3">
+              {index > 0 && <span className="text-white/25">/</span>}
+              <Link href={href} className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
+                <Icon className="h-3.5 w-3.5 text-[#C9A84C]" />
+                {label}
+              </Link>
+            </span>
+          ))}
         </div>
+
+        <button
+          type="button"
+          onClick={() => setIsPortalMenuOpen((value) => !value)}
+          aria-expanded={isPortalMenuOpen}
+          aria-label={isPortalMenuOpen ? 'Close login menu' : 'Open login menu'}
+          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/8 text-white transition hover:border-[#C9A84C]/50 hover:text-[#C9A84C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C]/40 md:hidden"
+        >
+          {isPortalMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        </button>
       </div>
+
+      {isPortalMenuOpen && (
+        <div className="absolute inset-x-4 top-full z-[80] mt-2 overflow-hidden rounded-2xl border border-white/12 bg-[#11163c] p-2 shadow-2xl shadow-black/25 md:hidden">
+          {portalLinks.map(({ label, href, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setIsPortalMenuOpen(false)}
+              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-white/82 transition hover:bg-white/8 hover:text-[#C9A84C]"
+            >
+              <Icon className="h-4 w-4 text-[#C9A84C]" />
+              {label}
+            </Link>
+          ))}
+        </div>
+      )}
     </motion.div>
   );
 }

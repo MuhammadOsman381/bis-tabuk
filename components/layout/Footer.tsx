@@ -11,6 +11,7 @@ const schoolLinks = [
   { label: 'Handbook', href: '/handbook' },
   { label: 'Privacy Policy', href: '/policies/privacy-policy.pdf', target: '_blank' },
   { label: 'Terms of Use', href: '/policies/terms-of-use.pdf', target: '_blank' },
+  { label: 'Accounts' },
 ];
 
 const learningLinks = [
@@ -48,10 +49,14 @@ export default function Footer() {
             <h4 className="mb-6 text-xs font-bold uppercase tracking-widest text-[#C9A84C]">School</h4>
             <ul className="space-y-3 text-white/70">
               {schoolLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} target={link.target} className="transition-colors hover:text-white">
-                    {link.label}
-                  </Link>
+                <li key={link.label}>
+                  {link.href ? (
+                    <Link href={link.href} target={link.target} className="transition-colors hover:text-white">
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <span>{link.label}</span>
+                  )}
                 </li>
               ))}
             </ul>
