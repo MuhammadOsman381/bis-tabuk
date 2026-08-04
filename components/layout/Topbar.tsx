@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Mail, Phone, ShieldCheck } from 'lucide-react';
+import { Mail, Phone, ShieldCheck, UserCog, UsersRound } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Topbar() {
@@ -25,21 +25,19 @@ export default function Topbar() {
         </div>
 
         <div className="hidden items-center gap-3 text-white/70 md:flex">
-          <ShieldCheck className="h-3.5 w-3.5 text-[#C9A84C]" />
-          <Link href="/login" className="transition-colors hover:text-[#C9A84C]">
-            LMS
+          <Link href="/teacher" className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
+            <UserCog className="h-3.5 w-3.5 text-[#C9A84C]" />
+            Teachers
           </Link>
           <span className="text-white/25">/</span>
-          <Link href="/student" className="transition-colors hover:text-[#C9A84C]">
-            Students
-          </Link>
-          <span className="text-white/25">/</span>
-          <Link href="/apply" className="transition-colors hover:text-[#C9A84C]">
+          <Link href="/apply" className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
+            <UsersRound className="h-3.5 w-3.5 text-[#C9A84C]" />
             Parents
           </Link>
           <span className="text-white/25">/</span>
-          <Link href="/teacher" className="transition-colors hover:text-[#C9A84C]">
-            Teachers
+          <Link href="/admin" className="inline-flex items-center gap-1.5 transition-colors hover:text-[#C9A84C]">
+            <ShieldCheck className="h-3.5 w-3.5 text-[#C9A84C]" />
+            Admin
           </Link>
         </div>
       </div>
