@@ -21,7 +21,7 @@ export default function PortalHeader() {
             <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg shadow-[#1A1F4B]/12 ring-1 ring-[#C8102E]/10 dark:bg-white dark:shadow-black/30 dark:ring-white/10">
               <Image
                 src="/international-school-logo.jpeg"
-                alt="International School logo"
+                alt="British International School of Tabuk logo"
                 width={48}
                 height={48}
                 className="h-full w-full object-cover"
@@ -29,8 +29,8 @@ export default function PortalHeader() {
               />
             </div>
             <div className="min-w-0">
-              <strong className="block text-base font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-lg">IS</strong>
-              <span className="block max-w-32 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">International School</span>
+              <strong className="block text-base font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-lg">BIST</strong>
+              <span className="block max-w-52 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">British International School of Tabuk</span>
             </div>
           </Link>
         </div>
