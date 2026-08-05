@@ -11,23 +11,21 @@ import Footer from '@/components/layout/Footer';
 import { Reveal } from '@/components/ui/Motion';
 
 const oneTimeFees = [
-  ['Application Fee', 'SAR 425'],
-  ['Assessment Fee', 'SAR 1,025'],
-  ['Entrance Fee', 'SAR 17,250'],
+  ['Application Fee', 'TBC'],
+  ['Assessment Fee', 'TBC'],
+  ['Entrance Fee', 'TBC'],
 ];
 
 const primaryFees = [
-  ['Nursery', 'TBC', 'TBC', 'TBC'],
-  ['FS1', 'TBC', 'TBC', 'TBC'],
-  ['FS2', 'TBC', 'TBC', 'TBC'],
+  ['Reception', 'TBC', 'TBC', 'TBC'],
   ['Years 1-6', 'TBC', 'TBC', 'TBC'],
 ];
 
 const secondaryFees = [
   ['Years 7-9', 'TBC', 'TBC', 'TBC'],
   ['Years 10-11', 'TBC', 'TBC', 'TBC'],
-  ['IB1 / Year 12', 'TBC', 'TBC', 'TBC'],
-  ['IB2 / Year 13', 'TBC', 'TBC', 'TBC'],
+  ['AS Level / Year 12', 'TBC', 'TBC', 'TBC'],
+  ['A2 Level / Year 13', 'TBC', 'TBC', 'TBC'],
 ];
 
 function FeeTable({ title, headers, rows }: { title: string; headers: string[]; rows: string[][] }) {
@@ -106,7 +104,6 @@ export default function SchoolFeesPage() {
             <Reveal className="mt-12 rounded-3xl border border-[#C8102E]/15 bg-[#C8102E]/6 p-6 text-left dark:border-[#C9A84C]/20 dark:bg-[#C9A84C]/8">
               <div className="space-y-4 text-lg leading-8 text-[#1A1F4B] dark:text-zinc-100">
                 <p>Fees may be subject to VAT where applicable.</p>
-                <p>A sibling discount of 10% may apply according to the school fee policy.</p>
                 <p>External examination fees are charged separately where applicable.</p>
               </div>
             </Reveal>

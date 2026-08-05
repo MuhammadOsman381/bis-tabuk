@@ -4,26 +4,26 @@ import { CalendarDays } from 'lucide-react';
 import { motion, Reveal, staggerContainer } from '../ui/Motion';
 
 const schoolEvents = [
-  { event: 'Staff Return', date: '16 August 2026 (Sunday)' },
-  { event: 'Student Return', date: '23 August 2026 (Sunday)' },
+  { event: 'Staff Return', date: '16 August 2026' },
+  { event: 'Student Return', date: '23 August 2026' },
   { event: 'Term 1 Internal Assessment (Years 3-10)', date: '9-15 December 2026' },
-  { event: 'Return from Winter Break (Term 2 Begins)', date: '10 January 2027 (Sunday)' },
-  { event: 'Parent-Teacher Conference', date: '11 February 2027 (Thursday)' },
+  { event: 'Return from Winter Break (Term 2 Begins)', date: '10 January 2027' },
+  { event: 'Parent-Teacher Conference', date: '11 February 2027' },
   { event: 'Term 2 Internal Assessment (Years 3-10)', date: '24 February - 2 March 2027' },
-  { event: 'Return from Spring Break (Term 3 Begins)', date: '28 March 2027 (Sunday)' },
-  { event: 'Parent-Teacher Conference', date: '11 April 2027 (Sunday)' },
+  { event: 'Return from Spring Break (Term 3 Begins)', date: '28 March 2027' },
+  { event: 'Parent-Teacher Conference', date: '11 April 2027' },
   { event: 'Term 3 Internal Assessment (Years 3-10)', date: '23-29 June 2027' },
-  { event: 'Summer Break Begins', date: '4 July 2027 (Sunday)' },
+  { event: 'Summer Break Begins', date: '4 July 2027' },
 ];
 
 const holidays = [
-  { event: 'Saudi National Day', date: '23 September 2026 (Wednesday)' },
-  { event: 'Half-Term Break', date: '25-29 October 2026 (Sunday-Thursday)' },
-  { event: 'Winter Break', date: '20 December 2026 - 7 January 2027 (Sunday-Thursday)' },
-  { event: 'Foundation Day', date: '22 February 2027 (Monday)' },
-  { event: 'Eid Al Fitr Holidays', date: '7-18 March 2027 (Sunday-Thursday)' },
-  { event: 'Spring Break', date: '21-25 March 2027 (Sunday-Thursday)' },
-  { event: 'Eid Al Adha Holidays', date: '9-20 May 2027 (Sunday-Thursday)' },
+  { event: 'Saudi National Day', date: '23 September 2026' },
+  { event: 'Half-Term Break', date: '25-29 October 2026' },
+  { event: 'Winter Break', date: '20 December 2026 - 7 January 2027' },
+  { event: 'Foundation Day', date: '22 February 2027' },
+  { event: 'Eid Al Fitr Holidays', date: '7-18 March 2027' },
+  { event: 'Spring Break', date: '21-25 March 2027' },
+  { event: 'Eid Al Adha Holidays', date: '9-20 May 2027' },
 ];
 
 function DateList({ title, items }: { title: string; items: Array<{ event: string; date: string }> }) {
