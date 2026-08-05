@@ -1,14 +1,56 @@
 'use client';
 
 import { useState } from 'react';
+import type { SVGProps } from 'react';
 import Link from 'next/link';
-import { GraduationCap, Mail, Phone, ShieldCheck, UsersRound, X } from 'lucide-react';
+import { Mail, Phone, ShieldCheck, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import MenuWordIcon from '@/components/ui/MenuWordIcon';
 
+function TeacherBoardIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect x="8" y="4" width="12" height="8" rx="1.5" />
+      <path d="M10 8h7" />
+      <path d="M10 11h4" />
+      <path d="M14 18l5-5" />
+      <path d="M17 16l2 2" />
+      <circle cx="5" cy="7" r="2" />
+      <path d="M3 21v-5a2 2 0 0 1 4 0v5" />
+      <path d="M2 21h6" />
+    </svg>
+  );
+}
+
+function StudentCapIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 3 4 7l8 4 8-4-8-4Z" />
+      <path d="M7 9v3c0 2.2 2.2 4 5 4s5-1.8 5-4V9" />
+      <path d="M20 7v5" />
+      <circle cx="12" cy="13" r="2" />
+      <path d="M7 21a5 5 0 0 1 10 0" />
+    </svg>
+  );
+}
+
+function FamilyIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="6" r="2.5" />
+      <circle cx="5.5" cy="9" r="2" />
+      <circle cx="18.5" cy="9" r="2" />
+      <path d="M8 21v-3a4 4 0 0 1 8 0v3" />
+      <path d="M2.5 21v-2.2a3 3 0 0 1 4.1-2.8" />
+      <path d="M21.5 21v-2.2a3 3 0 0 0-4.1-2.8" />
+    </svg>
+  );
+}
+
 const portalLinks = [
-  { label: 'Teachers', href: 'https://isksafh.vercel.app', icon: GraduationCap, isExternal: true },
-  { label: 'Parents', href: '/apply', icon: UsersRound },
+  { label: 'Teachers', href: 'https://isksafh.vercel.app', icon: TeacherBoardIcon, isExternal: true },
+  { label: 'Students', href: '/student', icon: StudentCapIcon },
+  { label: 'Parents', href: '/apply', icon: FamilyIcon },
   { label: 'Admin', href: '/admin', icon: ShieldCheck },
 ];
 
