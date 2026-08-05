@@ -58,7 +58,6 @@ const sidebarItems: SidebarItem[] = [
       { label: 'Years 7-9 (Key Stage Three)', href: '/secondary/years-7-9-key-stage-three' },
       { label: 'Years 10 & 11 (IGCSE)', href: '/secondary/years-10-11-igcse' },
       { label: 'A Levels', href: '/secondary/a-levels' },
-      { label: 'Subjects', href: '/secondary/subjects' },
       { label: 'Learning Support (Secondary)', href: '/secondary/learning-support' },
     ],
   },

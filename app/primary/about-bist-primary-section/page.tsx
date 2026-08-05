@@ -87,13 +87,6 @@ export default function AboutPrimarySectionPage() {
               </ul>
             </Reveal>
 
-            <Reveal className="mt-12">
-              <blockquote className="border-l-4 border-[#C8102E] pl-6 text-left text-xl font-semibold leading-9 text-[#1A1F4B] dark:border-[#C9A84C] dark:text-zinc-50">
-                &quot;BIST supported me in writing my book by organising Book Days, Book Weeks, and various competitions.
-                These events inspired me to write, explore my imagination, and bring my ideas to life.&quot; - Aaliyah, Y5-3
-              </blockquote>
-            </Reveal>
-
             <motion.div
               initial="hidden"
               whileInView="visible"

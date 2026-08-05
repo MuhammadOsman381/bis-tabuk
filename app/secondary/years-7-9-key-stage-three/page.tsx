@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import Topbar from '@/components/layout/Topbar';
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
@@ -23,7 +22,6 @@ const subjects = [
   'Music',
   'Physical Education',
   'Science',
-  'Spanish',
   'Wellbeing',
 ];
 
@@ -104,20 +102,6 @@ export default function KeyStageThreePage() {
               </p>
             </Reveal>
 
-            <Reveal className="mt-16 border-t border-zinc-200 pt-12 text-center dark:border-white/10">
-              <h2 className="text-3xl font-black text-[#1A1F4B] dark:text-zinc-50">Register Online</h2>
-              <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-                Click below to register your interest-we&apos;d love to hear from you!
-              </p>
-              <Link
-                href="/apply"
-                className="group relative isolate mt-8 inline-flex overflow-hidden rounded-full bg-[linear-gradient(135deg,#E11D48,#C8102E_45%,#7F1024)] px-7 py-3.5 text-sm font-bold text-white shadow-[0_18px_38px_rgba(200,16,46,0.26)] transition hover:-translate-y-0.5"
-              >
-                <span className="absolute inset-y-0 -left-1/2 -z-10 w-1/3 rotate-12 bg-white/30 blur-md transition-transform duration-700 group-hover:translate-x-[420%]" />
-                Join Our School
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Reveal>
           </div>
         </section>
 

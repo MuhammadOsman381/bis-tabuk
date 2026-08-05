@@ -18,15 +18,8 @@ const subjects = [
   'Computer Science',
   'Economics',
   'English',
-  'French',
-  'Geography',
-  'History',
   'Mathematics',
   'Physics',
-  'Psychology',
-  'Spanish',
-  'Theatre',
-  'Visual Arts',
 ];
 
 export default function IbOneAndTwoPage() {
@@ -65,12 +58,6 @@ export default function IbOneAndTwoPage() {
                 The A Levels Programme is a rigorous two-year course that develops academic
                 depth, breadth, research skills and international mindedness.
               </p>
-            </Reveal>
-
-            <Reveal className="mt-12">
-              <blockquote className="border-l-4 border-[#C8102E] pl-6 text-left text-xl font-semibold leading-9 text-[#1A1F4B] dark:border-[#C9A84C] dark:text-zinc-50">
-                &quot;A Levels at BIST has helped me organise my time, think independently and prepare for university life.&quot; - Hadi, IB2
-              </blockquote>
             </Reveal>
 
             <Reveal className="mt-12 space-y-7 text-left text-lg leading-8 text-zinc-700 dark:text-zinc-300">
