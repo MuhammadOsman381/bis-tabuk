@@ -82,6 +82,10 @@ export default function KeyDates() {
     <section className="relative overflow-hidden bg-white py-20 text-[#1A1F4B] dark:bg-zinc-950 dark:text-white sm:py-24">
       <div className="absolute left-0 top-0 h-80 w-80 rounded-full bg-[#C8102E]/7 blur-3xl dark:bg-[#C9A84C]/10" />
       <div className="relative mx-auto max-w-7xl px-6">
+        <Reveal className="mx-auto mb-12 max-w-3xl">
+          <SchoolTimings />
+        </Reveal>
+
         <Reveal className="mb-10 text-center">
           <span className="inline-flex rounded-full border border-[#C8102E]/10 bg-[#fffaf2] px-4 py-2 text-xs font-bold uppercase tracking-[3px] text-[#C8102E] shadow-sm shadow-[#1A1F4B]/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/8 dark:text-[#C9A84C]">Academic Calendar</span>
           <h2 className="mt-3 text-4xl font-bold md:text-5xl">Key Dates to <span className="text-[#C8102E] dark:text-[#C9A84C]">Remember</span></h2>
@@ -101,10 +105,6 @@ export default function KeyDates() {
             <DateList title="Holidays" items={holidays} />
           </motion.div>
         </motion.div>
-
-        <Reveal className="mx-auto mt-6 max-w-3xl">
-          <SchoolTimings />
-        </Reveal>
       </div>
     </section>
   );
