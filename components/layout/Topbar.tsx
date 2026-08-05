@@ -7,16 +7,15 @@ import { Mail, Phone, ShieldCheck, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import MenuWordIcon from '@/components/ui/MenuWordIcon';
 
-function TeacherBoardIcon(props: SVGProps<SVGSVGElement>) {
+function TeacherTieIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <rect x="9" y="4" width="12" height="9" rx="1.5" />
-      <path d="M12 8h6" />
-      <path d="M12 11h4" />
-      <circle cx="5" cy="7" r="2.2" />
-      <path d="M2.5 21v-5.2a2.5 2.5 0 0 1 5 0V21" />
-      <path d="M2 21h6" />
-      <path d="M15 13v3" />
+      <circle cx="12" cy="6" r="3" />
+      <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+      <path d="m10 13 2 2 2-2" />
+      <path d="m12 15-1.5 5" />
+      <path d="m12 15 1.5 5" />
+      <path d="M9 21h6" />
     </svg>
   );
 }
@@ -47,7 +46,7 @@ function FamilyIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 const portalLinks = [
-  { label: 'Teachers', href: 'https://isksafh.vercel.app', icon: TeacherBoardIcon, isExternal: true },
+  { label: 'Teachers', href: 'https://isksafh.vercel.app', icon: TeacherTieIcon, isExternal: true },
   { label: 'Students', href: '/student', icon: StudentCapIcon },
   { label: 'Parents', href: '/apply', icon: FamilyIcon },
   { label: 'Admin', href: '/admin', icon: ShieldCheck },
