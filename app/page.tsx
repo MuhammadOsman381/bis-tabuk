@@ -6,11 +6,8 @@ import Topbar from '@/components/layout/Topbar';
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
 import Hero from '@/components/sections/Hero';
-import Stages from '@/components/sections/Stages';
-import Values from '@/components/sections/Values';
 import SchoolLife from '@/components/sections/SchoolLife';
-import Events from '@/components/sections/Events';
-import News from '@/components/sections/News';
+import KeyDates from '@/components/sections/KeyDates';
 import Footer from '@/components/layout/Footer';
 
 export default function Home() {
@@ -28,6 +25,7 @@ export default function Home() {
         <Navbar isSidebarOpen={isSidebarOpen} onToggleSidebar={() => setIsSidebarOpen((value) => !value)} />
         <Hero />
         <SchoolLife />
+        <KeyDates />
         <Footer />
       </div>
     </motion.main>
