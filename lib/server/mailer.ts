@@ -225,6 +225,7 @@ export async function sendTeacherAccessEmail({
 }
 
 export async function sendLocalHireApplicationEmail({
+  applicationType = 'Local Hire Application',
   fullName,
   email,
   phone,
@@ -233,6 +234,7 @@ export async function sendLocalHireApplicationEmail({
   message,
   cv,
 }: {
+  applicationType?: string;
   fullName: string;
   email: string;
   phone: string;
@@ -244,6 +246,7 @@ export async function sendLocalHireApplicationEmail({
   const transporter = createTransporter();
   const { from } = getTransportConfig();
   const recipient = process.env.LOCAL_HIRE_APPLICATION_EMAIL || 'isksafh@gmail.com';
+  const safeApplicationType = escapeHtml(applicationType);
   const safeFullName = escapeHtml(fullName);
   const safeEmail = escapeHtml(email);
   const safePhone = escapeHtml(phone);
@@ -252,7 +255,7 @@ export async function sendLocalHireApplicationEmail({
   const safeMessage = escapeHtml(message || 'No additional message provided.');
 
   if (!transporter || !from) {
-    console.log(`BIST local hire application for ${fullName} <${email}>. CV: ${cv.filename}`);
+    console.log(`BIST ${applicationType.toLowerCase()} for ${fullName} <${email}>. CV: ${cv.filename}`);
     return { mode: 'console' as const };
   }
 
@@ -260,8 +263,9 @@ export async function sendLocalHireApplicationEmail({
     from,
     to: recipient,
     replyTo: email,
-    subject: `Local Hire Application - ${fullName}`,
+    subject: `${applicationType} - ${fullName}`,
     text: [
+      `Application type: ${applicationType}`,
       `Full name: ${fullName}`,
       `Email: ${email}`,
       `Phone: ${phone}`,
@@ -279,8 +283,12 @@ export async function sendLocalHireApplicationEmail({
       },
     ],
     html: emailShell(`
-      <p style="margin:0;color:#52525b;font-size:16px;line-height:1.7;">A new local hire application has been submitted through the BIST website.</p>
+      <p style="margin:0;color:#52525b;font-size:16px;line-height:1.7;">A new ${safeApplicationType.toLowerCase()} has been submitted through the BIST website.</p>
       <div style="margin:28px 0;padding:24px;border-radius:24px;background:#f8fafc;border:1px solid #e4e4e7;">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Application Type</div>
+          <div style="font-size:16px;font-weight:800;color:#27272a;">${safeApplicationType}</div>
+        </div>
         <div style="margin-bottom:14px;">
           <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#a1a1aa;">Candidate</div>
           <div style="font-size:20px;font-weight:900;color:#18181b;">${safeFullName}</div>

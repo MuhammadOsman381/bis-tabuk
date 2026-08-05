@@ -12,7 +12,6 @@ import {
   Home,
   Mail,
   Menu,
-  Newspaper,
   School,
   Sparkles,
   Users,
@@ -95,17 +94,6 @@ const sidebarItems: SidebarItem[] = [
     ],
   },
   {
-    label: 'News & Dates / Media',
-    href: '/news-and-media/news',
-    icon: Newspaper,
-    children: [
-      { label: 'News', href: '/news-and-media/news' },
-      { label: 'Newsletters', href: '/news-and-media/newsletters' },
-      { label: 'School Calendar', href: '/news-and-media/school-calendar' },
-      { label: 'Term Dates', href: '/news-and-media/term-dates' },
-    ],
-  },
-  {
     label: 'Alumni',
     href: '/alumni/bist-connect',
     icon: Users,
@@ -117,9 +105,10 @@ const sidebarItems: SidebarItem[] = [
     icon: BriefcaseBusiness,
     children: [
       { label: 'Why Work at BIST', href: '/employment/why-work-at-bisj' },
-      { label: 'Overseas Hire benefits', href: '/employment/overseas-hire-benefits' },
+      { label: 'Overseas hire benefits', href: '/employment/overseas-hire-benefits' },
+      { label: 'Apply (Overseas)', href: '/employment/overseas-hire-benefits/apply' },
       { label: 'Local hires benefits', href: '/employment/local-hire-benefits' },
-      { label: 'Apply', href: '/employment/local-hire-benefits/apply' },
+      { label: 'Apply (Local)', href: '/employment/local-hire-benefits/apply' },
       { label: 'About Tabuk', href: '/employment/about-tabuk' },
     ],
   },
