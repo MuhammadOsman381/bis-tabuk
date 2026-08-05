@@ -109,7 +109,6 @@ const sidebarItems: SidebarItem[] = [
       { label: 'Apply (Overseas)', href: '/employment/overseas-hire-benefits/apply' },
       { label: 'Local hires benefits', href: '/employment/local-hire-benefits' },
       { label: 'Apply (Local)', href: '/employment/local-hire-benefits/apply' },
-      { label: 'About Tabuk', href: '/employment/about-tabuk' },
     ],
   },
   {

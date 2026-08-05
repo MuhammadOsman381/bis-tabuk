@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type React from 'react';
-import { ArrowRight, CheckCircle2, Globe2, GraduationCap, Loader2, Mail, MapPin, PenLine, Sparkles, UserRound } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Globe2, GraduationCap, ImagePlus, Loader2, Mail, MapPin, PenLine, Sparkles, UserRound } from 'lucide-react';
 import SchoolPageShell from '@/components/layout/SchoolPageShell';
 
 const inputClass =
@@ -26,13 +26,11 @@ export default function BistConnectPage() {
     setIsSubmitting(true);
 
     const formData = new FormData(event.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
 
     try {
       const response = await fetch('/api/alumni/success-story', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
       const result = (await response.json()) as { error?: string };
 
@@ -154,6 +152,15 @@ export default function BistConnectPage() {
               <option value="BIST may contact me before publishing my story">BIST may contact me before publishing my story</option>
               <option value="For internal alumni records only">For internal alumni records only</option>
             </select>
+          </label>
+
+          <label className="text-sm font-black text-zinc-700 dark:text-zinc-200">
+            <span className="inline-flex items-center gap-2">
+              <ImagePlus className="h-4 w-4 text-[#C8102E] dark:text-[#C9A84C]" />
+              Alumni Photos
+            </span>
+            <input name="photos" type="file" multiple accept="image/jpeg,image/png,image/webp" className={inputClass} />
+            <span className="mt-2 block text-xs font-semibold leading-5 text-zinc-500 dark:text-zinc-400">Optional: upload up to three JPG, PNG, or WebP photos.</span>
           </label>
 
           {message && (

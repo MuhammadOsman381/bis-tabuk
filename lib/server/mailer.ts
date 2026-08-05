@@ -330,6 +330,7 @@ export async function sendAlumniSuccessStoryEmail({
   storyTitle,
   story,
   permission,
+  photos = [],
 }: {
   fullName: string;
   email: string;
@@ -339,6 +340,7 @@ export async function sendAlumniSuccessStoryEmail({
   storyTitle: string;
   story: string;
   permission: string;
+  photos?: Array<{ filename: string; contentType: string; content: Buffer }>;
 }) {
   const transporter = createTransporter();
   const { from } = getTransportConfig();
@@ -351,9 +353,10 @@ export async function sendAlumniSuccessStoryEmail({
   const safeStoryTitle = escapeHtml(storyTitle);
   const safeStory = escapeHtml(story);
   const safePermission = escapeHtml(permission);
+  const photoCountText = photos.length ? `${photos.length} photo${photos.length === 1 ? '' : 's'} attached` : 'No photos attached';
 
   if (!transporter || !from) {
-    console.log(`BIST alumni success story from ${fullName} <${email}>: ${storyTitle}`);
+    console.log(`BIST alumni success story from ${fullName} <${email}>: ${storyTitle}. ${photoCountText}.`);
     return { mode: 'console' as const };
   }
 
@@ -369,12 +372,20 @@ export async function sendAlumniSuccessStoryEmail({
       `Current location: ${currentLocation || 'Not provided'}`,
       `Current role: ${currentRole || 'Not provided'}`,
       `Permission: ${permission}`,
+      `Photos: ${photoCountText}`,
       '',
       `Story title: ${storyTitle}`,
       '',
       story,
     ].join('\n'),
-    attachments: [logoAttachment()],
+    attachments: [
+      logoAttachment(),
+      ...photos.map((photo) => ({
+        filename: photo.filename,
+        content: photo.content,
+        contentType: photo.contentType,
+      })),
+    ],
     html: emailShell(`
       <p style="margin:0;color:#52525b;font-size:16px;line-height:1.7;">A BIST alumnus has shared a success story through the website.</p>
       <div style="margin:28px 0;padding:24px;border-radius:24px;background:#f8fafc;border:1px solid #e4e4e7;">
@@ -404,6 +415,7 @@ export async function sendAlumniSuccessStoryEmail({
         <p style="margin:10px 0 0;color:#52525b;font-size:15px;line-height:1.7;white-space:pre-line;">${safeStory}</p>
       </div>
       <p style="margin:0;color:#71717a;font-size:14px;line-height:1.7;"><strong>Sharing permission:</strong> ${safePermission}</p>
+      <p style="margin:10px 0 0;color:#71717a;font-size:14px;line-height:1.7;"><strong>Photos:</strong> ${photoCountText}</p>
     `),
   });
 
