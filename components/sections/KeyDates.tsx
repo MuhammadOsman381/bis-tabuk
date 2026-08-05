@@ -102,7 +102,7 @@ export default function KeyDates() {
           </motion.div>
         </motion.div>
 
-        <Reveal className="mt-6">
+        <Reveal className="mx-auto mt-6 max-w-3xl">
           <SchoolTimings />
         </Reveal>
       </div>
