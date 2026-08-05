@@ -15,12 +15,9 @@ const subjects = [
   'Business Studies',
   'Chemistry',
   'Computer Science',
-  'Drama',
   'English Language',
   'English Literature',
-  'French',
   'Mathematics',
-  'Music',
   'Physical Education',
   'Physics',
 ];
