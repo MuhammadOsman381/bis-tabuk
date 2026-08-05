@@ -13,8 +13,8 @@ const badges = [
 ];
 
 const stats = [
-  { value: '1,300+', label: 'Students' },
-  { value: '60+', label: 'Nationalities' },
+  { value: '500+', label: 'Students' },
+  { value: '20+', label: 'Nationalities' },
   { value: '50', label: 'Years of Excellence' },
 ];
 

@@ -62,7 +62,7 @@ const sidebarItems: SidebarItem[] = [
     ],
   },
   {
-    label: 'Beyond the Classroom',
+    label: 'Horizons',
     href: '/beyond-the-classroom/learning-beyond-the-classroom',
     icon: Sparkles,
     children: [
@@ -91,7 +91,7 @@ const sidebarItems: SidebarItem[] = [
     children: [{ label: 'BIST-Network', href: '/alumni/bist-connect' }],
   },
   {
-    label: 'Employment Opportunities',
+    label: 'Employment',
     href: '/employment/why-work-at-bisj',
     icon: BriefcaseBusiness,
     children: [

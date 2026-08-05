@@ -124,8 +124,8 @@ export default function WelcomeToBistPage() {
                 British values, global perspective
               </h2>
               <p className="mt-5 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-                Founded in 1977, we operate on a purpose-built site, with over <strong>1,300 students</strong> from
-                over <strong>60 countries</strong> and with more than <strong>240 staff</strong> from
+                Founded in 1977, we operate on a purpose-built site, with over <strong>500 students</strong> from
+                over <strong>20 countries</strong> and with more than <strong>50 staff</strong> from
                 <strong> 20 countries</strong>.
               </p>
 

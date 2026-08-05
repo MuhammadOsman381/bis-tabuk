@@ -8,8 +8,8 @@ import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
 import { Reveal } from '@/components/ui/Motion';
 
-const igcseYears = ['2020', '2021', '2022', '2023', '2024'];
-const aLevelYears = ['2020', '2021', '2022', '2023', '2024', '2025'];
+const igcseYears = ['2020', '2021', '2022', '2023', '2024', '2025', '2026'];
+const aLevelYears = ['2020', '2021', '2022', '2023', '2024', '2025', '2026'];
 const igcseRows = ['A*-A grades', 'A*-C grades'];
 const aLevelRows = ['Pass rate', 'A*-A grades', 'A*-C grades', 'BIST average grade', 'World average'];
 
