@@ -53,12 +53,6 @@ export default function IgcsePage() {
             </Reveal>
 
             <Reveal className="mt-12">
-              <blockquote className="border-l-4 border-[#C8102E] pl-6 text-left text-xl font-semibold leading-9 text-[#1A1F4B] dark:border-[#C9A84C] dark:text-zinc-50">
-                &quot;BIST prepares us for what comes next by helping us become more independent, organised and confident.&quot; - Hana, IB2
-              </blockquote>
-            </Reveal>
-
-            <Reveal className="mt-12">
               <div
                 className="min-h-80 rounded-3xl  bg-cover  bg-center shadow-[0_22px_60px_rgba(26,31,75,0.14),inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-zinc-200 dark:ring-white/10"
                 style={{ backgroundImage: "url('/images/secondary/third.JPG')" }}
