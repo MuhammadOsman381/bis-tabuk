@@ -362,12 +362,6 @@ export const beyondPages: Record<string, BeyondPage> = {
           'Families are encouraged to review current menu information shared through school communication channels.',
         ],
       },
-      {
-        title: 'Nut-free school',
-        paragraphs: [
-          'BIST is a nut-free school. Families should avoid sending food containing nuts and should follow school guidance to help keep all students safe.',
-        ],
-      },
     ],
   },
 };
