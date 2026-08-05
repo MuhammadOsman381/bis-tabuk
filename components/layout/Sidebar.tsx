@@ -37,7 +37,6 @@ const sidebarItems: SidebarItem[] = [
       { label: 'Leadership Teams', href: '/leadership-teams' },
       { label: 'Core Principles', href: '/core-principles' },
       { label: 'Academic Results', href: '/academic-results' },
-      { label: 'Policies', href: '/privacy-policy' },
     ],
   },
   {
