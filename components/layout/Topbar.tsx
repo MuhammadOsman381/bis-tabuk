@@ -10,14 +10,13 @@ import MenuWordIcon from '@/components/ui/MenuWordIcon';
 function TeacherBoardIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <rect x="8" y="4" width="12" height="8" rx="1.5" />
-      <path d="M10 8h7" />
-      <path d="M10 11h4" />
-      <path d="M14 18l5-5" />
-      <path d="M17 16l2 2" />
-      <circle cx="5" cy="7" r="2" />
-      <path d="M3 21v-5a2 2 0 0 1 4 0v5" />
+      <rect x="9" y="4" width="12" height="9" rx="1.5" />
+      <path d="M12 8h6" />
+      <path d="M12 11h4" />
+      <circle cx="5" cy="7" r="2.2" />
+      <path d="M2.5 21v-5.2a2.5 2.5 0 0 1 5 0V21" />
       <path d="M2 21h6" />
+      <path d="M15 13v3" />
     </svg>
   );
 }
