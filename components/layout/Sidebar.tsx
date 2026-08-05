@@ -11,12 +11,12 @@ import {
   GraduationCap,
   Home,
   Mail,
-  Menu,
   School,
   Sparkles,
   Users,
   X,
 } from 'lucide-react';
+import MenuWordIcon from '@/components/ui/MenuWordIcon';
 
 type SidebarItem = {
   label: string;
@@ -225,9 +225,9 @@ export default function Sidebar({ isDesktopOpen, onDesktopClose, showMobileTrigg
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open sidebar navigation"
-          className="fixed bottom-5 left-5 z-[70] inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C8102E] text-white shadow-2xl shadow-[#C8102E]/25 transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/20 dark:bg-[#C9A84C] dark:text-zinc-950 dark:shadow-[#C9A84C]/25 lg:hidden"
+          className="fixed bottom-5 left-5 z-[70] inline-flex h-12 w-16 items-center justify-center rounded-2xl bg-[#C8102E] text-white shadow-2xl shadow-[#C8102E]/25 transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/20 dark:bg-[#C9A84C] dark:text-zinc-950 dark:shadow-[#C9A84C]/25 lg:hidden"
         >
-          <Menu className="h-5 w-5" />
+          <MenuWordIcon className="w-9" />
         </button>
       )}
 

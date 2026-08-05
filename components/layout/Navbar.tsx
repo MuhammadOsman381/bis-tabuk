@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import AuthAction from '../ui/AuthAction';
+import MenuWordIcon from '../ui/MenuWordIcon';
 import ThemeToggle from '../ui/ThemeToggle';
 
 type NavbarProps = {
@@ -29,7 +30,7 @@ export default function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) 
               aria-label={isSidebarOpen ? 'Close sidebar navigation' : 'Open sidebar navigation'}
               className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#C8102E]/10 bg-white/80 text-[#1A1F4B] shadow-sm shadow-[#1A1F4B]/5 transition hover:-translate-y-0.5 hover:border-[#C8102E]/20 hover:text-[#C8102E] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:border-[#C9A84C]/40 dark:hover:text-[#C9A84C] lg:inline-flex"
             >
-              {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isSidebarOpen ? <X className="h-5 w-5" /> : <MenuWordIcon className="w-7" />}
             </button>
 
             <Link href="https://bis-tabuk.vercel.app/" className="group flex min-w-0 items-center gap-3 rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8102E]/15">

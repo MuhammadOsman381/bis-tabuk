@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { GraduationCap, Mail, Menu, Phone, ShieldCheck, UsersRound, X } from 'lucide-react';
+import { GraduationCap, Mail, Phone, ShieldCheck, UsersRound, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import MenuWordIcon from '@/components/ui/MenuWordIcon';
 
 const portalLinks = [
   { label: 'Teachers', href: 'https://isksafh.vercel.app', icon: GraduationCap, isExternal: true },
@@ -57,9 +58,9 @@ export default function Topbar() {
           onClick={() => setIsPortalMenuOpen((value) => !value)}
           aria-expanded={isPortalMenuOpen}
           aria-label={isPortalMenuOpen ? 'Close login menu' : 'Open login menu'}
-          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/8 text-white transition hover:border-[#C9A84C]/50 hover:text-[#C9A84C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C]/40 md:hidden"
+          className="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/8 text-white transition hover:border-[#C9A84C]/50 hover:text-[#C9A84C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C]/40 md:hidden"
         >
-          {isPortalMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          {isPortalMenuOpen ? <X className="h-4 w-4" /> : <MenuWordIcon className="w-8" />}
         </button>
       </div>
 
