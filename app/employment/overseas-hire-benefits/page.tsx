@@ -9,6 +9,7 @@ export default function OverseasBenefitsPage() {
       title="Overseas hire benefits"
       heroImage="https://picsum.photos/id/1018/1920/980"
       heroAlt="Red Sea lifestyle and Tabuk city"
+      heroImageClassName="object-cover object-center"
       showVideo={false}
       sections={[
         { title: 'Compensation & Financial Security', bullets: ['Tax-Free Salary', 'End-of-Service Gratuity', 'Medical & Life Insurance'] },

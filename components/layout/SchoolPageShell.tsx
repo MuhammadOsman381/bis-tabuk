@@ -42,6 +42,7 @@ type SchoolPageShellProps = {
   subtitle?: string;
   heroImage?: string;
   heroAlt?: string;
+  heroImageClassName?: string;
   intro?: string[];
   quote?: string;
   sections?: ShellSection[];
@@ -183,6 +184,7 @@ export default function SchoolPageShell({
   subtitle,
   heroImage,
   heroAlt,
+  heroImageClassName = 'object-contain',
   intro,
   quote,
   sections,
@@ -207,7 +209,7 @@ export default function SchoolPageShell({
               fill
               priority
               sizes="100vw"
-              className="absolute inset-0  object-contain "
+              className={`absolute inset-0 ${heroImageClassName}`}
             />
             <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/90 via-[#1A1F4B]/76 to-[#C8102E]/48 dark:from-zinc-950/94 dark:via-zinc-900/82 dark:to-[#C8102E]/42" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.18),transparent_34%)]" />
