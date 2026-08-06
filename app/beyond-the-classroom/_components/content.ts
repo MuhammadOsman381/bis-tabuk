@@ -24,6 +24,7 @@ export type BeyondPage = {
   title: string;
   heroImage?: string;
   heroAlt: string;
+  showRegisterCta?: boolean;
   intro?: string[];
   quote?: string;
   sections?: BeyondSection[];
@@ -33,12 +34,12 @@ export type BeyondPage = {
 export const beyondPages: Record<string, BeyondPage> = {
   'learning-beyond-the-classroom': {
     title: 'Learning Beyond the Classroom',
-    heroImage: 'https://picsum.photos/id/1067/1920/980',
-    heroAlt: 'Students engaged in sports, arts and outdoor activities',
+    heroImage: '/images/beyond-the-classroom/learning-beyond-title.jpg',
+    heroAlt: 'Going Beyond Classroom visual with open book and letters',
     intro: [
       'At BIST, learning extends far beyond the classroom. Students are encouraged to discover interests, develop talents and build confidence through a rich programme of activities, leadership opportunities and community experiences.',
       'Our co-curricular programme supports academic growth by helping students collaborate, communicate, lead, reflect and take responsible risks.',
-      'From sport and music to service, outdoor education and student leadership, every opportunity is designed to help students flourish as balanced, curious and compassionate young people.',
+      'From sport and service to outdoor education and student leadership, every opportunity is designed to help students flourish as balanced, curious and compassionate young people.',
     ],
     quote:
       '"The opportunities beyond lessons help us find what we enjoy, meet new people and become more confident." - BIST student',
@@ -60,7 +61,7 @@ export const beyondPages: Record<string, BeyondPage> = {
           },
           {
             title: 'Performing Arts',
-            description: 'Drama, music, productions and creative confidence.',
+            description: 'Drama, productions and creative confidence.',
             image: 'https://picsum.photos/id/1035/640/420',
             href: '/beyond-the-classroom/performing-arts',
           },
@@ -78,6 +79,7 @@ export const beyondPages: Record<string, BeyondPage> = {
     title: 'Sports and Athletics',
     heroImage: 'https://picsum.photos/id/1058/1920/980',
     heroAlt: 'Students playing team sports',
+    showRegisterCta: false,
     intro: [
       'Sport is an important part of school life at BIST. Students are encouraged to participate, compete, improve and enjoy the benefits of an active lifestyle.',
       'Our sports programme supports physical wellbeing while helping students develop discipline, respect, resilience and pride in representing their school.',
@@ -90,7 +92,7 @@ export const beyondPages: Record<string, BeyondPage> = {
       },
       {
         title: 'Sports offered',
-        bullets: ['Football', 'Basketball', 'Swimming', 'Athletics', 'Volleyball', 'Netball', 'Badminton', 'Cross country'],
+        bullets: ['Football', 'Basketball', 'Athletics', 'Volleyball', 'Netball', 'Badminton'],
         image: 'https://picsum.photos/id/1076/900/680',
         imageAlt: 'School team training together',
       },
@@ -100,6 +102,7 @@ export const beyondPages: Record<string, BeyondPage> = {
     title: 'Outdoor Education',
     heroImage: 'https://picsum.photos/id/1018/1920/980',
     heroAlt: 'Students outdoors on expedition',
+    showRegisterCta: false,
     intro: [
       'Outdoor Education gives students the chance to challenge themselves, build resilience and learn in environments beyond the classroom.',
       'Through carefully planned experiences, students develop teamwork, independence, confidence and a deeper appreciation of the natural world.',
@@ -261,6 +264,7 @@ export const beyondPages: Record<string, BeyondPage> = {
     title: 'Our Extra-Curricular Programme',
     heroImage: 'https://picsum.photos/id/1080/1920/980',
     heroAlt: 'A variety of student activities and clubs',
+    showRegisterCta: false,
     intro: [
       'BIST offers a broad extra-curricular programme so students can explore interests, develop talents and build friendships beyond lessons.',
       'Activities are designed to support balance, confidence, leadership and joyful participation.',
@@ -292,8 +296,8 @@ export const beyondPages: Record<string, BeyondPage> = {
   },
   'our-community': {
     title: 'Our Community',
-    heroImage: 'https://picsum.photos/id/1026/1920/980',
-    heroAlt: 'BIST community gathering',
+    heroImage: '/images/beyond-the-classroom/community-title.jpg',
+    heroAlt: 'Community gathering in Tabuk public space',
     intro: [
       'BIST is a diverse international community where students, families and staff work together with shared purpose and care.',
       'Community life is strengthened through events, service, celebration, partnership and a culture of mutual respect.',

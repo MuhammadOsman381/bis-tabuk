@@ -70,16 +70,27 @@ export default function SchoolFeesPage() {
         <Topbar />
         <Navbar isSidebarOpen={isSidebarOpen} onToggleSidebar={() => setIsSidebarOpen((value) => !value)} />
 
-        <section className="luxury-section bg-[#fffaf4] py-16 dark:bg-zinc-950 sm:py-24">
-          <div className="relative mx-auto max-w-4xl px-6">
-            <Reveal className="text-center">
-              <p className="luxury-kicker text-xs font-bold uppercase tracking-[0.24em]">Admissions</p>
-              <h1 className="mt-6 text-4xl font-black leading-tight text-[#1A1F4B] dark:text-zinc-50 sm:text-6xl">
+        <section className="relative min-h-[52vh] overflow-hidden">
+          <div
+            className="absolute inset-0 scale-105 bg-cover bg-center"
+            style={{ backgroundImage: "url('/images/admissions/school-fees-title.jpg')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/88 via-[#1A1F4B]/72 to-[#C8102E]/40 dark:from-zinc-950/92 dark:via-zinc-900/82 dark:to-[#C8102E]/38" />
+          <div className="relative z-10 mx-auto flex min-h-[52vh] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center text-white">
+            <Reveal>
+              <p className="mb-5 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-[#C9A84C] backdrop-blur-xl">
+                Admissions
+              </p>
+              <h1 className="text-4xl font-black leading-tight drop-shadow-[0_18px_48px_rgba(0,0,0,0.28)] sm:text-6xl">
                 School Fees
               </h1>
             </Reveal>
+          </div>
+        </section>
 
-            <Reveal className="mt-14 grid gap-8 text-left md:grid-cols-[1fr_20rem] md:items-start">
+        <section className="luxury-section bg-[#fffaf4] py-16 dark:bg-zinc-950 sm:py-24">
+          <div className="relative mx-auto max-w-4xl px-6">
+            <Reveal className="text-left">
               <div className="space-y-7 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
                 <p>
                   BIST provides a clear fee structure for families joining and continuing at the school. Fees support the
@@ -90,11 +101,6 @@ export default function SchoolFeesPage() {
                   school&apos;s admissions criteria and availability.
                 </p>
               </div>
-              <div
-                className="min-h-80 rounded-3xl bg-cover bg-center shadow-[0_22px_60px_rgba(26,31,75,0.14),inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-zinc-200 dark:ring-white/10"
-                style={{ backgroundImage: "url('https://picsum.photos/id/1041/900/1000')" }}
-                aria-label="School campus and students"
-              />
             </Reveal>
 
             <FeeTable title="One-time fees" headers={['Fee', 'Amount']} rows={oneTimeFees} />

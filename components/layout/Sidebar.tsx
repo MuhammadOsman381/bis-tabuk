@@ -71,7 +71,6 @@ const sidebarItems: SidebarItem[] = [
       { label: 'Outdoor Education', href: '/beyond-the-classroom/outdoor-education' },
       { label: 'Our Extra-Curricular Programme', href: '/beyond-the-classroom/our-extra-curricular-programme' },
       { label: 'Our Community', href: '/beyond-the-classroom/our-community' },
-      { label: 'Cafeteria', href: '/beyond-the-classroom/cafeteria' },
     ],
   },
   {

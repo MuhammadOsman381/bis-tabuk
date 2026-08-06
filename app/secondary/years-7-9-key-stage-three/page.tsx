@@ -35,23 +35,34 @@ export default function KeyStageThreePage() {
         <Topbar />
         <Navbar isSidebarOpen={isSidebarOpen} onToggleSidebar={() => setIsSidebarOpen((value) => !value)} />
 
-        <section className="luxury-section bg-[#fffaf4] py-16 dark:bg-zinc-950 sm:py-24">
-          <div className="relative mx-auto max-w-3xl px-6">
-            <Reveal className="text-center">
-              <p className="luxury-kicker text-xs font-bold uppercase tracking-[0.24em]">Secondary</p>
-              <h1 className="mt-6 text-4xl font-black leading-tight text-[#1A1F4B] dark:text-zinc-50 sm:text-6xl">
+        <section className="relative min-h-[52vh] overflow-hidden">
+          <div
+            className="absolute inset-0 scale-105 bg-cover bg-center"
+            style={{ backgroundImage: "url('/images/secondary/ks3-key-stage.jpg')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/88 via-[#1A1F4B]/72 to-[#C8102E]/40 dark:from-zinc-950/92 dark:via-zinc-900/82 dark:to-[#C8102E]/38" />
+          <div className="relative z-10 mx-auto flex min-h-[52vh] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center text-white">
+            <Reveal>
+              <p className="mb-5 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-[#C9A84C] backdrop-blur-xl">
+                Secondary
+              </p>
+              <h1 className="text-4xl font-black leading-tight drop-shadow-[0_18px_48px_rgba(0,0,0,0.28)] sm:text-6xl">
                 Years 7-9 (Key Stage Three)
               </h1>
             </Reveal>
+          </div>
+        </section>
 
-            <Reveal className="mt-14 text-left text-lg leading-8 text-zinc-700 dark:text-zinc-300">
+        <section className="luxury-section bg-[#fffaf4] py-16 dark:bg-zinc-950 sm:py-24">
+          <div className="relative mx-auto max-w-3xl px-6">
+            <Reveal className="text-left text-lg leading-8 text-zinc-700 dark:text-zinc-300">
               <p>
                 In Key Stage 3 (Years 7, 8 and 9), students aged 11-14 develop their skills in a broad range of
                 subjects, building the confidence, curiosity and independence needed for later academic success.
               </p>
             </Reveal>
 
-            <Reveal className="mt-10 grid gap-8 rounded-3xl border border-zinc-200/80 bg-white/75 p-7 shadow-[0_18px_55px_rgba(26,31,75,0.09)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] md:grid-cols-[1fr_16rem]">
+            <Reveal className="mt-10 rounded-3xl border border-zinc-200/80 bg-white/75 p-7 shadow-[0_18px_55px_rgba(26,31,75,0.09)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]">
               <div>
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C8102E]/10 text-[#C8102E] dark:bg-[#C8102E]/18 dark:text-[#ff8fa0]">
                   <BookOpen className="h-6 w-6" />
@@ -75,11 +86,6 @@ export default function KeyStageThreePage() {
                   ))}
                 </motion.ul>
               </div>
-              <div
-                className="min-h-72 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-                style={{ backgroundImage: "url('/images/secondary/second.JPG')" }}
-                aria-label="Secondary students in learning activities"
-              />
             </Reveal>
 
             <Reveal className="mt-8 text-left">

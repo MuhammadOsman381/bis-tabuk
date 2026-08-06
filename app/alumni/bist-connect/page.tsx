@@ -51,8 +51,8 @@ export default function BistConnectPage() {
       eyebrow="Alumni"
       title="BIST Network"
       subtitle="A home for former students to reconnect, inspire and share the journeys that began at BIST."
-      heroImage="https://picsum.photos/id/1027/1920/980"
-      heroAlt="Alumni gathering and graduation event"
+      heroImage="/images/alumni/bist-network-title.jpg"
+      heroAlt="Global alumni network connections over Earth"
       intro={[
         'BIST Network brings former students together with the school community. Whether you are studying, building a career, leading a business or serving your community, your story can encourage the next generation of BIST learners.',
         'Share your success story with us and help celebrate the global reach, ambition and character of our alumni community.',

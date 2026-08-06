@@ -59,7 +59,7 @@ export default function HowToApplyPage() {
         <section className="relative min-h-[58vh] overflow-hidden">
           <div
             className="absolute inset-0 scale-105 bg-cover bg-center"
-            style={{ backgroundImage: "url('https://picsum.photos/id/1026/1920/980')" }}
+            style={{ backgroundImage: "url('/images/admissions/how-to-apply-title.jpg')" }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[#10163d]/90 via-[#1A1F4B]/76 to-[#C8102E]/48 dark:from-zinc-950/94 dark:via-zinc-900/82 dark:to-[#C8102E]/42" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.18),transparent_34%)]" />
@@ -97,7 +97,7 @@ export default function HowToApplyPage() {
               </p>
             </Reveal>
 
-            <Reveal className="mt-14 grid gap-8 rounded-3xl border border-zinc-200/80 bg-white/75 p-7 shadow-[0_18px_55px_rgba(26,31,75,0.09)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] md:grid-cols-[1fr_18rem]">
+            <Reveal className="mt-14 rounded-3xl border border-zinc-200/80 bg-white/75 p-7 shadow-[0_18px_55px_rgba(26,31,75,0.09)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]">
               <div className="text-left">
                 <h2 className="text-3xl font-black text-[#1A1F4B] dark:text-zinc-50">Find Your Child&apos;s Year Group</h2>
                 <p className="mt-5 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
@@ -111,11 +111,6 @@ export default function HowToApplyPage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </div>
-              <div
-                className="min-h-64 rounded-3xl bg-cover bg-center shadow-[0_18px_50px_rgba(26,31,75,0.12),inset_0_1px_0_rgba(255,255,255,0.2)] ring-1 ring-zinc-200 dark:ring-white/10"
-                style={{ backgroundImage: "url('https://picsum.photos/id/1071/800/900')" }}
-                aria-label="Admissions family visiting school"
-              />
             </Reveal>
 
             <Reveal className="mt-16 border-t border-zinc-200 pt-12 text-left dark:border-white/10">
