@@ -27,6 +27,7 @@ export default function ContactUsPage() {
       title="Contact Us"
       heroImage="/images/contact-title.jpg"
       heroAlt="Contact email symbol and message icons"
+      heroImageClassName="object-cover object-center"
       isContact={true}
     >
       <div className="mt-4 grid gap-8 ">

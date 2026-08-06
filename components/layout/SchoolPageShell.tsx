@@ -184,7 +184,7 @@ export default function SchoolPageShell({
   subtitle,
   heroImage,
   heroAlt,
-  heroImageClassName = 'object-contain',
+  heroImageClassName = 'object-cover object-center',
   intro,
   quote,
   sections,
