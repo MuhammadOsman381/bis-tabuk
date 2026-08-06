@@ -98,29 +98,22 @@ export default function AboutPrimarySectionPage() {
                 variants={{ hidden: { opacity: 0, y: 18, filter: 'blur(8px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } }}
                 className="py-10 text-left"
               >
-                <div className="grid gap-8 md:grid-cols-[18rem_1fr] md:items-start">
-                  <div
-                    className="min-h-80 rounded-3xl bg-cover bg-center shadow-[0_22px_60px_rgba(26,31,75,0.14),inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-zinc-200 dark:ring-white/10"
-                    style={{ backgroundImage: "url('/images/primary/second.png')" }}
-                    aria-label="Primary students learning together"
-                  />
-                  <div>
-                    <h2 className="text-2xl font-black text-[#1A1F4B] dark:text-zinc-50">Holistic Learning</h2>
-                    <div className="mt-5 space-y-6 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-                      <p>
-                        Our curriculum supports each child to develop holistically, to become life-long learners and to grow
-                        socially, emotionally, physically, morally, creatively and academically.
-                      </p>
-                      <p>In addition, we actively encourage all our students to develop and recognise the four Rs:</p>
-                      <ul className="grid gap-3 sm:grid-cols-2">
-                        {fourRs.map((item) => (
-                          <li key={item} className="rounded-2xl border border-zinc-200 bg-white/70 px-4 py-3 font-bold text-[#1A1F4B] dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100">
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                      <p>We cater for a wide range of students&apos; needs with Student Support Service Teams.</p>
-                    </div>
+                <div>
+                  <h2 className="text-2xl font-black text-[#1A1F4B] dark:text-zinc-50">Holistic Learning</h2>
+                  <div className="mt-5 space-y-6 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
+                    <p>
+                      Our curriculum supports each child to develop holistically, to become life-long learners and to grow
+                      socially, emotionally, physically, morally, creatively and academically.
+                    </p>
+                    <p>In addition, we actively encourage all our students to develop and recognise the four Rs:</p>
+                    <ul className="grid gap-3 sm:grid-cols-2">
+                      {fourRs.map((item) => (
+                        <li key={item} className="rounded-2xl border border-zinc-200 bg-white/70 px-4 py-3 font-bold text-[#1A1F4B] dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <p>We cater for a wide range of students&apos; needs with Student Support Service Teams.</p>
                   </div>
                 </div>
               </motion.section>
