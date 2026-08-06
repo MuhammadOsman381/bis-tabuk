@@ -7,8 +7,8 @@ export default function LocalBenefitsPage() {
     <SchoolPageShell
       eyebrow="Employment"
       title="Local Hire Benefits"
-      heroImage="https://picsum.photos/id/1076/1920/980"
-      heroAlt="Local staff working in a school environment"
+      heroImage="/images/employment/local-hire-benefits-title.jpg"
+      heroAlt="Local hire benefits illustration with employment documents"
       showVideo={false}
       sections={[
         { title: 'Compensation & Financial Security', bullets: ['Tax-Free Salary', 'End-of-Service Gratuity'] },

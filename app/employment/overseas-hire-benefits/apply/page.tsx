@@ -45,8 +45,8 @@ export default function OverseasHireApplyPage() {
       eyebrow="Employment"
       title="Apply"
       subtitle="Share your details with the BIST recruitment team for overseas hire opportunities."
-      heroImage="https://picsum.photos/id/1043/1920/980"
-      heroAlt="International candidate preparing a professional application"
+      heroImage="/images/employment/overseas-apply-title.jpg"
+      heroAlt="Employment law title image with gavel"
       showVideo={false}
     >
       <div className="mt-14 rounded-3xl border border-zinc-200/80 bg-white/82 p-6 shadow-[0_18px_55px_rgba(26,31,75,0.09)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:p-8">

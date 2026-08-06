@@ -25,8 +25,8 @@ export default function ContactUsPage() {
     <SchoolPageShell
       eyebrow="Contact"
       title="Contact Us"
-      heroImage="/images/contact.jpeg"
-      heroAlt="Welcoming school campus entrance"
+      heroImage="/images/contact-title.jpg"
+      heroAlt="Contact email symbol and message icons"
       isContact={true}
     >
       <div className="mt-4 grid gap-8 ">
