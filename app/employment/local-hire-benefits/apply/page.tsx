@@ -15,11 +15,12 @@ export default function LocalHireApplyPage() {
 
   async function submitApplication(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setIsSubmitting(true);
     setIsSuccess(false);
     setMessage('');
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
 
     try {
       const response = await fetch('/api/employment/local-hire/apply', {
@@ -30,7 +31,7 @@ export default function LocalHireApplyPage() {
 
       if (!response.ok) throw new Error(result.error ?? 'Unable to submit application.');
 
-      event.currentTarget.reset();
+      form.reset();
       setIsSuccess(true);
       setMessage('Thank you. Your application and CV have been sent to the recruitment team.');
     } catch (error) {

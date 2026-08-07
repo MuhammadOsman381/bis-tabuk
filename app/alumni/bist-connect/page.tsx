@@ -21,11 +21,12 @@ export default function BistConnectPage() {
 
   async function submitStory(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setMessage('');
     setIsSuccess(false);
     setIsSubmitting(true);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
 
     try {
       const response = await fetch('/api/alumni/success-story', {
@@ -36,7 +37,7 @@ export default function BistConnectPage() {
 
       if (!response.ok) throw new Error(result.error ?? 'Unable to submit story.');
 
-      event.currentTarget.reset();
+      form.reset();
       setIsSuccess(true);
       setMessage('Thank you. Your success story has been sent to the BIST team.');
     } catch (error) {
