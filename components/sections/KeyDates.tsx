@@ -65,7 +65,7 @@ function SchoolTimings() {
         {schoolTimings.map((item) => (
           <div key={item.day} className="grid gap-3 py-4 md:grid-cols-[14rem_1fr] md:gap-6">
             <p className="text-sm font-black leading-6 text-zinc-800 dark:text-zinc-100">{item.day}</p>
-            <ul className="space-y-2 text-sm font-semibold leading-6 text-zinc-600 dark:text-zinc-300">
+            <ul className="space-y-2 text-sm font-semibold leading-6 text-zinc-600 dark:text-zinc-300 md:text-right">
               {item.timings.map((time) => (
                 <li key={time}>{time}</li>
               ))}
