@@ -82,7 +82,7 @@ export default function KeyDates() {
     <section className="relative overflow-hidden bg-white py-20 text-[#1A1F4B] dark:bg-zinc-950 dark:text-white sm:py-24">
       <div className="absolute left-0 top-0 h-80 w-80 rounded-full bg-[#C8102E]/7 blur-3xl dark:bg-[#C9A84C]/10" />
       <div className="relative mx-auto max-w-7xl px-6">
-        <Reveal className="mx-auto mb-12 max-w-3xl">
+        <Reveal className="mx-auto mb-12 max-w-4xl">
           <SchoolTimings />
         </Reveal>
 
@@ -102,7 +102,7 @@ export default function KeyDates() {
             <DateList title="School Events" items={schoolEvents} />
           </motion.div>
           <motion.div variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}>
-            <DateList title="Holidays" items={holidays} />
+            <DateList title="School Holidays" items={holidays} />
           </motion.div>
         </motion.div>
       </div>
