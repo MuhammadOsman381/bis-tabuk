@@ -96,7 +96,7 @@ export default function KeyDates() {
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
           variants={staggerContainer}
-          className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]"
+          className="mx-auto grid max-w-4xl gap-6"
         >
           <motion.div variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}>
             <DateList title="School Events" items={schoolEvents} />
