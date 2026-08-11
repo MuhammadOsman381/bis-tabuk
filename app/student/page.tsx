@@ -193,9 +193,6 @@ export default function StudentPage() {
         {/* <div className='text-red-600 font-bold text-6xl' >
           Learning Management System
           </div>  */}
-          <div className='text-red-600 font-semibold ' >
-            Under Construction
-          </div>
       </div>
     </motion.main>
   );
