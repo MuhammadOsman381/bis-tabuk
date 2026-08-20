@@ -27,7 +27,7 @@ const holidays = [
 ];
 
 const schoolTimings = [
-  { day: 'Sunday to Thursday', timings: ['Reception: 7:30 AM - 13:00 PM', 'Primary: 7:30 AM - 13:00 PM', 'Secondary: 7:30 AM - 13:00 PM'] },
+  { day: 'Sunday to Thursday', timings: ['Reception: 7:40 AM - 12:50 PM', 'Primary: 7:40 AM - 12:50 PM', 'Secondary: 7:40 AM - 12:50 PM'] },
   { day: 'Friday & Saturday', timings: ['Campus closed for regular lessons', 'Events and activities as scheduled'] },
 ];
 
