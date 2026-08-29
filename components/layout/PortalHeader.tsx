@@ -30,7 +30,7 @@ export default function PortalHeader() {
             </div>
             <div className="min-w-0">
               <strong className="block text-base font-black leading-tight text-zinc-950 dark:text-zinc-50 sm:text-lg">BIST</strong>
-              <span className="block max-w-52 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">International School</span>
+              <span className="block max-w-52 truncate text-[10px] font-semibold leading-tight text-zinc-500 dark:text-zinc-400 sm:max-w-none sm:text-xs">British International School of Tabuk</span>
             </div>
           </Link>
         </div>
